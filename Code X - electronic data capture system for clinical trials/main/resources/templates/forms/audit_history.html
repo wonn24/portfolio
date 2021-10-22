@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Audit History</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a
+              href="/"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              href="/studies"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study List"
+              ><i class="fad fa-tags"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study Dashboard"
+              ><i class="fad fa-chess-king"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName + '/' + siteid}"
+              class="kt-subheader__breadcrumbs-home"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Site Dashboard"
+              ><i class="fad fa-chess-queen"></i
+            ></a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <!-- begin::hidden inputs -->
+      <input
+        class="form-control"
+        type="hidden"
+        name="STUDYID"
+        th:value="${studyid}"
+      />
+      <input
+        class="form-control"
+        type="hidden"
+        name="SITEID"
+        th:value="${siteid}"
+      />
+      <input type="hidden" name="scrno" id="input_scrno" />
+      <!-- end::hidden inputs -->
+
+      <!--begin::Portlet-->
+      <div class="kt-portlet" id="div_filter">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Get audits by filters</h3>
+          </div>
+          <div class="kt-portlet__head-toolbar"></div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <form id="form_audit_history">
+            <div class="row">
+              <div class="col-2">
+                <code>SCRNO (activated)</code>
+                <select
+                  class="form-control selectpicker"
+                  data-size="7"
+                  title="Choose.."
+                  id="select_scrno_act"
+                  data-live-search="true"
+                >
+                  <option value="">Choose..</option>
+                  <option
+                    th:value="${item.scrno}"
+                    th:text="${item.scrno}"
+                    th:if="${item.isActive == true}"
+                    th:selected="${item.scrno == scrno ? 'selected' : 'false'}"
+                    th:data-subtext="${item.isActive == true ? 'Activated' : 'Inactivated'}"
+                    th:each="item: ${listParticipant}"
+                  ></option>
+                </select>
+              </div>
+
+              <div class="col-2">
+                <code>SCRNO (in-activated)</code>
+                <select
+                  class="form-control selectpicker"
+                  data-size="7"
+                  title="Choose.."
+                  id="select_scrno_inact"
+                  data-live-search="true"
+                >
+                  <option value="">Choose..</option>
+                  <option
+                    th:value="${item.scrno}"
+                    th:text="${item.scrno}"
+                    th:if="${item.isActive == false}"
+                    th:data-subtext="${item.subjid}"
+                    th:selected="${item.scrno == scrno ? 'selected' : 'false'}"
+                    th:each="item: ${listParticipant}"
+                  ></option>
+                </select>
+              </div>
+
+              <div class="col-4">
+                <code>Please click the button to get result</code>
+                <br />
+                <button
+                  type="button"
+                  class="btn btn-instagram btn-hover btn-elevate"
+                  id="btn_submit"
+                >
+                  <i class="fad fa-play-circle fa-lg"></i> &nbsp;
+                  <strong>GET <span class="kt-opacity-7">RESULT</span></strong>
+                </button>
+
+                <button type="button" class="btn btn-facebook" id="btn_refresh">
+                  <i class="fad fa-redo fa-lg"></i> &nbsp;<span
+                    ><strong th:text="#{menu.button.refresh}"
+                      >REFRESH</strong
+                    ></span
+                  >
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div class="row" style="margin-top: 20px" th:if="${listAudit}">
+            <div class="col-12 kt-scroll" data-scroll="true">
+              <!--begin: Datatable -->
+              ...
+              <!--end: Datatable -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $("#btn_refresh").on("click", function () {
+        location.reload();
+      });
+
+      $("#select_scrno_act").on("change", function () {
+        $("#input_scrno").val($("#select_scrno_act").val());
+      });
+
+      $("#select_scrno_inact").on("change", function () {
+        $("#input_scrno").val($("#select_scrno_inact").val());
+      });
+
+      $("#btn_submit").on("click", function () {
+        var studyid = "[[${studyid}]]";
+        var studyShortName = "[[${studyShortName}]]";
+        var siteid = "[[${siteid}]]";
+        var scrno = $("#input_scrno").val();
+
+        if (scrno.length == 0) {
+          alert("Please select scrno.");
+          return;
+        }
+
+        // validating an uploaded excel file
+        var layer = $("#div_filter");
+        KTApp.block(layer, {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Loading...",
+        });
+
+        var form = $("#form_audit_history");
+        form.attr(
+          "action",
+          "/audit/" + studyShortName + "/" + siteid + "/" + scrno
+        );
+        form.attr("method", "POST");
+        form.submit();
+      });
+
+      var dom_data =
+        "<'row'<'col-sm-6 text-left'f><'col-sm-6 text-right'>>" +
+        "<'row'<'col-sm-12'tr>> " +
+        "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>> ";
+
+      $(document).ready(function () {
+        $("#table_result")
+          .DataTable({
+            dom: "Bfrtip",
+            responsive: true,
+            lengthMenu: [5, 10, 25, 50],
+            pageLength: 10,
+            buttons: ["excel"],
+            colReorder: true,
+          })
+          .draw();
+      });
+    </script>
+  </div>
+</html>

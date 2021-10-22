@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X-sidenav</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="sidenav">
+    <!-- begin::Aside Brand -->
+    <div class="kt-aside__brand kt-grid__item" id="kt_aside_brand">
+      <div class="kt-aside__brand-logo">
+        <a href="/">
+          <span style="color: white">
+            <img alt="Logo" src="assets/media/logos/logo-6_edit.png" />
+          </span>
+        </a>
+      </div>
+      <div class="kt-aside__brand-tools">
+        <button
+          class="
+            kt-aside__brand-aside-toggler kt-aside__brand-aside-toggler--left
+          "
+          id="kt_aside_toggler"
+        >
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <!-- end:: Aside Brand -->
+
+    <!-- begin:: Aside Menu -->
+    <div
+      class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid"
+      id="kt_aside_menu_wrapper"
+    >
+      <div
+        id="kt_aside_menu"
+        class="kt-aside-menu"
+        data-ktmenu-vertical="1"
+        data-ktmenu-scroll="1"
+        data-ktmenu-dropdown-timeout="500"
+      >
+        <ul class="kt-menu__nav">
+          <li class="kt-menu__item" aria-haspopup="true">
+            <a href="/doc" class="kt-menu__link">
+              <span class="kt-menu__link-icon"><i class="fad fa-book"></i></span
+              >&emsp; <span class="kt-menu__link-text">Documentation</span></a
+            >
+          </li>
+
+          <li class="kt-menu__item" aria-haspopup="true">
+            <a href="/studies" class="kt-menu__link">
+              <span class="kt-menu__link-icon"><i class="fad fa-tags"></i></span
+              >&emsp;
+              <span
+                class="kt-menu__link-text"
+                th:text="#{menu.button.study_list}"
+                >Study List</span
+              ></a
+            >
+          </li>
+
+          <li
+            th:if="${session.pm_t1 == true}"
+            class="kt-menu__item kt-menu__item--submenu"
+            aria-haspopup="true"
+            data-ktmenu-submenu-toggle="hover"
+          >
+            <a class="kt-menu__link kt-menu__toggle">
+              <span class="kt-menu__link-icon"><i class="fad fa-cog"></i></span
+              >&emsp; <span class="kt-menu__link-text">Study Build</span
+              ><i class="kt-menu__ver-arrow la la-angle-right"></i>
+            </a>
+            <div class="kt-menu__submenu">
+              <span class="kt-menu__arrow"></span>
+              <ul class="kt-menu__subnav">
+                <li
+                  class="kt-menu__item kt-menu__item--submenu"
+                  aria-haspopup="true"
+                  data-ktmenu-submenu-toggle="hover"
+                >
+                  <a
+                    th:href="${'/build/role/' + studyShortName + '/' + siteid}"
+                    class="kt-menu__link kt-menu__toggle"
+                    ><i class="kt-menu__link-bullet kt-menu__link-bullet--line"
+                      ><span></span
+                    ></i>
+                    <span class="kt-menu__link-text">User Role Setting</span></a
+                  >
+                </li>
+
+                <li
+                  class="kt-menu__item kt-menu__item--submenu"
+                  aria-haspopup="true"
+                  data-ktmenu-submenu-toggle="hover"
+                >
+                  <a
+                    th:href="${'/build/crf/' + studyShortName + '/' + siteid}"
+                    class="kt-menu__link kt-menu__toggle"
+                    ><i class="kt-menu__link-bullet kt-menu__link-bullet--line"
+                      ><span></span
+                    ></i>
+                    <span class="kt-menu__link-text">eCRF Building</span></a
+                  >
+                </li>
+
+                <li
+                  class="kt-menu__item kt-menu__item--submenu"
+                  aria-haspopup="true"
+                  data-ktmenu-submenu-toggle="hover"
+                >
+                  <a
+                    th:href="${'/build/validation/' + studyShortName + '/' + siteid}"
+                    class="kt-menu__link kt-menu__toggle"
+                    ><i class="kt-menu__link-bullet kt-menu__link-bullet--line"
+                      ><span></span
+                    ></i>
+                    <span class="kt-menu__link-text">Validation</span></a
+                  >
+                </li>
+
+                <li
+                  class="kt-menu__item kt-menu__item--submenu"
+                  aria-haspopup="true"
+                  data-ktmenu-submenu-toggle="hover"
+                >
+                  <a
+                    th:href="${'/build/parameter/' + studyShortName + '/' + siteid}"
+                    class="kt-menu__link kt-menu__toggle"
+                    ><i class="kt-menu__link-bullet kt-menu__link-bullet--line"
+                      ><span></span
+                    ></i>
+                    <span class="kt-menu__link-text">Parameter Setting</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+
+          <li
+            th:if="${studyShortName}"
+            class="kt-menu__item kt-menu__item--submenu"
+            aria-haspopup="true"
+            data-ktmenu-submenu-toggle="hover"
+          >
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-menu__link kt-menu__toggle"
+              ><span class="kt-menu__link-icon"
+                ><i class="fad fa-chess-king"></i
+              ></span>
+              &emsp; <span class="kt-menu__link-text">Study Dashboard</span>
+            </a>
+          </li>
+
+          <li
+            th:if="${siteid}"
+            class="kt-menu__item kt-menu__item--submenu"
+            aria-haspopup="true"
+            data-ktmenu-submenu-toggle="hover"
+          >
+            <a
+              th:href="${'/study/' + studyShortName + '/' + siteid}"
+              class="kt-menu__link kt-menu__toggle"
+              ><span class="kt-menu__link-icon"
+                ><i class="fad fa-chess-queen"></i
+              ></span>
+              &emsp; <span class="kt-menu__link-text">Site Dashboard</span>
+            </a>
+          </li>
+
+          <li
+            th:if="${listParticipant}"
+            class="kt-menu__item kt-menu__item--submenu"
+            aria-haspopup="true"
+            data-ktmenu-submenu-toggle="hover"
+          >
+            <a
+              th:href="${'/subject/' + studyShortName + '/' + siteid}"
+              class="kt-menu__link kt-menu__toggle"
+              >&nbsp;<span class="kt-menu__link-icon"
+                ><i class="fad fa-chess-knight"></i></span
+              >&emsp;
+              <span
+                class="kt-menu__link-text"
+                th:text="#{menu.button.subject_dashboard}"
+                >Subject Dashboard</span
+              >
+            </a>
+          </li>
+
+          <li
+            th:if="${mapVisit}"
+            class="kt-menu__item kt-menu__item--submenu"
+            aria-haspopup="true"
+            data-ktmenu-submenu-toggle="hover"
+          >
+            <a class="kt-menu__link kt-menu__toggle"
+              ><span class="kt-menu__link-icon"
+                ><i class="fad fa-hospital-user fa-lg"></i></span
+              >&emsp;<span class="kt-menu__link-text">Visit</span
+              ><i class="kt-menu__ver-arrow la la-angle-right"></i
+            ></a>
+            <div class="kt-menu__submenu">
+              <span class="kt-menu__arrow"></span>
+              <ul class="kt-menu__subnav" th:each="entry : ${mapVisit}">
+                <li
+                  class="kt-menu__item kt-menu__item--parent"
+                  aria-haspopup="true"
+                >
+                  <span class="kt-menu__link"
+                    ><span class="kt-menu__link-text">Visit</span></span
+                  >
+                </li>
+
+                <li
+                  class="kt-menu__item kt-menu__item--submenu"
+                  aria-haspopup="true"
+                  data-ktmenu-submenu-toggle="hover"
+                >
+                  <a class="kt-menu__link kt-menu__toggle"
+                    ><i class="kt-menu__link-bullet kt-menu__link-bullet--line"
+                      ><span></span></i
+                    ><span
+                      class="kt-menu__link-text"
+                      th:text="${entry.key == 0} ? 'Unscheduled' : ${entry.key}"
+                      >visit number</span
+                    ><i class="kt-menu__ver-arrow la la-angle-right"></i
+                  ></a>
+                  <div class="kt-menu__submenu">
+                    <span class="kt-menu__arrow"></span>
+                    <!-- <ul class="kt-menu__subnav" th:each="item : ${entry.value}"> -->
+                    <ul class="kt-menu__subnav">
+                      <!-- DM DS VS VSP LB PE IE MH PC EX CO -->
+                      <li
+                        class="kt-menu__item kt-menu__item--parent"
+                        aria-haspopup="true"
+                      >
+                        <span class="kt-menu__link"
+                          ><span
+                            class="kt-menu__link-text"
+                            th:text="${entry.key}"
+                            >visit number</span
+                          ></span
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'UV')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/uv'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="UV"
+                            >UV</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'AE')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ae'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="AE"
+                            >AE</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'CM')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/cm'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="CM"
+                            >CM</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'SAE')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/sae'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="SAE"
+                            >SAE</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'SAEV2')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/saev2'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="SAE-ViDT2"
+                            >SAE-ViDT2</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'EOS')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/eos'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="EOS"
+                            >EOS</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'SV')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/sv'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="SV"
+                            >SV</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'DM')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/dm'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="DM"
+                            >DM</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'DS')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ds'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="DS"
+                            >DS</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'VS')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/vs'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="VS"
+                            >VS</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'VSP')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/vsp'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="VSP"
+                            >VSP</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'LB')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/lb'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="LB"
+                            >LB</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'PE')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/pe'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="PE"
+                            >PE</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'IE')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ie'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="IE"
+                            >IE</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'MH')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/mh'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="MH"
+                            >MH</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'PC')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/pc'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="PC"
+                            >PC</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'EX')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ex'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="EX"
+                            >EX</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'CO')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/co'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="CO"
+                            >CO</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'HPV')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/hpv'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="HPV"
+                            >HPV</span
+                          ></a
+                        >
+                      </li>
+
+                      <li class="kt-menu__item" aria-haspopup="true">
+                        <a
+                          th:if="${#lists.contains(entry.value, 'SBQ')}"
+                          th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/sbq'}"
+                          class="kt-menu__link"
+                          ><i
+                            class="
+                              kt-menu__link-bullet kt-menu__link-bullet--dot
+                            "
+                            ><span></span></i
+                          ><span class="kt-menu__link-text" th:text="SBQ"
+                            >SBQ</span
+                          ></a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- end::Aside Menu -->
+  </div>
+</html>

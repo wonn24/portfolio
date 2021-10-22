@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- begin::Head -->
+<head>
+<base href="/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Bella</title>
+
+</head>
+<!-- end::Head -->
+
+<div th:fragment="content">
+
+	<!-- begin:: Subheader -->
+	<div class="kt-subheader kt-grid__item" id="kt_subheader">
+		<div class="kt-container kt-container--fluid">
+
+			<!-- begin::breadcrumbs -->
+			<div class="kt-subheader__main">
+				<h3 class="kt-subheader__title">
+					CRF <span th:text="${version}"></span> - Demographic
+				</h3>
+				<span class="kt-subheader__separator kt-hidden"></span>
+				<div class="kt-subheader__breadcrumbs">
+					<a href="/" class="kt-subheader__breadcrumbs-home"><i class="fad fa-home-lg"></i></a> <span class="kt-subheader__breadcrumbs-separator"></span> <a
+						href="/studies" class="kt-subheader__breadcrumbs-link"><i class="fad fa-tags"></i></a> <span class="kt-subheader__breadcrumbs-separator"></span>
+					<a th:href="${'/study/' + studyShortName}" class="kt-subheader__breadcrumbs-link"><span th:text=${studyid}></span></a> <span
+						class="kt-subheader__breadcrumbs-separator"></span> <a th:href="${'/study/' + studyShortName + '/' + siteid}"
+						class="kt-subheader__breadcrumbs-link"><span th:text=${siteid}></span></a> <span class="kt-subheader__breadcrumbs-separator"></span> <a
+						href="javascript:void(0);" class="kt-subheader__breadcrumbs-link" th:text="${scrno}"> screening number </a> <span
+						class="kt-subheader__breadcrumbs-separator"></span> <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+						th:text="${'VISIT ' + visit}"> visit </a> <span class="kt-subheader__breadcrumbs-separator"></span> <a href="javascript:void(0);"
+						class="kt-subheader__breadcrumbs-link" th:text="${domain}"> domain </a>
+				</div>
+			</div>
+			<!-- end::breadcrumbs -->
+
+			<!-- begin::toolbar -->
+			<div class="kt-subheader__toolbar">
+				<div class="kt-subheader__wrapper">
+					<a th:if="${session.pm_e2 == true}" th:href="${'/study/' + studyShortName + '/' + siteid + '/new_subject'}"
+						class="btn btn-sm btn-hover btn-dark btn-elevate" id="btn_add_subject"> <i class="fas fa-user-plus fa-lg"></i> &nbsp; <span
+						class="kt-opacity-7">NEW</span> &nbsp; <strong>SUBJECT</strong>
+					</a>
+
+					<div class="btn-group dropdown">
+						<button type="button" class="btn btn-sm btn-hover btn-brand btn-elevate dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false">
+							<i class="fad fa-repeat"></i> &nbsp; <span class="kt-opacity-7">SWITCH</span>&nbsp; <strong>FORM</strong>
+						</button>
+						<div class="dropdown-menu dropdown-menu-right">
+							<div th:each="entry: ${mapVisit}">
+								<div th:if="${entry.key != 0}" class="dropdown-divider"></div>
+
+								<h6 style="color: blue;" th:if="${entry.key == 0}" class="dropdown-header">
+									<span>Unscheduled Visit</span>
+								</h6>
+
+								<h6 style="color: blue;" th:if="${entry.key != 0}" class="dropdown-header">
+									Visit <span th:text="${entry.key}"></span>
+								</h6>
+
+								<a th:if="${#lists.contains(entry.value, 'UV')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/uv'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="UV">UV</span></a><a
+									th:if="${#lists.contains(entry.value, 'AE')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ae'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="AE">AE</span></a> <a
+									th:if="${#lists.contains(entry.value, 'CM')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/cm'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="CM">CM</span></a> <a
+									th:if="${#lists.contains(entry.value, 'SAE')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/sae'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="SAE">SAE</span></a> <a
+									th:if="${#lists.contains(entry.value, 'SAEV2')}"
+									th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/saev2'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="SAE-ViDT2">SAE-ViDT2</span></a>
+								<a th:if="${#lists.contains(entry.value, 'EOS')}"
+									th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/eos'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="EOS">EOS</span></a> <a
+									th:if="${#lists.contains(entry.value, 'SV')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/sv'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="SV">SV</span></a> <a
+									th:if="${#lists.contains(entry.value, 'DM')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/dm'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="DM">DM</span></a> <a
+									th:if="${#lists.contains(entry.value, 'DS')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ds'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="DS">DS</span></a> <a
+									th:if="${#lists.contains(entry.value, 'VS')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/vs'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="VS">VS</span></a> <a
+									th:if="${#lists.contains(entry.value, 'VSP')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/vsp'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="VSP">VSP</span></a> <a
+									th:if="${#lists.contains(entry.value, 'LB')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/lb'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="LB">LB</span></a> <a
+									th:if="${#lists.contains(entry.value, 'PE')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/pe'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="PE">PE</span></a> <a
+									th:if="${#lists.contains(entry.value, 'IE')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ie'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="IE">IE</span></a> <a
+									th:if="${#lists.contains(entry.value, 'MH')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/mh'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="MH">MH</span></a> <a
+									th:if="${#lists.contains(entry.value, 'PC')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/pc'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="PC">PC</span></a> <a
+									th:if="${#lists.contains(entry.value, 'EX')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/ex'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="EX">EX</span></a> <a
+									th:if="${#lists.contains(entry.value, 'CO')}" th:href="${'/crf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + entry.key + '/co'}"
+									style="padding-top: 10px; padding-bottom: 10px;" class="dropdown-item"> <span class="kt-menu__link-text" th:text="CO">CO</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end::toolbar -->
+		</div>
+	</div>
+	<!-- end:: Subheader -->
+
+	<!-- begin:: Main content -->
+	<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+		<!--begin::Portlet-->
+		<!-- <div class="kt-portlet kt-portlet--solid-brand">
+			<div class="kt-portlet__head">
+				<div class="kt-portlet__head-label">
+					<span class="kt-portlet__head-icon" style="font-size: 2em;"><i class="fad fa-exclamation-triangle fa-inverse"></i></span>
+					<h3 class="kt-portlet__head-title">How to enter Demographic</h3>
+				</div>
+				<div class="kt-portlet__head-toolbar">Information</div>
+			</div>
+			<div class="kt-portlet__body">
+				<div class="kt-portlet__content">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+					industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled. Lorem Ipsum is simply dummy
+					text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+					printer took a galley of type and scrambled.</div>
+			</div>
+		</div> -->
+		<!--end::Portlet-->
+
+		<!--begin::Portlet-->
+		<div class="kt-portlet">
+			<div class="kt-portlet__head kt-portlet__head--lg">
+				<div class="kt-portlet__head-label">
+					<h3 class="kt-portlet__head-title">Demographic</h3>
+				</div>
+				<div class="kt-portlet__head-toolbar">
+					<form th:if="${session.pm_ex2 == true}" th:action="${'export_blankpdf/' + studyShortName + '/' + siteid + '/' + scrno + '/' + visit + '/dm'}"
+						method="post" id="form_export_pdf">
+						<button type="button" class="btn btn-sm btn-hover btn-secondary btn-elevate" onclick="export_blankPDF()">
+							<i class="fad fa-file-export fa-lg"></i> &nbsp; <span><strong>EXPORT</strong> &nbsp; <span class="kt-opacity-7">PDF</span></span>
+						</button>
+					</form>
+
+					&emsp;
+
+					<button th:if="${session.pm_e2 == true}" type="button" class="btn btn-sm btn-hover btn-danger btn-elevate" onclick="save_changes()">
+						<i class="fad fa-save fa-lg"></i> &nbsp; <span><strong>SAVE</strong> &nbsp; <span class="kt-opacity-7">CHANGES</span></span>
+					</button>
+				</div>
+			</div>
+
+			<div class="kt-portlet__body">
+				<form class="kt-form" th:object="${objDM}" method="post" id="form_crf_DM" autocomplete="off">
+					<div class="row">
+						<div class="col-xl-1">
+
+							<!-- begin::hidden inputs -->
+							<input class="form-control" type="hidden" name="STUDYID" th:value="${studyid}"> <input class="form-control" type="hidden" name="SITEID"
+								th:value="${siteid}"> <input class="form-control" type="hidden" name="VISIT" th:value="${visit}"> <input class="form-control"
+								type="hidden" name="DOMAIN" th:value="${domain}"> <input class="form-control" type="hidden" name="SUBJID" th:value="${objDM.SUBJID}">
+							<input class="form-control" type="hidden" id="input_scrno" name="SCRNO" th:value="${scrno}">
+							<!-- end::hidden inputs -->
+
+						</div>
+						<div class="col-xl-10">
+							<div class="kt-section kt-section--first">
+								<div class="kt-section__body" th:each="crf, iter : ${listCRF}" th:switch="${var}" th:with="var=${crf.cdashig}, sid=0">
+									<div class="form-group row" th:unless="${var == 'STUDYID' or var == 'SITEID' or var == 'SUBJID'}">
+
+										<div th:if="${setAutoQueryOpened != null and setAutoQueryOpened.contains(var)}">
+											&nbsp; <span style="color: #fd3995;"><i class="fad fa-exclamation-circle fa-3x"></i></span> &nbsp;
+										</div>
+
+										<div class="col-sm-4">
+											<label class="col-form-label" th:if="${mapFlag.get(var)?.lock_} != '1'"> <i class="fad fa-lock-open-alt"></i>&emsp; <span
+												th:text="${crf.text}"></span></label> <label class="col-form-label" th:if="${mapFlag.get(var)?.lock_} == 1"> <span style="color: tomato;"><i
+													class="fad fa-lock-alt"></i></span>&emsp; <span th:text="${crf.text}"></span></label>
+										</div>
+
+										<div class="col-sm-4">
+											<div class="input-group" th:case="BRTHDTC">
+												<input class="form-control" type="text" th:name="${var}" th:value="${objDM.BRTHDTC}" th:data-sid="${sid}" th:id="${'input_' + var + sid}"
+													th:data-modification="${var + sid}" th:disabled="${mapFlag.get(var)?.lock_} == 1 or ${session.pm_e2 != true}">
+												<div class="input-group-append">
+													<span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+												</div>
+											</div>
+
+											<input th:case="AGE" class="form-control" type="number" th:id="${'input_' + var + sid}" th:name="${var}" th:value="${objDM.AGE}"
+												th:data-modification="${var + sid}" th:min="${age_min}" th:max="${age_max}"
+												th:disabled="${mapFlag.get(var)?.lock_} == 1 or ${session.pm_e2 != true}">
+
+											<div th:case="AGEU" class="kt-radio-inline">
+												<label class="kt-radio kt-radio--brand" th:each="opt_ageu: ${listAGEU}"> <input type="radio" th:name="${var}"
+													th:data-modification="${var + sid}" th:value="${opt_ageu.text}" th:code="${opt_ageu.code}" th:checked="${opt_ageu.text == objDM.AGEU}"
+													th:text="${opt_ageu.text}" th:disabled="${mapFlag.get(var)?.lock_} == 1 or ${session.pm_e2 != true}" th:id="${'input_' + var + sid}">
+													<span></span>
+												</label>
+											</div>
+
+											<input th:case="DMDTC" class="form-control" type="text" th:name="${var}" th:value="${objDM.DMDTC}" th:data-modification="${var + sid}"
+												th:disabled="${mapFlag.get(var)?.lock_} == 1 or ${session.pm_e2 != true}" th:id="${'input_' + var + sid}">
+
+											<div th:case="SEX" class="kt-radio-inline">
+												<label class="kt-radio kt-radio--brand"> <input type="radio" th:name="${var}" value="M" th:checked="${objDM.SEX == 'M'}"
+													th:data-modification="${var + sid}" th:disabled="${mapFlag.get(var)?.lock_} == 1 or ${session.pm_e2 != true}"
+													th:id="${'input_' + var + sid}"> Male <span></span>
+												</label> <label class="kt-radio kt-radio--brand"> <input type="radio" th:name="${var}" value="F" th:checked="${objDM.SEX == 'F'}"
+													th:data-modification="${var + sid}" th:disabled="${mapFlag.get(var)?.lock_} == 1 or ${session.pm_e2 != true}"
+													th:id="${'input_' + var + sid}"> Female <span></span>
+												</label>
+											</div>
+
+											<input th:case="ETHNIC" class="form-control" type="text" th:id="${'input_' + var + sid}" th:name="${var}" th:value="${objDM.ETHNIC}"
+												th:data-modification="${var + sid}" th:disabled="${mapFlag.get(var + sid)?.lock_} == 1 or ${session.pm_e2 != true}"> <input
+												th:case="RACE" class="form-control" type="text" th:data-modification="${var + sid}" th:id="${'input_' + var + sid}" th:name="${var}"
+												th:value="${objDM.RACE}" th:disabled="${mapFlag.get(var + sid)?.lock_} == 1 or ${session.pm_e2 != true}"> <input th:case="*"
+												class="form-control" type="text" th:id="${'input_' + var + sid}" th:name="${var}" th:data-modification="${var + sid}"
+												th:disabled="${mapFlag.get(var + sid)?.lock_} == 1 or ${session.pm_e2 != true}"> <span th:unless="${var == 'BRTHDTC'}"
+												class="form-text text-muted">description</span> <span th:if="${var == 'BRTHDTC'}" class="form-text text-muted">Provide dates using
+												ISO 8601 format, i.e., <code th:if="${session.studyDateFormat == 'yyyy-MM-dd'}">yyyy-MM-dd (2020-07-01)</code> <code
+													th:if="${session.studyDateFormat == 'M/dd/yyyy'}">M/dd/yyyy (07/01/2020)</code>
+
+											</span>
+
+										</div>
+
+										<div class="col-sm-3">
+											<!-- begin::SDV button -->
+											<button th:if="${mapFlag.get(var)?.sdv_ == 1 and session.pm_e6 == true}" type="button" class="btn btn-sm btn-success btn-icon btn-verify"
+												tabindex="-1" th:data-studyid="${studyid}" th:data-shortname="${studyShortName}" th:data-siteid="${siteid}" th:data-visit="${visit}"
+												th:data-scrno="${scrno}" th:data-domain="DM" th:data-cdashig="${var}" th:disabled="${mapFlag.get(var)?.lock_ == 1}">
+												<i class="far fa-check"></i>
+											</button>
+											<button th:if="${mapFlag.get(var)?.sdv_ != 1 and session.pm_e6 == true}" type="button"
+												class="btn btn-sm btn-outline-hover-success btn-icon btn-verify" tabindex="-1" th:data-studyid="${studyid}"
+												th:data-shortname="${studyShortName}" th:data-siteid="${siteid}" th:data-visit="${visit}" th:data-scrno="${scrno}" th:data-domain="DM"
+												th:data-cdashig="${var}" th:disabled="${mapFlag.get(var)?.lock_ == 1}">
+												<i class="far fa-check"></i>
+											</button>
+											<!-- end::SDV button -->
+
+											<!-- begin::REVIEW button -->
+											<button th:if="${mapFlag.get(var)?.review_ == 1 and session.pm_e5 == true}" type="button"
+												class="btn btn-sm btn-success btn-icon btn-review" tabindex="-1" th:data-studyid="${studyid}" th:data-siteid="${siteid}"
+												th:data-visit="${visit}" th:data-scrno="${scrno}" th:data-domain="DM" th:data-cdashig="${var}"
+												th:disabled="${mapFlag.get(var)?.lock_} == 1">
+												<i class="fad fa-file-search"></i>
+											</button>
+											<button th:if="${mapFlag.get(var)?.review_ != 1 and session.pm_e5 == true}" type="button"
+												class="btn btn-sm btn-outline-hover-success btn-icon btn-review" tabindex="-1" th:data-studyid="${studyid}" th:data-siteid="${siteid}"
+												th:data-visit="${visit}" th:data-scrno="${scrno}" th:data-domain="DM" th:data-cdashig="${var}"
+												th:disabled="${mapFlag.get(var)?.lock_} == 1">
+												<i class="fad fa-file-search"></i>
+											</button>
+											<!-- end::REVIEW button -->
+
+											<!-- begin::HISTORY button -->
+											<button type="button" class="btn btn-sm btn-outline-hover-brand btn-icon btn-history" tabindex="-1" data-toggle="collapse"
+												th:href="${'#collapse_history_' + var + sid}" role="button" aria-expanded="false" th:aria-controls="${'collapse_history_' + var + sid}"
+												th:data-studyid="${studyid}" th:data-shortname="${studyShortName}" th:data-siteid="${siteid}" th:data-visit="${visit}"
+												th:data-scrno="${scrno}" th:data-sid="${sid}" th:data-domain="DM" th:data-cdashig="${var}">
+												<span><i class="fad fa-history fa-lg"></i></span>
+											</button>
+											<!-- end::HISTORY button -->
+
+											<button th:if="${mapQuery.get(var)} and ${session.pm_q4 == true}" type="button" class="btn btn-sm btn-focus btn-query" tabindex="-1"
+												data-toggle="collapse" th:href="${'#collapse_query_' + var + sid}" role="button" aria-expanded="false"
+												th:aria-controls="${'collapse_query_' + var + sid}" th:data-studyid="${studyid}" th:data-shortname="${studyShortName}"
+												th:data-siteid="${siteid}" th:data-visit="${visit}" th:data-scrno="${scrno}" th:data-sid="${sid}" th:data-domain="DM"
+												th:data-cdashig="${var}" th:disabled="${mapFlag.get(var)?.lock_} == 1">
+												<i class="fas fa-comment-alt-dots fa-inverse fa-lg"></i> <span class="badge badge-light" th:if="${mapQueryPending.get(var)}"
+													th:text="${mapQueryPending.get(var)}"></span>
+											</button>
+											<button th:if="${mapQuery.get(var) == null} and ${session.pm_q4 == true}" type="button"
+												class="btn btn-sm btn-outline-hover-focus btn-icon btn-query" tabindex="-1" data-toggle="collapse"
+												th:href="${'#collapse_query_' + var + sid}" role="button" aria-expanded="false" th:aria-controls="${'collapse_query_' + var + sid}"
+												th:data-studyid="${studyid}" th:data-shortname="${studyShortName}" th:data-siteid="${siteid}" th:data-visit="${visit}"
+												th:data-scrno="${scrno}" th:data-sid="${sid}" th:data-domain="DM" th:data-cdashig="${var}" th:disabled="${mapFlag.get(var)?.lock_} == 1">
+												<i class="fad fa-comment-alt-dots fa-lg"></i>
+											</button>
+											<!-- end::QUERY button -->
+										</div>
+
+										<div class="col-12">
+
+											<div class="kt-separator kt-separator--space-lg"></div>
+
+											<div class="collapse multi-collapse" th:id="${'collapse_modifcation_' + var + sid}">
+												<div class="kt-portlet kt-portlet--tabs kt-portlet--solid-metal kt-portlet--height-fluid">
+													<div class="kt-portlet__head">
+														<div class="kt-portlet__head-label">
+															<h3 class="kt-portlet__head-title">Reason to modify</h3>
+														</div>
+													</div>
+
+													<div class="kt-portlet__body">
+														<div class="kt-scroll" data-scroll="true">
+															<div class="kt-select-inline">
+																<select class="form-control" th:name="${var + '_comment'}" th:id="${'select_comment_' + var + sid}">
+																	<option value="">Select...</option>
+																	<option value="NEW DATA">NEW DATA</option>
+																	<option value="DATA ENTRY ERROR">DATA ENTRY ERROR</option>
+																	<option value="QUERY RESOLUTION">QUERY RESOLUTION</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="collapse multi-collapse" th:id="${'collapse_history_' + var + sid}">
+												<div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">
+													<div class="kt-portlet__head">
+														<div class="kt-portlet__head-label">
+															<h3 class="kt-portlet__head-title">History</h3>
+														</div>
+													</div>
+
+													<div class="kt-portlet__body">
+														<div class="kt-scroll" data-scroll="true">
+															<!--begin: Datatable -->
+															<table class="table table-striped table-bordered table-hover" th:id="${'table_' + var + sid}">
+
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="collapse multi-collapse" th:id="${'collapse_query_' + var + sid}">
+												<div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">
+													<div class="kt-portlet__head">
+														<div class="kt-portlet__head-label">
+															<h3 class="kt-portlet__head-title">Query</h3>
+														</div>
+													</div>
+
+													<div class="kt-portlet__body">
+														<div class="tab-content">
+															<div th:if="${session.pm_q2}" class="kt-scroll" data-scroll="true">
+																<!--Begin::Item -->
+																<div class="form-group">
+																	<span class="col-form-label">STUDYID</span>
+																	<code th:text="${studyid}"></code>
+																	&emsp; <span class="col-form-label">SITEID</span>
+																	<code th:text="${siteid}"></code>
+																	&emsp; <span class="col-form-label">VISIT</span>
+																	<code th:text="${visit}"></code>
+																	&emsp; <span class="col-form-label">DOMAIN</span>
+																	<code th:text="${domain}"></code>
+																	&emsp; <span class="col-form-label">SCREEN NUMBER</span>
+																	<code th:text="${scrno}"></code>
+																	&emsp; <span class="col-form-label">SUBJID</span>
+																	<code th:if="${subjid}" th:text="${subjid}"></code>
+																	<code th:unless="${subjid}">N/A</code>
+																	&emsp; <span class="col-form-label">Variable:</span>
+																	<code th:text="${var}"></code>
+																</div>
+
+																<div class="form-group">
+																	<label class="col-form-label current_value">Value:</label> <input class="form-control" type="text"
+																		th:id="${'input_query_' + var + sid}" readonly />
+																</div>
+
+																<div class="form-group">
+																	<label for="message-text" class="col-form-label">Message:</label>
+																	<textarea th:disabled="${session.pm_q2 == false}" class="form-control" name="query_text" maxlength="200"></textarea>
+																	<span class="form-text text-muted">Please enter a query text. (A new line will be changed to a white space.)</span> <br />
+																	<button th:disabled="${session.pm_q2 == false}" type="button" class="btn btn-primary btn-query-submit" style="float: right;"
+																		id="btn_submit_query" th:data-studyid="${studyid}" th:data-siteid="${siteid}" th:data-visit="${visit}" th:data-scrno="${scrno}"
+																		th:data-subjid="${subjid}" th:data-domain="${domain}" th:data-cdashig="${var}">Submit</button>
+																</div>
+																<!--End::Item -->
+															</div>
+
+															<div th:if="${session.pm_q2}" class="col-12 kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+															<div class="kt-notes" th:if="${session.pm_q4}">
+																<div class="kt-notes__items">
+
+																	<div class="kt-notes__item" th:each="item : ${mapQuery.get(var)}" th:if="${item.qorder == 1}"
+																		th:with="firstname=${listUser.get(item.registeredBy)?.firstName}, lastname=${listUser.get(item.registeredBy)?.lastName}, org=${listUser.get(item.registeredBy)?.organization}, rname=${listUser.get(item.registeredBy)?.rname}">
+
+																		<div class="kt-notes__media">
+																			<h3 class="kt-notes__user kt-font-brand kt-font-boldest" th:if="${item.type == 'manual'}"
+																				th:text="${#strings.substring(firstname, 0, 1) + #strings.substring(lastname, 0, 1)}"></h3>
+
+																			<span class="kt-notes__icon kt-font-boldest" style="color: #3e4466;" th:if="${item.type == 'auto'}"> <i
+																				class="fad fa-cat fa-2x"></i>
+																			</span>
+																		</div>
+
+																		<div class="kt-notes__content">
+																			<div class="kt-notes__section">
+																				<div class="kt-notes__info">
+																					<a class="kt-notes__title" th:if="${item.type == 'manual'}"> <span
+																						th:text="${firstname + ' ' + lastname + ' (' + rname + ')'}"></span>
+																					</a> <a class="kt-notes__title" th:if="${item.type == 'auto'}"> Bella (System)</a> <span class="kt-notes__desc"> <span
+																						th:text="${'Opened at ' + #temporals.format(item.convertedDate, session.timeformat)}"></span>
+																					</span>
+																				</div>
+
+																				<div class="kt-notes__dropdown" th:if="${session.pm_q1 == true}">
+																					<a href="#" class="btn btn-sm btn-icon-md btn-icon" data-toggle="dropdown"> <i class="far fa-ellipsis-v"></i>
+																					</a>
+
+																					<div th:if="${item.state == 'opened' or item.state == 'pending'}" class="dropdown-menu dropdown-menu-right">
+																						<h6 class="dropdown-header">Any response is required.</h6>
+																					</div>
+
+																					<div th:if="${item.state == 'closed'}" class="dropdown-menu dropdown-menu-right">
+																						<h6 class="dropdown-header">This query was closed already.</h6>
+																					</div>
+
+																					<div th:if="${item.state == 'in_progress'}" class="dropdown-menu dropdown-menu-right">
+																						<h6 class="dropdown-header">Set state of this query as</h6>
+																						<a class="dropdown-item query-action" th:data-studyid="${studyid}" th:data-siteid="${siteid}" th:data-visit="${visit}"
+																							th:data-scrno="${scrno}" th:data-subjid="${subjid}" th:data-domain="${domain}" th:data-sid="${sid}" th:data-cdashig="${var}"
+																							th:data-qid="${item.qid}" th:qorder="${item.qorder}" th:data-state="pending"><i class="fad fa-sync fa-spin"></i> &emsp;
+																							Pending</a> <a class="dropdown-item query-action" th:data-studyid="${studyid}" th:data-siteid="${siteid}" th:data-visit="${visit}"
+																							th:data-scrno="${scrno}" th:data-subjid="${subjid}" th:data-domain="${domain}" th:data-sid="${sid}" th:data-cdashig="${var}"
+																							th:data-qid="${item.qid}" th:qorder="${item.qorder}" th:data-state="closed"><i class="fad fa-check-circle"></i> &emsp;
+																							Closed</a>
+																					</div>
+																				</div>
+																			</div>
+
+																			<div class="kt-notes__body">
+																				<div th:if="${item.state == 'opened'}">
+																					<span class="badge badge-pill badge-primary" th:text="${item.state}"></span> <span th:if="${item.type== 'auto'}"
+																						class="badge badge-pill badge-dark" th:text="${item.type}"></span> <span th:if="${item.type== 'manual'}"
+																						class="badge badge-pill badge-warning" th:text="${item.type}"></span>
+																				</div>
+
+																				<div th:if="${item.state == 'pending' or item.state == 'in_progress'}">
+																					<span class="badge badge-pill badge-warning" th:text="${item.state}"></span> <span th:if="${item.type== 'auto'}"
+																						class="badge badge-pill badge-dark" th:text="${item.type}"></span> <span th:if="${item.type== 'manual'}"
+																						class="badge badge-pill badge-warning" th:text="${item.type}"></span>
+																				</div>
+
+																				<div th:if="${item.state == 'closed'}">
+																					<span class="badge badge-pill badge-success" th:text="${item.state}"></span> <span th:if="${item.type== 'auto'}"
+																						class="badge badge-pill badge-dark" th:text="${item.type}"></span> <span th:if="${item.type== 'manual'}"
+																						class="badge badge-pill badge-warning" th:text="${item.type}"></span>
+																				</div>
+
+																				<div th:if="${item.type== 'auto'}">
+																					<br /> <i class="fas fa-quote-left fa-2x"></i> &emsp; A new query (StudyID:
+																					<code th:text="${item.studyid}"></code>
+																					, SiteID:
+																					<code th:text="${item.siteid}"></code>
+																					, SCRNO:
+																					<code th:text="${item.scrno}"></code>
+																					for the variable
+																					<code th:text="${item.cdashig}"></code>
+																					and value
+																					<code th:text="${item.value}"></code>
+																					) has been created automatically. <br />
+																					<code th:text="${'>> ' + item.comment}"></code>
+																				</div>
+
+																				<div th:if="${item.type== 'manual'}">
+																					<br /> <i class="fas fa-quote-left fa-2x"></i> &emsp; <span th:text="${item.comment}"></span> <br />
+																					<code>
+																						This query was sent for the value '<span th:text="${item.value}"></span>'
+																					</code>
+																				</div>
+
+																				<div class="kt-list kt-list--badge" th:each="reply: ${mapQuery.get(var)}" th:with="user=${listUser.get(reply.registeredBy)}"
+																					th:if="${reply.qid == item.qid and reply.qorder != 1}">
+																					<br />
+																					<div class="kt-list__item">
+																						<span class="kt-list__badge kt-list__badge--brand"></span> <span class="kt-list__text"> <span
+																							class="kt-media kt-media--sm kt-media--circle kt-media--brand"> <span
+																								th:text="${#strings.substring(user.firstName, 0, 1) + #strings.substring(user.lastName, 0, 1)}" data-toggle="kt-tooltip"
+																								data-skin="brand" data-placement="top"
+																								th:title="${user.firstName + ' ' + user.lastName + ' (' + user.rname + '; ' + user.organization + ')'}">AL</span>
+																						</span> &nbsp; <span th:text="${reply.comment}">answer text</span> <span style="float: right;"
+																							th:text="${#temporals.format(reply.registeredDate, session.timeformat)}"></span>
+																						</span>
+																					</div>
+																				</div>
+
+																				<div class="form-group" th:if="${session.pm_q3 == true}">
+																					<br /> <label class="col-form-label">Reply</label>
+																					<div class="input-group">
+																						<input th:disabled="${item.state == 'closed'}" type="text" class="form-control" th:id="${'input_reply_' + var + sid}"
+																							th:data-studyid="${studyid}" th:data-siteid="${siteid}" th:data-visit="${visit}" th:data-scrno="${scrno}"
+																							th:data-subjid="${subjid}" th:data-domain="${domain}" th:data-sid="${sid}" th:data-cdashig="${var}" th:data-qid="${item.qid}"
+																							th:data-qorder="${item.qorder + 1}" th:data-value="''" />
+
+																						<div class="input-group-append">
+																							<button th:disabled="${item.state == 'closed'}" class="btn btn-sm btn-secondary btn-reply-submit" type="button">
+																								<i class="fas fa-paper-plane"></i>&nbsp; Send
+																							</button>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+
+																		</div>
+																	</div>
+
+																	<div th:unless="${mapQuery.get(var)}" class="kt-notes__item">
+																		<div class="kt-notes__media">
+																			<span class="kt-notes__icon kt-font-boldest" style="color: #3e4466;"> <i class="fad fa-cat fa-2x"></i>
+																			</span>
+																		</div>
+																		<div class="kt-notes__content">
+																			<div class="kt-notes__section">
+																				<div class="kt-notes__info">
+																					<a class="kt-notes__title"> Bella (System)</a> <span class="kt-notes__desc"
+																						th:text="${'Opened at ' + #calendars.format(#calendars.createNow(), session.timeformat)}"> </span>
+																				</div>
+																			</div>
+																			<span class="kt-notes__body"><br /> <i class="fas fa-quote-left fa-2x"></i> &emsp; There is no query history for this
+																				variable yet. <br /> </span>
+																		</div>
+																	</div>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+
+										<div class="col-12 kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-1"></div>
+					</div>
+				</form>
+			</div>
+
+			<!--end::Portlet-->
+		</div>
+		<!--end::Dashboard 3-->
+	</div>
+	<!-- end:: Main content -->
+
+
+
+	<script>
+		var changed = [];
+		var isEmpty = false;
+
+		var save_changes = function() {
+			for (var i = 0; i < changed.length; i++) {
+				if ($('#select_comment_' + changed[i]).children("option:selected").val() == '')
+					isEmpty = true;
+			}
+
+			if (isEmpty == true) {
+				swal.fire({
+					title : 'You must provide a reason why you modify a value.',
+					icon : 'error',
+					backdrop : false,
+					confirmButtonText : 'OK',
+				});
+
+				isEmpty = false;
+				return;
+			}
+
+			swal.fire({
+				title : msg14,
+				icon : 'info',
+				iconHtml : ' ',
+				backdrop : false,
+				showCancelButton : true,
+				cancelButtonText : 'No',
+				confirmButtonText : 'Yes',
+				reverseButtons : true
+			}).then(function(result) {
+				if (result.value) {
+					update();
+				}
+			});
+		};
+
+		function update() {
+			var form = document.getElementById('form_crf_DM');
+			form.submit();
+
+			return true;
+		}
+
+		var arrows = {
+			leftArrow : '<i class="la la-angle-left"></i>',
+			rightArrow : '<i class="la la-angle-right"></i>'
+		}
+
+		/* var warning_class = "kt-badge kt-badge--warning kt-badge--rounded kt-badge--inline";
+		var success_class = "kt-badge kt-badge--danger kt-badge--rounded kt-badge--inline"; */
+		var studyDateFormat = "[[${session.studyDateFormat}]]";
+		/* var lang = "[[${session.lang}]]"; */
+		var lang = '[[${#locale.language}]]' || '';
+
+		$(document).ready(function() {
+			// date picker
+
+			$('#input_BRTHDTC0, #input_DMDTC0').datepicker({
+				language : lang,
+				format : studyDateFormat,
+				todayBtn : "linked",
+				clearBtn : true,
+				todayHighlight : false,
+				orientation : "bottom left",
+				templates : arrows,
+				forceParse : 0
+			});
+
+			// check whether it is modification
+			if ('[[${isUpdate}]]'.length > 0)
+				$('input').on('change', function() {
+					var id = $(this).data('modification');
+					$('#collapse_modifcation_' + id).collapse('show');
+
+					if (!changed.includes(id))
+						changed.push(id);
+				});
+
+			$('textarea.form-control').maxlength({
+				alwaysShow : true,
+				threshold : 10,
+				warningClass : warning_class,
+				limitReachedClass : success_class,
+				separator : ' of ',
+				preText : '',
+				postText : ' chars',
+				validate : true,
+				placement : 'bottom'
+			});
+
+		});
+
+		function export_blankPDF() {
+			swal.fire({
+				title : 'Do you want to export blank CRF DM?',
+				icon : 'info',
+				iconHtml : ' ',
+				backdrop : false,
+				showCancelButton : true,
+				cancelButtonText : 'No',
+				confirmButtonText : 'Yes',
+				reverseButtons : true
+			}).then(function(result) {
+				if (result.value) {
+					var form = $('#form_export_pdf');
+					form.submit();
+				}
+			});
+		}
+	</script>
+
+</div>
+</html>
+

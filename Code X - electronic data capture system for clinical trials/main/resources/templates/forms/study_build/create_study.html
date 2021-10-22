@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Create New Study</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet" id="div_study">
+        <form
+          method="post"
+          th:object="${objStudy}"
+          autocomplete="off"
+          id="form_create_study"
+        >
+          <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+              <h3 class="kt-portlet__head-title">Create New Study</h3>
+            </div>
+
+            <div class="kt-portlet__head-toolbar">
+              <button
+                type="button"
+                class="btn btn-sm btn-hover btn-danger btn-elevate"
+                id="btn_create_study"
+              >
+                <i class="fad fa-save fa-lg"></i>
+                <span class="kt-hidden-mobile">
+                  &nbsp; <strong>SAVE</strong> &nbsp;
+                  <span class="kt-opacity-7">CHANGES</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="form-group row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label>Study full name:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="fullname"
+                        placeholder="Enter study full name"
+                        th:value="${objStudy.fullname}"
+                        maxlength="500"
+                        id="input_fullname"
+                      />
+                      <span class="form-text text-muted">... </span>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Study ID:</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="studyid"
+                        placeholder="Enter study ID"
+                        th:value="${objStudy.studyid}"
+                        maxlength="100"
+                        id="input_studyid"
+                      />
+                      <span class="form-text text-muted">... </span>
+                    </div>
+
+                    ...
+
+                    <div class="form-group">
+                      <label>Site ID(s):</label>
+                      <input
+                        type="text"
+                        name="siteid"
+                        placeholder="Enter site ID"
+                        value="S01, S02"
+                        maxlength="50"
+                        id="input_siteid"
+                        required
+                      />
+                      <span class="form-text text-muted">... </span>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Site Name(s):</label>
+                      <input
+                        type="text"
+                        name="sitename"
+                        placeholder="Enter site name"
+                        value="Nepal,Philippines"
+                        maxlength="100"
+                        id="input_sitename"
+                        required
+                      />
+                      <span class="form-text text-muted">... </span>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Maximum number of visits:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        name="maxvisit"
+                        placeholder="0-20"
+                        th:value="${objStudy.maxvisit}"
+                        min="0"
+                        max="20"
+                        id="input_visitnum"
+                        maxlength="2"
+                      />
+                      <span class="form-text text-muted">...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <!-- begin:: #check study short name -->
+    <script>
+      var list = "[[${list_studyname}]]";
+      var isChcked = false;
+
+      $("#input_shortname").on("input", function () {
+        var value = $("#input_shortname").val().toLowerCase().trim();
+        var converted = list.substring(1, list.length - 1).split(",");
+
+        if (value.length <= 4) {
+          setFailTags();
+        } else {
+          var boolCheck = false;
+          converted.forEach(function (el) {
+            if (el.trim() == value) boolCheck = true;
+          });
+
+          /* found in the list */
+          if (boolCheck == true) setFailTags();
+          else setSuccessTags();
+        }
+      });
+
+      $("#input_shortname").on("change", function () {
+        // ...
+      });
+
+      $("#input_visitnum").on("input", function () {
+        var value = $("#input_visitnum").val();
+
+        if (value > 20 || value < 1) {
+          swal
+            .fire({
+              title: "The value must be equal or less than 20",
+              icon: "error",
+              backdrop: false,
+              showCancelButton: false,
+              confirmButtonText: "OK",
+            })
+            .then(function (result) {
+              $("#input_visitnum").val("");
+            });
+        }
+      });
+
+      $("#btn_create_study").on("click", function () {
+        var fullname = $("#input_fullname").val();
+        var studyid = $("#input_studyid").val();
+        var shortname = $("#input_shortname").val();
+        var siteids = $("#input_siteid").val();
+        var sitenames = $("#input_sitename").val();
+        var maxvisits = $("#input_visitnum").val();
+
+        if (
+          isChcked == false ||
+          fullname.length == 0 ||
+          studyid.length == 0 ||
+          shortname.length == 0 ||
+          siteids.length == 0 ||
+          sitenames.length == 0 ||
+          maxvisits.length == 0
+        ) {
+          swal.fire({
+            title: "You must enter all fields. Please try it again.",
+            icon: "error",
+            backdrop: false,
+            showCancelButton: false,
+            confirmButtonText: "OK",
+          });
+        } else {
+          var form = $("#form_create_study");
+          form.submit();
+        }
+      });
+
+      var setSuccessTags = function () {
+        $("#input_shortname").removeClass("is-invalid");
+        $("#input_shortname").addClass("is-valid");
+        $("#btn_build_next").prop("disabled", false);
+        isChcked = true;
+      };
+
+      var setFailTags = function () {
+        $("#input_shortname").removeClass("is-valid");
+        $("#input_shortname").addClass("is-invalid");
+        $("#btn_build_next").prop("disabled", true);
+        isChcked = false;
+      };
+    </script>
+    <!-- end:: #check study short name -->
+
+    <!--begin::Page Scripts(used by this page) -->
+    <script>
+      jQuery(document).ready(function () {
+        isChcked = false;
+
+        //
+      });
+    </script>
+    <!--end::Page Scripts -->
+  </div>
+</html>

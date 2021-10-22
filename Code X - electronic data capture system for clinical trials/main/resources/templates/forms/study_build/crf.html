@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Build</a
+            >
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >eCRF</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet" id="div_crf_build">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Build - eCRF</h3>
+          </div>
+
+          <div class="kt-portlet__head-toolbar">
+            <button
+              type="button"
+              class="btn btn-sm btn-hover btn-dark btn-elevate kt-margin-r-10"
+              id="btn_import_design"
+            >
+              <i class="fad fa-file-import fa-lg"></i>
+              <span class="kt-hidden-mobile">
+                &nbsp; <strong>IMPORT</strong> &nbsp;
+                <span class="kt-opacity-7">DESIGN</span>
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-sm btn-hover btn-dark btn-elevate kt-margin-r-10"
+              id="btn_export_design"
+            >
+              <i class="fad fa-file-export fa-lg"></i>
+              <span class="kt-hidden-mobile">
+                &nbsp; <strong>EXPORT</strong> &nbsp;
+                <span class="kt-opacity-7">DESIGN</span>
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="
+                btn btn-sm btn-hover btn-primary btn-elevate
+                kt-margin-r-10
+              "
+              id="btn_refresh_tamplates"
+            >
+              <i class="fad fa-repeat fa-lg"></i>
+              <span class="kt-hidden-mobile">
+                &nbsp; <strong>REFRESH</strong> &nbsp;
+                <span class="kt-opacity-7">TEMPLATES</span>
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-sm btn-hover btn-danger btn-elevate"
+              id="btn_save_crf"
+            >
+              <i class="fad fa-save fa-lg"></i>
+              <span class="kt-hidden-mobile">
+                &nbsp; <strong>SAVE</strong> &nbsp;
+                <span class="kt-opacity-7">CHANGES</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="kt-section kt-section--first">
+            <div class="kt-section__body">
+              <div class="alert alert-secondary" role="alert">
+                <div class="alert-icon">
+                  <i class="flaticon-warning kt-font-brand"></i>
+                </div>
+                <div class="alert-text">Please enter the version of e-CRF.</div>
+              </div>
+
+              <div
+                class="
+                  kt-separator
+                  kt-separator--space-lg
+                  kt-separator--border-dashed
+                "
+              ></div>
+
+              <div class="form-group row">
+                <div class="col-lg-3 col-xl-3 col-sm-12">
+                  <label class="col-form-label">e-CRF version</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="input_crf_version"
+                    required
+                  />
+                  <span
+                    >Latest version: <code th:text="${latestVersion}"></code>
+                  </span>
+                </div>
+
+                <div class="col-lg-1 col-xl-1 col-sm-12"></div>
+
+                <div class="col-lg-6 col-xl-6 col-sm-12">
+                  <label class="col-form-label">Comment</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="input_crf_comment"
+                    maxlength="30"
+                    placeholder="Please specify any comment to explain this version..."
+                  />
+                </div>
+              </div>
+
+              <div
+                class="
+                  kt-separator
+                  kt-separator--space-lg
+                  kt-separator--border-dashed
+                "
+              ></div>
+
+              <ul class="nav nav-pills nav-tabs-btn" role="tablist">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    data-toggle="tab"
+                    href="#crf_plan"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                    ><span style="font-size: 2em"
+                      ><i class="fad fa-user-edit fa-lg"></i></span
+                    ><span class="nav-link-title">Visit plan</span></a
+                  >
+                </li>
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Demographics"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_dm"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                    ><span style="font-size: 2em"
+                      ><i class="fad fa-id-card-alt fa-lg"></i></span
+                    ><span class="nav-link-title">DM</span></a
+                  >
+                </li>
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Disposition Domain"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_ds"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                    ><span style="font-size: 2em"
+                      ><i class="fad fa-house-user fa-lg"></i></span
+                    ><span class="nav-link-title">DS</span></a
+                  >
+                </li>
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Vital Signs"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_vs"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                    ><span style="font-size: 2em"
+                      ><i class="fad fa-heartbeat fa-lg"></i></span
+                    ><span class="nav-link-title">VS</span></a
+                  >
+                </li>
+
+                ...
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Pharmacokinetic Concentrations"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_pc"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                  >
+                    <span style="font-size: 2em"
+                      ><i class="fad fa-microscope fa-lg"></i
+                    ></span>
+                    <span class="nav-link-title">PC</span></a
+                  >
+                </li>
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Exposure"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_ex"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                  >
+                    <span style="font-size: 2em"
+                      ><i class="fad fa-hospital-user fa-lg"></i
+                    ></span>
+                    <span class="nav-link-title">EX</span></a
+                  >
+                </li>
+
+                ...
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Comments"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_co"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                  >
+                    <span style="font-size: 2em"
+                      ><i class="fad fa-comment-dots fa-lg"></i
+                    ></span>
+                    <span class="nav-link-title">CO</span></a
+                  >
+                </li>
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Subject Visit"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_sv"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                    ><span style="font-size: 2em"
+                      ><i class="fad fa-calendar-star fa-lg"></i></span
+                    ><span class="nav-link-title">SV</span></a
+                  >
+                </li>
+
+                <li
+                  class="nav-item"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="End of Study"
+                >
+                  <a
+                    class="nav-link"
+                    data-toggle="tab"
+                    href="#crf_eos"
+                    role="tab"
+                    style="width: 140px; height: 120px"
+                    ><span style="font-size: 2em"
+                      ><i class="fad fa-calendar-check fa-lg"></i></span
+                    ><span class="nav-link-title">EOS</span></a
+                  >
+                </li>
+              </ul>
+
+              <div
+                class="
+                  kt-separator
+                  kt-separator--space-lg
+                  kt-separator--border-dashed
+                "
+              ></div>
+
+              <div class="tab-content">
+                <div
+                  class="tab-pane fade active show"
+                  id="crf_plan"
+                  role="tabpanel"
+                >
+                  <div class="form-group row">
+                    <div class="col">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-label-linkedin check-all"
+                      >
+                        Check All
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-label-linkedin clear-all"
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group row" id="div_plan_CRF">
+                    <div
+                      class="col-12"
+                      th:each="i: ${#numbers.sequence(1, maxVisit)}"
+                    >
+                      <span class="badge badge-danger visit_number"
+                        >Visit <span th:text="${i}"></span
+                      ></span>
+                      <div class="kt-checkbox-inline">
+                        <label
+                          class="
+                            kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                          "
+                        >
+                          <input
+                            type="checkbox"
+                            class="VISIT_PLAN"
+                            name="chks_plan"
+                            th:value="${i + '_SV'}"
+                          />
+                          SV <span></span> </label
+                        ><label
+                          class="
+                            kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                          "
+                        >
+                          <input
+                            type="checkbox"
+                            class="VISIT_PLAN"
+                            name="chks_plan"
+                            th:value="${i + '_DM'}"
+                          />
+                          DM <span></span>
+                        </label>
+                        <label
+                          class="
+                            kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                          "
+                        >
+                          <input
+                            type="checkbox"
+                            class="VISIT_PLAN"
+                            name="chks_plan"
+                            th:value="${i + '_DS'}"
+                          />
+                          DS <span></span>
+                        </label>
+                        ...
+                      </div>
+
+                      <div
+                        class="
+                          kt-separator
+                          kt-separator--space-lg
+                          kt-separator--border-dashed
+                        "
+                      ></div>
+                    </div>
+
+                   
+
+                <div class="tab-pane fade" id="crf_dm" role="tabpanel">
+                  <div class="form-group row">
+                    <div class="col">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-label-linkedin check-all"
+                      >
+                        Check All
+                      </button>
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-label-linkedin clear-all"
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    class="form-group row"
+                    id="chosen_crf_dm"
+                    th:each="item : ${crf_templates_dm}"
+                  >
+                    <div class="col">
+                      <div class="form-group">
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <label
+                                class="
+                                  kt-checkbox
+                                  kt-checkbox--single
+                                  kt-checkbox--primary
+                                "
+                                >&emsp;&emsp;
+                                <input
+                                  type="checkbox"
+                                  th:name="${'chk_DM_' + item.cdashig}"
+                                  th:value="${item.cdashig}"
+                                  checked
+                                />
+                                Use <span></span>
+                              </label>
+                              &emsp;&emsp;&emsp;
+                            </span>
+                          </div>
+                          <input
+                            type="text"
+                            class="form-control"
+                            aria-label="Text input with checkbox"
+                            th:placeholder="${item.text}"
+                            th:value="${item.text}"
+                            th:id="${'text_DM_' + item.cdashig}"
+                          />
+                        </div>
+
+                        <div class="input-group">
+                          <span
+                            class="badge badge-primary"
+                            th:text="${item.cdashig}"
+                          ></span
+                          >&emsp;<span
+                            class="form-text text-muted"
+                            th:text="${item.label}"
+                          >
+                          </span>
+                        </div>
+                      </div>
+
+                      <!--begin::for AGEU -->
+                      <div class="form-group" th:if="${item.cdashig == 'AGEU'}">
+                        <div class="kt-checkbox-list">
+                          <label
+                            class="
+                              kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              name="options_DM_AGEU"
+                              value="Years"
+                            />
+                            Years <span></span>
+                          </label>
+                          <label
+                            class="
+                              kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              name="options_DM_AGEU"
+                              value="Months"
+                            />
+                            Months <span></span>
+                          </label>
+                          <label
+                            class="
+                              kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                            "
+                          >
+                            <input
+                              type="checkbox"
+                              name="options_DM_AGEU"
+                              value="Days"
+                            />
+                            Days <span></span>
+                          </label>
+                        </div>
+                        <div
+                          class="
+                            kt-separator
+                            kt-separator--space-lg
+                            kt-separator--border-dashed
+                          "
+                        ></div>
+                      </div>
+                      <!--end::for AGEU -->
+                    </div>
+                  </div>
+                </div>
+
+                ...
+
+                <div class="tab-pane fade" id="kt_tabs_8_3" role="tabpanel">
+                  Not prepared yet
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Begin::modal import study template -->
+    <div
+      class="modal fade"
+      id="dialog_upload_study_template"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalImportCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fad fa-file-upload"></i> &nbsp; Import Study Template
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group row">
+              <div class="col">Please choose a file to be imported.</div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col">
+                <input type="file" id="input_study_template" accept=".txt" />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-brand"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-brand"
+              id="btn_proceed_import"
+              onclick="import_study_template()"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var mySession = {};
+
+      $("#btn_import_design").click(function () {
+        /* $('#input_upload_cdc').val(''); */
+        $("#dialog_upload_study_template").modal("show");
+      });
+
+      function import_study_template() {
+        $("#dialog_upload_study_template").modal("hide");
+
+        if ($("#input_study_template").val().trim().length > 0) {
+          var fileToUpload = $("#input_study_template").prop("files")[0];
+
+          KTApp.block("#div_crf_build", {
+            overlayColor: "#000000",
+            type: "v2",
+            state: "primary",
+            message: "Processing...",
+          });
+
+          var fileReader = new FileReader();
+          fileReader.onload = function () {
+            var data = fileReader.result; // data <-- in this var you have the file data in Base64 format
+            swal
+              .fire({
+                title: "Study template was successfully imported!",
+                text: "Data will be mapped automatically.",
+                icon: "success",
+                backdrop: true,
+                allowOutsideClick: false,
+                confirmButtonText: "OK",
+              })
+              .then(function (result) {
+                if (result.value) wrapWithImportedJSON(data);
+              });
+          };
+          fileReader.readAsText($("#input_study_template").prop("files")[0]);
+        } else
+          swal.fire({
+            title: "You must choose a file!",
+            icon: "error",
+            backdrop: false,
+            confirmButtonText: "OK",
+          });
+      }
+
+      function wrapWithImportedJSON(data) {   
+        $.each($("input:checkbox"), function () {
+          $(this).prop("checked", false);
+        });
+
+        var parsedData = JSON.parse(data);
+
+        // e-crf version
+        $("#input_crf_version").val(parsedData.version);
+        $("#input_crf_comment").val(parsedData.comment);
+
+        // visit plan
+        var visits = $("#div_plan_CRF").find("input:checkbox");
+        var visits_imported = parsedData.visit_plan.split(";");
+        $.each(visits_imported, function (index, value) {
+          $.each(visits, function () {
+            if (value == $(this).val()) $(this).prop("checked", true);
+          });
+        });
+
+        // DM
+        // chosen_crf_dm": "STUDYID;SITEID;SUBJID;BRTHDTC;AGE;AGEU;DMDTC;SEX;ETHNIC;RACE;",
+        var chosen_dm = parsedData.chosen_crf_dm.split(";");
+        $.each(chosen_dm, function (index, value) {
+          $("input[name='chk_DM_" + value + "']").prop("checked", true);
+        });
+
+        // texts_dm
+        var texts_dm = $("#crf_dm").find("input:text");
+        $.each(texts_dm, function () {
+          $(this).val(parsedData[$(this).prop("id")]);
+        });
+
+        // "options_DM_AGEU": "Years;Months;Days;",
+        var options_dm_ageu = parsedData.options_DM_AGEU.split(";");
+        $.each(options_dm_ageu, function (index, value) {
+          $.each($('input[name="options_DM_AGEU"]'), function () {
+            if (value == $(this).val()) $(this).prop("checked", true);
+          });
+        });
+
+        // DS
+        // "chosen_crf_ds": "STUDYID;SITEID;SUBJID;DSDECOD_IC;DSDECOD_IA;DSTERM;DSSTDAT_IC;DSSTDAT_IA;DSUNBLND;DSCONT;DSNEXT;",
+        var chosen_ds = parsedData.chosen_crf_ds.split(";");
+        $.each(chosen_ds, function (index, value) {
+          $("input[name='chk_DS_" + value + "']").prop("checked", true);
+        });
+
+        // texts_ds
+        var texts_ds = $("#crf_ds").find("input:text");
+        $.each(texts_ds, function () {
+          $(this).val(parsedData[$(this).prop("id")]);
+        });
+
+        // options_DS_DSDECOD_IA
+        var options_ds_dsdecod_ia = parsedData.options_DS_DSDECOD_IA.split(";");
+        $.each(options_ds_dsdecod_ia, function (index, value) {
+          $.each($('input[name="options_DS_DSDECOD_IA"]'), function () {
+            if (value == $(this).val()) $(this).prop("checked", true);
+          });
+        });
+
+        // options_DS_DSDECOD_IC
+        var options_ds_dsdecod_ic = parsedData.options_DS_DSDECOD_IC.split(";");
+        $.each(options_ds_dsdecod_ic, function (index, value) {
+          $.each($('input[name="options_DS_DSDECOD_IC"]'), function () {
+            if (value == $(this).val()) $(this).prop("checked", true);
+          });
+        });
+
+        // ...
+
+        KTApp.unblock("#div_crf_build");
+      }
+
+      $("#btn_export_design").on("click", function () {
+        if (update_session() == true) {
+          const json = JSON.stringify(mySession, null, 2);
+
+          $("<a />", {
+            download:
+              "Bella EDC template " + new Date().toLocaleDateString() + ".txt",
+            href: "data:application/json," + encodeURIComponent(json),
+          })
+            .appendTo("body")
+            .click(function () {
+              $(this).remove();
+            })[0]
+            .click();
+        }
+      });
+
+      $("#btn_refresh_tamplates").on("click", function () {
+        swal
+          .fire({
+            title: "Are you sure to refresh CRF templates?",
+            icon: "info",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              refresh_templates();
+            }
+          });
+      });
+
+      function refresh_templates() {
+        var btn = document.getElementById("btn_refresh_tamplates");
+        KTApp.progress(btn);
+        // pause
+        KTApp.block("#div_crf_build", {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Processing...",
+        });
+
+        var err_text = "An error has occured to get CRF templates.";
+
+        $.ajax({
+          type: "POST",
+          url: "/build/refresh_crf_templates",
+          success: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            KTApp.unblock("#div_crf_build");
+
+            var str = JSON.parse(xhr.responseText);
+
+            if (str.result == "success") {
+              swal
+                .fire({
+                  title: "Refreshing templates successful",
+                  icon: "success",
+                  backdrop: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  location.reload();
+                });
+            } else if (str.result == "build-crf") {
+              swal.fire({
+                title: "error",
+                text: err_text,
+                icon: "error",
+                backdrop: false,
+                confirmButtonText: "OK",
+              });
+            }
+            /* window.location = '/'; */
+          },
+          error: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            KTApp.unblock("#div_crf_build");
+            msg_error();
+          },
+        });
+      }
+
+      $("#btn_save_crf").on("click", function () {
+        event.preventDefault();
+        if (update_session() == true)
+          swal
+            .fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              backdrop: false,
+              showCancelButton: true,
+              cancelButtonText: "No",
+              confirmButtonText: "Yes",
+              reverseButtons: true,
+            })
+            .then(function (result) {
+              if (result.value) {
+                completeBuild();
+              }
+            });
+      });
+
+      function completeBuild() {
+        var btn = document.getElementById("btn_save_crf");
+
+        KTApp.progress(btn);
+        // pause
+        KTApp.block("#div_crf_build", {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Processing...",
+        });
+
+        var err_text = "something is wrong, check the e-CRF version";
+
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(mySession),
+          success: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            KTApp.unblock("#div_crf_build");
+
+            var str = JSON.parse(xhr.responseText);
+
+            if (str.result == "success") {
+              swal
+                .fire({
+                  title: msg_save_success,
+                  icon: "success",
+                  backdrop: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  location.reload();
+                });
+            } else if (str.result == "build-crf") {
+              swal
+                .fire({
+                  title: "error",
+                  text: err_text,
+                  icon: "error",
+                  backdrop: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  location.reload();
+                });
+            } else if (str.result == "duplicated version") {
+              swal
+                .fire({
+                  title: "error",
+                  text: str.msg,
+                  icon: "error",
+                  backdrop: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  location.reload();
+                });
+            }
+            /* window.location = '/'; */
+          },
+          error: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            KTApp.unblock("#div_crf_build");
+            msg_error();
+          },
+        });
+      }
+
+      jQuery(document).ready(function () {
+        $("#input_crf_version").TouchSpin({
+          buttondown_class: "btn btn-secondary",
+          buttonup_class: "btn btn-secondary",
+
+          min: 0,
+          max: 10,
+          step: 0.01,
+          decimals: 2,
+          boostat: 5,
+          maxboostedstep: 10,
+        });
+
+        init_extra_user_role_change_listener();
+      });
+    </script>
+
+    <!-- begin::Build/User Role -->
+    <script type="text/javascript" src="assets/js/customized/build.js"></script>
+    <!-- begin::Build/User Role -->
+  </div>
+</html>

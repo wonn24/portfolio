@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X - Document</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Document</h3>
+          <span class="kt-subheader__separator kt-hidden"></span>
+          <div class="kt-subheader__breadcrumbs">
+            <a href="/" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="row">
+        <div class="col-xl-3">
+          <!--begin::Portlet-->
+          <div class="kt-portlet">
+            <div class="kt-portlet__body kt-portlet__body--fit-x">
+              <ul
+                class="
+                  kt-nav
+                  kt-nav--bold
+                  kt-nav--md-space
+                  kt-nav--lg-font
+                  kt-nav--v3
+                  nav nav-tabs
+                "
+                role="tablist"
+              >
+                <li class="kt-nav__item">
+                  <a
+                    href="#content_about_code_x"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                    aria-controls="content_about_code_x"
+                    aria-selected="true"
+                  >
+                    <span class="kt-nav__link-text">About code_x</span>
+                  </a>
+                </li>
+
+                <li class="kt-nav__item">
+                  <a
+                    href="#content_contact"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text">Contact</span>
+                  </a>
+                </li>
+
+                <li th:if="${session.uid}" class="kt-nav__item">
+                  <a
+                    href="#content_abbreviations"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text">Abbreviations</span>
+                  </a>
+                </li>
+
+                <li th:if="${session.uid}" class="kt-nav__item">
+                  <a
+                    href="#content_assumptions_constraints"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text"
+                      >Assumptions &amp; Constraints</span
+                    >
+                  </a>
+                </li>
+
+                <li th:if="${session.uid}" class="kt-nav__item">
+                  <a
+                    href="#content_requirements"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text">Requirements</span>
+                  </a>
+                </li>
+
+                <li th:if="${session.uid}" class="kt-nav__item">
+                  <a
+                    href="#content_user_roles"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text"
+                      >User roles &amp; Permissions</span
+                    >
+                  </a>
+                </li>
+
+                <li th:if="${session.uid}" class="kt-nav__item">
+                  <a
+                    href="#content_howto_sign_up_in"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text">How to sign-up/-in</span>
+                  </a>
+                </li>
+
+                <li th:if="${session.uid}" class="kt-nav__item">
+                  <a
+                    href="#content_howto_build_study"
+                    data-toggle="tab"
+                    role="tab"
+                    class="kt-nav__link"
+                  >
+                    <span class="kt-nav__link-text">How to build a study</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!--end::Portlet-->
+        </div>
+
+        <div class="col-xl-9">
+          <div class="tab-content">
+            <!--begin::Portlet about-->
+            <div
+              class="kt-portlet tab-pane fade show active"
+              id="content_about_code_x"
+              role="tabpanel"
+            >
+              <div class="kt-portlet__body">
+                <!--begin::Section-->
+                <h1
+                  class="
+                    kt-heading
+                    kt-heading--space-xl
+                    kt-heading--lg
+                    kt-heading--medium
+                  "
+                >
+                  About code_x
+                </h1>
+
+                <div class="kt-section">
+                  <div class="kt-heading kt-heading--md kt-heading--medium">
+                    Release history
+                  </div>
+                  <div class="kt-section__content">
+                    Version 2.00 is released on 2020-10-26
+                  </div>
+                </div>
+
+                <!--end::Section-->
+                <div class="kt-separator kt-separator--space-sm"></div>
+
+                <!--begin::Section-->
+                <div class="kt-section">
+                  <div class="kt-heading kt-heading--md kt-heading--medium">
+                    Benefits
+                  </div>
+                  <div class="kt-section__content">
+                    <!--begin::Accordion-->
+                    <div class="accordion accordion-light">
+                      <div class="card">
+                        <div class="card-header" id="heading1-1">
+                          <div
+                            class="card-title collapsed"
+                            data-toggle="collapse"
+                            role="button"
+                            data-target="#collapse1-1"
+                            aria-expanded="true"
+                            aria-controls="collapse1-1"
+                          >
+                            Software as a service
+                          </div>
+                        </div>
+                        <div
+                          id="collapse1-1"
+                          class="card-body-wrapper collapse"
+                          aria-labelledby="heading1-1"
+                        >
+                          <div class="card-body">...</div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading1-2">
+                          <div
+                            class="card-title collapsed"
+                            data-toggle="collapse"
+                            role="button"
+                            data-target="#collapse1-2"
+                            aria-expanded="true"
+                            aria-controls="collapse1-2"
+                          >
+                            Compliant with regulations
+                          </div>
+                        </div>
+                        <div
+                          id="collapse1-2"
+                          class="card-body-wrapper collapse"
+                          aria-labelledby="heading1-2"
+                        >
+                          <div class="card-body">
+                            code_x EDC is compliant with industry regulations
+                            such as GAMP5 and 21 CFR Part 11.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="card">
+                        <div class="card-header" id="heading1-3">
+                          <div
+                            class="card-title collapsed"
+                            data-toggle="collapse"
+                            role="button"
+                            data-target="#collapse1-3"
+                            aria-expanded="true"
+                            aria-controls="collapse1-3"
+                          >
+                            Easy and fast to build your studies with CDISC
+                            Standards
+                          </div>
+                        </div>
+                        <div
+                          id="collapse1-3"
+                          class="card-body-wrapper collapse"
+                          aria-labelledby="heading1-3"
+                        >
+                          <div class="card-body">
+                            code_x EDC supports CDISC Standards to create a
+                            study easily, quickly, and efficiently. It also
+                            provides complete traceability and improved data
+                            quality.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--end::Accordion-->
+                  </div>
+                </div>
+                <!--end::Section-->
+              </div>
+            </div>
+            <!--end::Portlet-->
+
+            <!--begin::Portlet contract-->
+            <div
+              class="kt-portlet tab-pane fade"
+              id="content_contact"
+              role="tabpanel"
+            >
+              <div class="kt-portlet__body">
+                <!--begin::Section-->
+                <h1
+                  class="
+                    kt-heading
+                    kt-heading--space-xl
+                    kt-heading--lg
+                    kt-heading--medium
+                  "
+                >
+                  Contact
+                </h1>
+
+                <!--begin::Section-->
+                <div class="kt-section">
+                  <div class="kt-heading kt-heading--md kt-heading--medium">
+                    System design &amp; development
+                  </div>
+                  <div class="kt-section__content">
+                    <h5>Hyeongwon Seo, PhD</h5>
+                  </div>
+                </div>
+                <!--end::Section-->
+              </div>
+            </div>
+            <!--end::Portlet-->
+
+            <!--begin::Portlet Abbreviations-->
+            <div
+              class="kt-portlet tab-pane fade"
+              id="content_abbreviations"
+              role="tabpanel"
+            >
+              <div class="kt-portlet__body">
+                <!--begin::Section-->
+                <h1
+                  class="
+                    kt-heading
+                    kt-heading--space-xl
+                    kt-heading--lg
+                    kt-heading--medium
+                  "
+                >
+                  Abbreviations
+                </h1>
+              </div>
+            </div>
+            <!--end::Portlet-->
+
+            <!--begin::Portlet Assumptions & Constraints-->
+            <div
+              class="kt-portlet tab-pane fade"
+              id="content_assumptions_constraints"
+              role="tabpanel"
+            >
+              <div class="kt-portlet__body">
+                <!--begin::Section-->
+                <h1
+                  class="
+                    kt-heading
+                    kt-heading--space-xl
+                    kt-heading--lg
+                    kt-heading--medium
+                  "
+                >
+                  Assumptions &amp; Constraints
+                </h1>
+
+                <!--begin::Section-->
+                <div class="kt-section">
+                  <div class="kt-heading kt-heading--md kt-heading--medium">
+                    Assumptions
+                  </div>
+                  <div class="kt-section__content">
+                    <ul>
+                      <li>A.</li>
+                      <li>B.</li>
+                    </ul>
+                  </div>
+                </div>
+                <!--end::Section-->
+
+                <!--end::Section-->
+                <div class="kt-separator kt-separator--space-sm"></div>
+
+                <!--begin::Section-->
+                <div class="kt-section">
+                  <div class="kt-heading kt-heading--md kt-heading--medium">
+                    Constraints
+                  </div>
+                  <div class="kt-section__content">
+                    <ul>
+                      <li>A.</li>
+                      <li>B.</li>
+                      <li>C.</li>
+                    </ul>
+                  </div>
+                </div>
+                <!--end::Section-->
+              </div>
+            </div>
+            <!--end::Portlet-->
+
+            <!--begin::Portlet Requirements-->
+            <div
+              class="kt-portlet tab-pane fade"
+              id="content_requirements"
+              role="tabpanel"
+            >
+              <div class="kt-portlet__body">
+                <!--begin::Section-->
+                <h1
+                  class="
+                    kt-heading
+                    kt-heading--space-xl
+                    kt-heading--lg
+                    kt-heading--medium
+                  "
+                >
+                  Requirements
+                </h1>
+
+                <p>...</p>
+              </div>
+            </div>
+            <!--end::Portlet-->
+
+            <!--begin::Portlet User roles & permissions-->
+            <div
+              class="kt-portlet tab-pane fade"
+              id="content_user_roles"
+              role="tabpanel"
+            >
+              <div class="kt-portlet__body">
+                <!--begin::Section-->
+                <h1
+                  class="
+                    kt-heading
+                    kt-heading--space-xl
+                    kt-heading--lg
+                    kt-heading--medium
+                  "
+                >
+                  User roles &amp; Permissions
+                </h1>
+                <!--end::Section-->
+
+                <!--begin::Section-->
+                <div class="kt-section">
+                  <div class="kt-section__content">
+                    <p>...</p>
+                  </div>
+
+                  <div class="kt-heading kt-heading--md kt-heading--medium">
+                    Roles
+                  </div>
+
+                  ...
+                </div>
+              </div>
+            </div>
+            <!--end::Portlet-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- end:: Content -->
+
+    <script>
+      $(document).ready(function () {
+        $(".copyToClipboard").click(function () {
+          let str = $(this).attr("data-content");
+          const el = document.createElement("textarea");
+          el.value = str;
+          el.setAttribute("readonly", "");
+          el.style.position = "absolute";
+          el.style.left = "-9999px";
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand("copy");
+          document.body.removeChild(el);
+
+          var ic = "#" + $(this).attr("id");
+          $(ic).attr("data-original-title", "Copied").tooltip("show");
+          $(ic).children().removeClass("far fa-copy");
+          $(ic).children().addClass("far fa-check");
+
+          setTimeout(function () {
+            $(ic).attr("data-original-title", "Copy to Clipboard");
+            $(ic).children().removeClass("far fa-check");
+            $(ic).children().addClass("far fa-copy");
+          }, 2000);
+        });
+      });
+    </script>
+  </div>
+</html>

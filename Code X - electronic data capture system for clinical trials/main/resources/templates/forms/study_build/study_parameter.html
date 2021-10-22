@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Parameter Setting</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet" id="div_study">
+        <form
+          method="post"
+          th:object="${objStudy}"
+          autocomplete="off"
+          id="form_study_parameter"
+        >
+          <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+              <h3 class="kt-portlet__head-title">Set Study Parameters</h3>
+            </div>
+
+            <div class="kt-portlet__head-toolbar">
+              <button
+                type="button"
+                class="btn btn-sm btn-hover btn-danger btn-elevate"
+                id="btn_save_parameter"
+              >
+                <i class="fad fa-save fa-lg"></i>
+                <span class="kt-hidden-mobile">
+                  &nbsp; <strong>SAVE</strong> &nbsp;
+                  <span class="kt-opacity-7">CHANGES</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="form-group row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label>Study description:</label>
+                      <textarea
+                        class="form-control"
+                        name="description"
+                        th:value="${objStudy.description}"
+                        th:text="${objStudy.description}"
+                        maxlength="1000"
+                        id="input_fullname"
+                      ></textarea>
+                      <span class="form-text text-muted"
+                        >Please enter study description (max 1000 characters)
+                      </span>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Study Date format:</label>
+                      <select class="form-control" name="dateformat" required>
+                        <option value="" selected>
+                          Select a Date Format...
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'yyyy-mm-dd' ? 'selected'"
+                          value="yyyy-mm-dd"
+                        >
+                          yyyy-mm-dd (2020-01-01)
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'yyyy-M-dd' ? 'selected'"
+                          value="yyyy-M-dd"
+                        >
+                          yyyy-M-dd (2020-Jan-01)
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'dd M yyyy' ? 'selected'"
+                          value="dd M yyyy"
+                        >
+                          dd M yyyy (01 Jan 2020)
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'ddMyyyy' ? 'selected'"
+                          value="ddMyyyy"
+                        >
+                          ddMyyyy (01Jan2020)
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'dd/M/yyyy' ? 'selected'"
+                          value="dd/M/yyyy"
+                        >
+                          dd/M/yyyy (01/Jan/2020)
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'dd/mm/yyyy' ? 'selected'"
+                          value="dd/mm/yyyy"
+                        >
+                          dd/mm/yyyy (01/01/2020)
+                        </option>
+                        <option
+                          th:selected="${objStudy.dateformat} == 'mm/dd/yyyy' ? 'selected'"
+                          value="mm/dd/yyyy"
+                        >
+                          mm/dd/yyyy (01/01/2020)
+                        </option>
+                      </select>
+                      <span class="form-text text-muted"
+                        >Please select a date format which will be used commonly
+                        in a study.</span
+                      >
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <!--begin::Page Scripts(used by this page) -->
+    <script>
+      jQuery(document).ready(function () {        
+        //
+      });
+
+      $("#btn_save_parameter").on("click", function () {
+        event.preventDefault();
+
+        swal
+          .fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              var form = $("#form_study_parameter");
+              form.submit();
+            }
+          });
+      });
+    </script>
+    <!--end::Page Scripts -->
+  </div>
+</html>

@@ -1,0 +1,3454 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Lock Database</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a href="/" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="/studies" class="kt-subheader__breadcrumbs-link"
+              ><i class="fad fa-tags"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-subheader__breadcrumbs-link"
+              ><span th:text="${studyid}"></span
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName + '/' + siteid}"
+              class="kt-subheader__breadcrumbs-link"
+              ><span th:text="${siteid}"></span
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Lock DB</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <div class="kt-subheader__toolbar">
+          <div class="kt-subheader__wrapper">
+            <div class="dropdown dropdown-inline">
+              <a
+                th:if="${session.pm_d1 == true or session.pm_d2 == true or session.pm_d3 == true or session.pm_d4 == true or session.pm_d5 == true}"
+                th:href="${'/lock/' + studyShortName + '/' + siteid}"
+                class="btn btn-sm btn-hover btn-success btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fad fa-lock-alt fa-lg"></i> &nbsp;
+                <span class="kt-opacity-7">LOCK</span> &nbsp;
+                <strong>DB</strong></a
+              >
+              <a
+                th:if="${session.pm_t1 == true and studyid != null}"
+                th:href="${'/build/crf_version/' + studyShortName + '/' + siteid}"
+                class="btn btn-sm btn-hover btn-accent btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fad fa-repeat fa-lg"></i> &nbsp;
+                <span class="kt-opacity-7">SWITCH</span> &nbsp;
+                <strong>CRF</strong></a
+              >
+              <a
+                href="#"
+                class="
+                  btn btn-sm btn-hover btn-brand btn-elevate
+                  dropdown-toggle
+                "
+                data-toggle="dropdown"
+                data-offset="0px,0px"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fad fa-map-marker-alt fa-inverse fa-lg"></i> &emsp;
+                <span th:if="${#locale.language == 'en'}"
+                  ><span class="kt-opacity-7">CHOOSE</span> &nbsp;
+                  <strong>SITE</strong></span
+                >
+                <span
+                  th:unless="${#locale.language == 'en'}"
+                  th:text="#{menu.button.choose_site}"
+                ></span>
+              </a>
+
+              <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                <ul
+                  class="kt-nav kt-nav--active-bg"
+                  role="tablist"
+                  th:each="item: ${listStudy}"
+                >
+                  <li class="kt-nav__item">
+                    <a
+                      th:href="${'/study/' + studyShortName + '/' + item.siteid}"
+                      class="kt-nav__link"
+                      role="tab"
+                    >
+                      <i class="kt-nav__link-icon fas fa-map-marker-alt"></i>
+                      <span
+                        class="kt-nav__link-text"
+                        th:text="${item.siteid + ' - ' + item.sitename}"
+                      ></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <a
+                th:if="${session.pm_u1 == true or session.pm_u2 == true}"
+                th:href="${'/userlist/' + studyShortName + '/' + siteid}"
+                class="btn btn-sm btn-hover btn-focus btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fad fa-users-cog fa-lg"></i> &emsp;
+                <span class="kt-opacity-7">CHANGE</span> &nbsp;
+                <strong>ROLE</strong>
+              </a>
+              <a
+                th:if="${session.pm_e2 == true}"
+                th:href="${'/study/' + studyShortName + '/' + siteid + '/new_subject'}"
+                class="btn btn-sm btn-hover btn-dark btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fas fa-user-plus fa-lg"></i> &emsp;
+                <span th:if="${#locale.language == 'en'}"
+                  ><span class="kt-opacity-7">NEW</span> &nbsp;
+                  <strong>SUBJECT</strong></span
+                >
+                <span
+                  th:unless="${#locale.language == 'en'}"
+                  th:text="#{menu.button.new_subject}"
+                ></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+      id="portlet_dblock"
+    >
+      <!--begin::Portlet-->
+      <div class="kt-portlet" th:unless="${sid}">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              <span class="kt-portlet__head-icon" style="font-size: 1.5em"
+                ><i class="fad fa-exclamation-triangle"></i
+              ></span>
+              Important
+            </h3>
+          </div>
+
+          <div
+            class="kt-portlet__head-toolbar"
+            th:if="${listUser.get(session.uid)?.rid == 'role2'}"
+          >
+            <button
+              type="button"
+              class="btn btn-sm btn-hover btn-brand btn-elevate"
+              onclick="add()"
+              id="btn_add"
+            >
+              <i class="far fa-plus"></i> &nbsp;
+              <span class="kt-hidden-mobile"
+                ><strong>ADD</strong>&nbsp;
+                <span class="kt-opacity-7">ITEM</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="alert alert-secondary" role="alert">
+            <div
+              class="alert-text"
+              style="word-wrap: break-word; max-width: 100%"
+            >
+              <span style="float: left; padding-right: 20px"
+                ><i class="fas fa-quote-left fa-2x"></i
+              ></span>
+              [descriptions ***]
+            </div>
+          </div>
+
+          <div
+            class="
+              col-lg-12
+              kt-separator kt-separator--border-dashed kt-separator--space-lg
+            "
+          ></div>
+
+          <div class="kt-section kt-section--first">
+            <div class="kt-section__body">
+              <div class="row">
+                <label class="col-xl-3"></label>
+                <div class="col-lg-9 col-xl-6">
+                  <h3 class="kt-section__title kt-section__title-sm">
+                    Study information:
+                  </h3>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-1"></div>
+                <label class="col-2 col-form-label">Study ID</label>
+                <div class="col-6">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="studyid"
+                    th:value="${studyid}"
+                    readonly
+                  />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-1"></div>
+                <label class="col-2 col-form-label">Study full name</label>
+                <div class="col-6">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="studyid"
+                    th:value="${listStudy.get(0).fullname}"
+                    readonly
+                  />
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-1"></div>
+                <label class="col-2 col-form-label">Site ID</label>
+                <div class="col-6">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="siteid"
+                    th:value="${listStudy.get(0).siteid}"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kt-portlet" th:if="${sid}">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Database Lock Information</h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          id="form_dblock_role2"
+          method="post"
+          autocomplete="off"
+          th:object="${objDBLock}"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Request Form Version:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-1"></div>
+                  <label class="col-2 col-form-label">DB Lock version</label>
+                  <div class="col-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="version"
+                      th:value="${objDBLock.version}"
+                      th:disabled="${objDBLock.version != 0}"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="
+                    kt-separator
+                    kt-separator--border-dashed
+                    kt-separator--portlet-fit
+                    kt-separator--space-lg
+                  "
+                ></div>
+
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Visits and Forms to be locked:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row" th:each="visit : ${visits}">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-lg-8 col-xl-8">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input
+                          type="checkbox"
+                          th:data-key="${visit.key}"
+                          name="visits"
+                          th:id="${'input_visit_' + visit.key}"
+                          th:value="${visit.key}"
+                          th:text="${visit.key == 0 ? 'Unscheduled visit' : 'Visit ' + visit.key}"
+                          th:disabled="${objDBLock.version != 0 or session.pm_d5 == false or mode == 'view'}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-lg-8 col-xl-8">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        th:each="form : ${visit.value}"
+                        class="kt-checkbox kt-checkbox--tick kt-checkbox--brand"
+                      >
+                        <input
+                          type="checkbox"
+                          th:id="${'input_form_' + visit.key + '_' + form}"
+                          th:data-key="${visit.key}"
+                          name="forms"
+                          th:class="${'form' + visit.key}"
+                          th:value="${visit.key + '_' + form}"
+                          th:text="${form}"
+                          th:disabled="${objDBLock.version != 0 or session.pm_d5 == false or mode == 'view'}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-lg-8 col-xl-8">
+                    <code
+                      >* Please click the button to proceed. If visits and forms
+                      are not verified, you cannot proceed</code
+                    >
+                    <br />
+                    <br />
+
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-hover btn-brand btn-elevate"
+                      onclick="check_forms()"
+                      id="btn_check_forms"
+                    >
+                      <i class="far fa-check"></i> &nbsp;
+                      <span class="kt-hidden-mobile"
+                        ><strong>CHECK</strong>&nbsp;
+                        <span class="kt-opacity-7">FORMS</span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="
+                    kt-separator
+                    kt-separator--border-dashed
+                    kt-separator--portlet-fit
+                    kt-separator--space-lg
+                  "
+                ></div>
+
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Checklist:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <p>
+                      <label class="text-left"
+                        >1. All CRFs were entered into the system and saved as
+                        complete.</label
+                      >
+                      <br />
+                      <code
+                        >Note: explain the reason and handling method any forms
+                        listed on the overdue report that were not
+                        complete</code
+                      >
+                    </p>
+
+                    <br />
+
+                    <div class="kt-radio-inline">
+                      <small>All forms for partial lock entered</small> &emsp;
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q1"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q1 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q1"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q1 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q1"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q1 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <div class="kt-radio-inline">
+                      <small>All forms for Final lock entered</small> &emsp;
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q1"
+                          value="4"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q1 == 4}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q1"
+                          value="5"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q1 == 5}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q1"
+                          value="6"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q1 == 6}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment1"
+                      maxlength="200"
+                      th:text="${objDBLock.comment1}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left"
+                      >2. All system-generated queries/discrepancies have been
+                      resolved.</label
+                    >
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q2"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q2 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q2"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q2 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q2"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q2 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment2"
+                      maxlength="200"
+                      th:text="${objDBLock.comment2}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left"
+                      >3. All manual queries/discrepancies have been
+                      resolved.</label
+                    >
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q3"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q3 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q3"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q3 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q3"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q3 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment3"
+                      maxlength="200"
+                      th:text="${objDBLock.comment3}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left"
+                      >4. Study Laboratory has transferred.</label
+                    >
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q4"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q4 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q4"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q4 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q4"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q4 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment4"
+                      maxlength="200"
+                      th:text="${objDBLock.comment4}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left">5. ...</label>
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q5"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q5 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q5"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q5 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q5"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q5 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment5"
+                      maxlength="200"
+                      th:text="${objDBLock.comment5}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left">6. ... </label>
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q6"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q6 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q6"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q6 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q6"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q6 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment6"
+                      maxlength="200"
+                      th:text="${objDBLock.comment6}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left">7. ... </label>
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q7"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q7 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q7"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q7 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q7"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q7 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment7"
+                      maxlength="200"
+                      th:text="${objDBLock.comment7}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left">8. ...</label>
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q8"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q8 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q8"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q8 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q8"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q8 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment8"
+                      maxlength="200"
+                      th:text="${objDBLock.comment8}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left">9. ...</label>
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q9"
+                          value="1"
+                          th:text="'Yes'"
+                          th:checked="${objDBLock.q9 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q9"
+                          value="2"
+                          th:text="'No'"
+                          th:checked="${objDBLock.q9 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q9"
+                          value="3"
+                          th:text="'NA'"
+                          th:checked="${objDBLock.q9 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment9"
+                      maxlength="200"
+                      th:text="${objDBLock.comment9}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div
+                    class="
+                      col-lg-8 col-xl-8
+                      kt-separator
+                      kt-separator--border-dashed
+                      kt-separator--space-lg
+                    "
+                  ></div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-xl-2 col-lg-2"></div>
+                  <div class="col-8">
+                    <label class="text-left">10. ...</label>
+
+                    <div class="kt-radio-inline">
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q10"
+                          value="1"
+                          th:text="'Yes'"
+                          th:id="'input_q10'"
+                          th:checked="${objDBLock.q10 == 1}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q10"
+                          value="2"
+                          th:text="'No'"
+                          th:id="'input_q10'"
+                          th:checked="${objDBLock.q10 == 2}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                      <label class="kt-radio kt-radio--brand">
+                        <input
+                          type="radio"
+                          name="q10"
+                          value="3"
+                          th:text="'NA'"
+                          th:id="'input_q10'"
+                          th:checked="${objDBLock.q10 == 3}"
+                          th:disabled="${objDBLock.registeredBy}"
+                        />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <br />
+                    <span>Comment</span>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      name="comment10"
+                      maxlength="200"
+                      th:text="${objDBLock.comment10}"
+                      th:disabled="${objDBLock.registeredBy}"
+                    ></textarea>
+                  </div>
+                  <div class="col-xl-2 col-lg-2"></div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              th:if="${listUser.get(session.uid)?.rid == 'role2' and (objDBLock.registeredBy == null or objDBLock.registeredBy4SC == null) and mode != 'view'}"
+              class="
+                kt-separator
+                kt-separator--border-dashed
+                kt-separator--portlet-fit
+                kt-separator--space-lg
+              "
+            ></div>
+
+            <div
+              class="kt-section"
+              th:if="${listUser.get(session.uid)?.rid == 'role2' and (objDBLock.registeredBy == null or objDBLock.registeredBy4SC == null) and mode != 'view'}"
+            >
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- if you are study creator -->
+          <div
+            class="kt-portlet__foot"
+            th:if="${listUser.get(session.uid)?.rid == 'role2' and mode != 'view'}"
+          >
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+
+                <div
+                  class="col-lg-9 col-xl-9"
+                  th:if="${objDBLock.registeredBy == null or objDBLock.registeredBy4SC == null}"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Begin:: portlet for role3 / SMM -->
+      <div
+        class="kt-portlet"
+        th:if="${sid != null and listUser.get(session.uid)?.rid == 'role3' and objDBLock.registeredBy4SMM == null and mode != 'view'}"
+      >
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              e-Signature for
+              <span th:text="${listUser.get(session.uid)?.rname}"></span>
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          th:id="${'form_dblock_' + listUser.get(session.uid)?.rid}"
+          method="post"
+          autocomplete="off"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- End:: portlet -->
+
+      <!-- Begin:: portlet for role4 / CO -->
+      <div
+        class="kt-portlet"
+        th:if="${sid != null and listUser.get(session.uid)?.rid == 'role4' and objDBLock.registeredBy4CO == null and mode != 'view'}"
+      >
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              e-Signature for
+              <span th:text="${listUser.get(session.uid)?.rname}"></span>
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          th:id="${'form_dblock_' + listUser.get(session.uid)?.rid}"
+          method="post"
+          autocomplete="off"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- End:: portlet -->
+
+      <!-- Begin:: portlet for role5 / BST -->
+      <div
+        class="kt-portlet"
+        th:if="${sid != null and listUser.get(session.uid)?.rid == 'role5' and objDBLock.registeredBy4BST == null and mode != 'view'}"
+      >
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              e-Signature for
+              <span th:text="${listUser.get(session.uid)?.rname}"></span>
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          th:id="${'form_dblock_' + listUser.get(session.uid)?.rid}"
+          method="post"
+          autocomplete="off"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- End:: portlet -->
+
+      <!-- Begin:: portlet for role6 / QM -->
+      <div
+        class="kt-portlet"
+        th:if="${sid != null and listUser.get(session.uid)?.rid == 'role6' and objDBLock.registeredBy4QM == null and mode != 'view'}"
+      >
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              e-Signature for
+              <span th:text="${listUser.get(session.uid)?.rname}"></span>
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          th:id="${'form_dblock_' + listUser.get(session.uid)?.rid}"
+          method="post"
+          autocomplete="off"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- End:: portlet -->
+
+      <!-- Begin:: portlet for role7 / CRL -->
+      <div
+        class="kt-portlet"
+        th:if="${sid != null and listUser.get(session.uid)?.rid == 'role7' and objDBLock.registeredBy4CRL == null }"
+      >
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              e-Signature for
+              <span th:text="${listUser.get(session.uid)?.rname}"></span>
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          th:id="${'form_dblock_' + listUser.get(session.uid)?.rid}"
+          method="post"
+          autocomplete="off"
+          enctype="multipart/form-data"
+          th:action="${'/lock/file/' + studyShortName + '/' + siteid + '/' + sid} "
+        >
+          <!-- <input type="file" name="lab_file" /> -->
+
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Uploaded files</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <table
+                      class="
+                        table table-sm table-striped table-bordered table-hover
+                      "
+                      id="table_ae"
+                    >
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>NAME</th>
+                          <th>UPLOAD TIME</th>
+                        </tr>
+                      </thead>
+                      <tbody
+                        th:if="${#lists.size(listLF) > 0}"
+                        th:each="item : ${listLF}"
+                      >
+                        <tr>
+                          <td style="vertical-align: middle">
+                            <span th:text="${item.fid}"></span>
+                          </td>
+                          <td style="vertical-align: middle">
+                            <span th:text="${item.fileName}"></span>
+                          </td>
+                          <td style="vertical-align: middle">
+                            <span
+                              th:text="${#temporals.format(item.registeredDate, session.timeformat)}"
+                            ></span>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <tbody th:unless="${#lists.size(listLF) > 0}">
+                        <tr>
+                          <td colspan="3" align="center">NO DATA</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Upload</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="dropzone dropzone-multi" id="kt_dropzone_5">
+                      <div class="dropzone-panel">
+                        <a
+                          class="
+                            dropzone-select
+                            btn btn-label-brand btn-bold btn-sm
+                          "
+                          >Attach lab result(s)</a
+                        >
+                      </div>
+                      <div class="dropzone-items">
+                        <div class="dropzone-item" style="display: none">
+                          <div class="dropzone-file">
+                            <div
+                              class="dropzone-filename"
+                              title="some_image_file_name.jpg"
+                            >
+                              <span data-dz-name>some_image_file_name.jpg</span>
+                              <strong
+                                >(<span data-dz-size>340kb</span>)
+                              </strong>
+                            </div>
+                            <div
+                              class="dropzone-error"
+                              data-dz-errormessage
+                            ></div>
+                          </div>
+                          <div class="dropzone-progress">
+                            <div class="progress">
+                              <div
+                                class="progress-bar kt-bg-brand"
+                                role="progressbar"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="0"
+                                data-dz-uploadprogress
+                              ></div>
+                            </div>
+                          </div>
+                          <!-- <div class="dropzone-toolbar">
+													<span class="dropzone-delete" data-dz-remove><i class="flaticon2-cross"></i></span>
+												</div> -->
+                        </div>
+                      </div>
+                    </div>
+                    <span class="form-text text-muted"
+                      >Max file size is 2MB and maximum number of files is
+                      5.</span
+                    >
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- End:: portlet -->
+
+      <!-- Begin:: portlet for role8 & role9 / PI & SI -->
+      <div
+        class="kt-portlet"
+        th:if="${sid != null and (listUser.get(session.uid)?.rid == 'role8' or listUser.get(session.uid)?.rid == 'role9') and objDBLock.registeredBy4PI == null and mode != 'view'}"
+      >
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+              e-Signature for
+              <span th:text="${listUser.get(session.uid)?.rname}"></span>
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          th:id="${'form_dblock_' + listUser.get(session.uid)?.rid}"
+          method="post"
+          autocomplete="off"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      Personal Information:
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="registeredBy"
+                      th:value="${session.fullName}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Role Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      th:value="${listUser.get(session.uid)?.rname}"
+                      readonly
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Confirmation</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-checkbox-inline">
+                      <label
+                        class="
+                          kt-checkbox kt-checkbox--tick kt-checkbox--danger
+                        "
+                      >
+                        <input type="checkbox" id="check_confirmation" /> I
+                        confirm that the information given in this form is
+                        correct and complete. <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="reset"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel();"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    id="btn_submit"
+                    th:data-rid="${listUser.get(session.uid)?.rid}"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- End:: portlet -->
+
+      <!--begin::Portlet-->
+      <div class="kt-portlet" th:if="${listDBLock}">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">DB Lock Event and Progress</h3>
+          </div>
+          <div class="kt-portlet__head-toolbar"></div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="row">
+            <div class="col-xl-12">
+              <div th:unless="${#lists.size(listDBLock) > 0}">
+                <span>No data requested</span>
+              </div>
+
+              <div
+                class="kt-notes"
+                th:if="${#lists.size(listDBLock) > 0}"
+                th:each="item, iter : ${listDBLock}"
+              >
+                <div class="kt-notes__items">
+                  <div class="kt-notes__item">
+                    <div class="kt-notes__media">
+                      <span
+                        class="kt-notes__icon kt-font-boldest"
+                        style="color: #3e4466"
+                        th:text="${item.sid}"
+                      >
+                      </span>
+                    </div>
+
+                    <div class="kt-notes__content">
+                      <div class="kt-notes__section">
+                        <div class="kt-notes__info">
+                          <a class="kt-notes__title"> Event information: </a>
+                          <span class="kt-notes__desc">
+                            StudyID:
+                            <code th:text="${item.studyid}"></code> SiteID:
+                            <code th:text="${item.siteid}"></code> EventID:
+                            <code th:text="${item.sid}"></code> Version:
+                            <code th:text="${item.version}"></code> State:
+                            &nbsp;
+                            <span
+                              th:if="${item.state == 'requested'}"
+                              class="badge badge-primary"
+                            >
+                              <i class="fad fa-play-circle"></i>
+                              <span th:text="${item.state}"></span
+                            ></span>
+                            <span
+                              th:if="${item.state == 'in_progress'}"
+                              class="badge badge-warning"
+                            >
+                              <i class="fad fa-spinner-third fa-spin"></i>
+                              <span>In progress</span></span
+                            >
+                            <span
+                              th:if="${item.state == 'completed'}"
+                              class="badge badge-success"
+                            >
+                              <i class="fas fa-check"></i>
+                              <span th:text="${item.state}"></span
+                            ></span>
+                            <span
+                              th:if="${item.state == 'canceled'}"
+                              class="badge badge-danger"
+                            >
+                              <i class="far fa-times"></i>
+                              <span th:text="${item.state}"></span></span
+                            ><br />
+                            &nbsp;
+                          </span>
+                        </div>
+
+                        <div
+                          class="kt-notes__dropdown"
+                          th:with="roleid=${listUser.get(session.uid)?.rid}"
+                          th:if="${session.pm_d1 == true or session.pm_d2 == true or session.pm_d3 == true or session.pm_d4 == true or session.pm_d5 == true}"
+                        >
+                          <a
+                            class="btn btn-sm btn-icon-md btn-icon"
+                            data-toggle="dropdown"
+                          >
+                            <i class="far fa-ellipsis-v"></i>
+                          </a>
+
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role2'}"
+                          >
+                            <h6
+                              th:if="${item.registeredBy4SC == null and (item.q4 != 3 && item.registeredBy4CRL == null) and item.state != 'canceled'}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              Not fully completed yet.
+                            </h6>
+                            <h6
+                              th:if="${item.registeredBy4SC != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4SC == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+
+                            <a
+                              th:class="${item.state == 'canceled' or item.registeredBy4SC != null or (item.q4 != 3 && item.registeredBy4CRL == null) ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy4SC != null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item cancel'}"
+                              href="javascript:void(0)"
+                              th:data-studyid="${studyid}"
+                              th:data-siteid="${siteid}"
+                              th:data-sid="${item.sid}"
+                              ><i class="fad fa-window-close"></i> &nbsp; Cancel
+                              this event</a
+                            >
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+
+                            <form
+                              th:if="${session.pm_o2}"
+                              th:action="${'download/lab/' + studyid + '/' + siteid + '/' + session.uid}"
+                              method="post"
+                              autocomplete="off"
+                              id="form_download_lab_files"
+                            >
+                              <a
+                                th:class="${item.registeredBy4CRL == null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item'}"
+                                href="javascript:download_lab_files()"
+                                ><i class="fas fa-cloud-download-alt"></i>
+                                &nbsp;&nbsp; Download Lab file(s)</a
+                              >
+                            </form>
+                          </div>
+
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role3'}"
+                          >
+                            <h6
+                              th:if="${item.registeredBy4SMM != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4SMM == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+                            <a
+                              th:class="${item.registeredBy4SMM != null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+                          </div>
+
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role4'}"
+                          >
+                            <h6
+                              th:if="${item.registeredBy4CO != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4CO == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+                            <a
+                              th:class="${item.registeredBy4CO != null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+                          </div>
+
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role5'}"
+                          >
+                            <h6
+                              th:if="${item.registeredBy4BST != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4BST == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+                            <a
+                              th:class="${item.registeredBy4BST != null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+                          </div>
+
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role6'}"
+                          >
+                            <h6
+                              th:if="${item.registeredBy4QM != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4QM == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+                            <a
+                              th:class="${item.registeredBy4QM != null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+                          </div>
+                          <!-- End:: Role for Study Creator / Study Medical Monitor / Clinical Operations / Biostatistician / Quality Management -->
+
+                          <!-- Begin:: Role for Principal Investigator / Sub Investigator -->
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role8' or roleid == 'role9'}"
+                          >
+                            <h6
+                              th:if="${item.state != 'canceled' and (item.registeredBy4BST == null or item.registeredBy4SMM == null or item.registeredBy4CO == null or item.registeredBy4QM == null)}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              Not approved yet.
+                            </h6>
+                            <h6
+                              th:if="${item.registeredBy4PI != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4PI == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+                            <a
+                              th:class="${item.registeredBy4PI != null or item.state == 'canceled' or (item.registeredBy4BST == null or item.registeredBy4SMM == null or item.registeredBy4CO == null or item.registeredBy4QM == null) ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+                          </div>
+                          <!-- End:: Role for Principal Investigator / Sub Investigator -->
+
+                          <!-- Begin:: Role for Clinical Research Lab -->
+                          <div
+                            class="dropdown-menu dropdown-menu-right"
+                            th:if="${roleid == 'role7'}"
+                          >
+                            <h6
+                              th:if="${item.state != 'canceled' and item.registeredBy4PI == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              Not approved yet.
+                            </h6>
+                            <h6
+                              th:if="${item.registeredBy4CRL != null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              You already completed your job.
+                            </h6>
+                            <h6
+                              th:if="${item.state == 'canceled' and item.registeredBy4CRL == null}"
+                              class="dropdown-header"
+                            >
+                              <i class="fas fa-info-circle fa-lg"></i> &nbsp;
+                              This event was canceled.
+                            </h6>
+
+                            <a
+                              th:class="${item.registeredBy4PI == null or item.registeredBy4CRL != null or item.state == 'canceled' or item.q4 == 3 ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid}"
+                              ><i class="fas fa-signature"></i> &nbsp; Review
+                              &amp; e-Sign</a
+                            >
+
+                            <a
+                              th:class="${item.registeredBy == null ? 'dropdown-item disabled' : 'dropdown-item'}"
+                              th:href="${'lock/' + studyShortName + '/' + siteid + '/' + item.sid + '/view'}"
+                              ><i class="fad fa-eye"></i> &nbsp; View</a
+                            >
+
+                            <form
+                              th:if="${session.pm_o2}"
+                              th:action="${'download/lab/' + studyid + '/' + siteid + '/' + session.uid}"
+                              method="post"
+                              autocomplete="off"
+                              id="form_download_lab_files"
+                            >
+                              <a
+                                th:class="${item.registeredBy4CRL == null or item.state == 'canceled' ? 'dropdown-item disabled' : 'dropdown-item'}"
+                                href="javascript:download_lab_files()"
+                                ><i class="fas fa-cloud-download-alt"></i>
+                                &nbsp;&nbsp; Download Lab file(s)</a
+                              >
+                            </form>
+                          </div>
+                          <!-- End:: Role for Clinical Research Lab -->
+                        </div>
+                      </div>
+
+                      <div class="kt-notes__body">
+                        <div class="kt-list kt-list--badge">
+                          <!-- Begin:: first event -->
+                          <div class="kt-list__item">
+                            <span
+                              class="kt-list__badge kt-list__badge--success"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-check kt-font-success"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >DB Lock event should initially be requested by
+                              <code>Study Creator</code>
+                            </span>
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy}"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The DB Lock request has been placed and
+                              e-signature was done by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy)?.firstName + ' ' + listUser.get(item.registeredBy)?.lastName + ' (' + listUser.get(item.registeredBy)?.organization + '; ' + listUser.get(item.registeredBy)?.rname + ')'}"
+                              ></span
+                              >.
+                              <span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: fist event -->
+
+                          <!-- Begin:: second event -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4BST != null and item.registeredBy4SMM != null and item.registeredBy4QM != null and item.registeredBy4CO != null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--success"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-check kt-font-success"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request should be reviewed by
+                              <code>...</code>, <code>...</code>,
+                              <code>...</code>, and <code>...</code></span
+                            >
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:unless="${item.state == 'canceled' or (item.registeredBy4BST != null and item.registeredBy4SMM != null and item.registeredBy4QM != null and item.registeredBy4CO != null)}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--warning"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i
+                                class="
+                                  fad
+                                  fa-spinner-third fa-spin
+                                  kt-font-warning
+                                "
+                              ></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request should be reviewed by
+                              <code>...</code>, <code>...</code>,
+                              <code>...</code>, and <code>...</code></span
+                            >
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state == 'canceled' and item.registeredBy4BST == null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--danger"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-times kt-font-danger"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request should be reviewed by
+                              <code>...</code>, <code>...</code>,
+                              <code>...</code>, and <code>...</code></span
+                            >
+                            <span style="float: right" class="kt-list__time"
+                              >Canceled</span
+                            >
+                          </div>
+
+                          <!-- Begin:: review by BST -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4BST != null}"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The review was completed and e-signature was done
+                              by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy4BST)?.firstName + ' ' + listUser.get(item.registeredBy4BST)?.lastName + ' (' + listUser.get(item.registeredBy4BST)?.organization + '; ' + listUser.get(item.registeredBy4BST)?.rname + ')'}"
+                              ></span>
+                              .
+                              <span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate4BST, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: review by BST -->
+
+                          <!-- Begin:: review by SMM -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4SMM != null}"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The review was completed and e-signature was done
+                              by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy4SMM)?.firstName + ' ' + listUser.get(item.registeredBy4SMM)?.lastName + ' (' + listUser.get(item.registeredBy4SMM)?.organization + '; ' + listUser.get(item.registeredBy4SMM)?.rname + ')'}"
+                              ></span>
+                              .
+                              <span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate4SMM, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: review by SMM -->
+
+                          <!-- Begin:: review by CO -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4CO} != null"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The review was completed and e-signature was done
+                              by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy4CO)?.firstName + ' ' + listUser.get(item.registeredBy4CO)?.lastName + ' (' + listUser.get(item.registeredBy4CO)?.organization + '; ' + listUser.get(item.registeredBy4CO)?.rname + ')'}"
+                              ></span>
+                              .
+                              <span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate4CO, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: review by CO -->
+
+                          <!-- Begin:: review by QM -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4QM != null}"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The review was completed and e-signature was done
+                              by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy4QM)?.firstName + ' ' + listUser.get(item.registeredBy4QM)?.lastName + ' (' + listUser.get(item.registeredBy4QM)?.organization + '; ' + listUser.get(item.registeredBy4QM)?.rname + ')'}"
+                              ></span>
+                              .
+                              <span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate4QM, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: review by QM -->
+                          <!-- End:: second event -->
+
+                          <!-- Begin:: third event -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state != 'canceled' and item.registeredBy4PI == null and (item.registeredBy4BST == null or item.registeredBy4SMM == null or item.registeredBy4QM == null or item.registeredBy4CO == null)}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--primary"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-dice-three fa-lg"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request has been approved by
+                              <code>Principal Investigator</code> or
+                              <code>Sub Investigator</code></span
+                            >
+                            <span class="kt-list__time">Not done</span>
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state != 'canceled' and item.registeredBy4PI == null and item.registeredBy4BST != null and item.registeredBy4SMM != null and item.registeredBy4QM != null and item.registeredBy4CO != null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--warning"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i
+                                class="
+                                  fad
+                                  fa-spinner-third fa-spin
+                                  kt-font-warning
+                                "
+                              ></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request has been approved by
+                              <code>...</code> or <code>...</code></span
+                            >
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4PI != null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--success"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-check kt-font-success"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request has been approved by
+                              <code>...</code> or <code>...</code></span
+                            >
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state == 'canceled' and item.registeredBy4PI == null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--danger"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-times kt-font-danger"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The request has been approved by
+                              <code>...</code> or <code>...</code></span
+                            >
+                            <span class="kt-list__time">Canceled</span>
+                          </div>
+
+                          <!-- sub -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4PI != null}"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The review was completed and e-signature was done
+                              by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy4PI)?.firstName + ' ' + listUser.get(item.registeredBy4PI)?.lastName + ' (' + listUser.get(item.registeredBy4PI)?.organization + '; ' + listUser.get(item.registeredBy4PI)?.rname + ')'}"
+                              ></span>
+                              .
+                              <span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate4PI, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: third event -->
+
+                          <!-- Begin:: forth event -->
+                          <div th:if="${item.q4 != 3}">
+                            <div
+                              class="kt-list__item"
+                              th:if="${item.state != 'canceled' and item.registeredBy4PI == null and item.registeredBy4CRL == null}"
+                            >
+                              <span
+                                class="kt-list__badge kt-list__badge--primary"
+                              ></span>
+                              <span class="kt-list__icon"
+                                ><i class="fas fa-dice-four fa-lg"></i>
+                              </span>
+                              <span class="kt-list__text">... </span>
+                              <span class="kt-list__time">Not done</span>
+                            </div>
+
+                            <div
+                              class="kt-list__item"
+                              th:if="${item.state != 'canceled' and item.registeredBy4PI != null and item.registeredBy4CRL == null}"
+                            >
+                              <span
+                                class="kt-list__badge kt-list__badge--warning"
+                              ></span>
+                              <span class="kt-list__icon"
+                                ><i
+                                  class="
+                                    fad
+                                    fa-spinner-third fa-spin
+                                    kt-font-warning
+                                  "
+                                ></i>
+                              </span>
+                              <span class="kt-list__text">... </span>
+                            </div>
+
+                            <div
+                              class="kt-list__item"
+                              th:if="${item.registeredBy4CRL != null}"
+                            >
+                              <span
+                                class="kt-list__badge kt-list__badge--success"
+                              ></span>
+                              <span class="kt-list__icon"
+                                ><i class="fas fa-check kt-font-success"></i>
+                              </span>
+                              <span class="kt-list__text">... </span>
+                            </div>
+
+                            <div
+                              class="kt-list__item"
+                              th:if="${item.state == 'canceled' and item.registeredBy4CRL == null}"
+                            >
+                              <span
+                                class="kt-list__badge kt-list__badge--danger"
+                              ></span>
+                              <span class="kt-list__icon"
+                                ><i class="fas fa-times kt-font-danger"></i>
+                              </span>
+                              <span class="kt-list__text">... </span>
+                              <span class="kt-list__time">Canceled</span>
+                            </div>
+
+                            <!-- sub -->
+                            <div
+                              class="kt-list__item"
+                              th:if="${item.registeredBy4CRL != null}"
+                            >
+                              <span class="kt-list__badge"></span>
+                              &emsp;&emsp;&emsp;
+                              <span class="kt-list__icon"
+                                ><i class="fad fa-angle-double-right"></i
+                              ></span>
+                              <span class="kt-list__text"
+                                >The review was completed and e-signature was
+                                done by
+                                <span
+                                  class="kt-font-primary"
+                                  th:text="${listUser.get(item.registeredBy4CRL)?.firstName + ' ' + listUser.get(item.registeredBy4CRL)?.lastName + ' (' + listUser.get(item.registeredBy4CRL)?.organization + '; ' + listUser.get(item.registeredBy4CRL)?.rname + ')'}"
+                                ></span>
+                                .<span
+                                  style="float: right"
+                                  class="kt-list__time"
+                                  th:text="${#temporals.format(item.registeredDate4CRL, session.timeformat)}"
+                                ></span
+                              ></span>
+                            </div>
+                          </div>
+                          <!-- End:: forth event -->
+
+                          <!-- Begin:: fifth event -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state != 'canceled' and (item.q4 != 3 && item.registeredBy4CRL == null) and item.registeredBy4SC == null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--primary"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i
+                                th:if="${item.q4 == 3}"
+                                class="fas fa-dice-four fa-lg"
+                              ></i>
+                              <i
+                                th:if="${item.q4 != 3}"
+                                class="fas fa-dice-five fa-lg"
+                              ></i
+                            ></span>
+                            <span class="kt-list__text">...</span>
+                            <span class="kt-list__time">Not done</span>
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state != 'canceled' and (item.q4 == 3 || item.registeredBy4CRL != null) and item.registeredBy4SC == null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--warning"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i
+                                class="
+                                  fad
+                                  fa-spinner-third fa-spin
+                                  kt-font-warning
+                                "
+                              ></i
+                            ></span>
+                            <span class="kt-list__text">...</span>
+                            <span class="kt-list__time">Not done</span>
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4SC != null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--success"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-check kt-font-success"></i
+                            ></span>
+                            <span class="kt-list__text">...</span>
+                          </div>
+
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.state == 'canceled' and item.registeredBy4SC == null}"
+                          >
+                            <span
+                              class="kt-list__badge kt-list__badge--danger"
+                            ></span>
+                            <span class="kt-list__icon"
+                              ><i class="fas fa-times kt-font-danger"></i
+                            ></span>
+                            <span class="kt-list__text">...</span>
+                            <span class="kt-list__time">Canceled</span>
+                          </div>
+
+                          <!-- sub -->
+                          <div
+                            class="kt-list__item"
+                            th:if="${item.registeredBy4SC != null}"
+                          >
+                            <span class="kt-list__badge"></span>
+                            &emsp;&emsp;&emsp;
+                            <span class="kt-list__icon"
+                              ><i class="fad fa-angle-double-right"></i
+                            ></span>
+                            <span class="kt-list__text"
+                              >The review was completed and e-signature was done
+                              by
+                              <span
+                                class="kt-font-primary"
+                                th:text="${listUser.get(item.registeredBy4SC)?.firstName + ' ' + listUser.get(item.registeredBy4SC)?.lastName + ' (' + listUser.get(item.registeredBy4SC)?.organization + '; ' + listUser.get(item.registeredBy4SC)?.rname + ')'}"
+                              ></span>
+                              .<span
+                                style="float: right"
+                                class="kt-list__time"
+                                th:text="${#temporals.format(item.registeredDate4SC, session.timeformat)}"
+                              ></span
+                            ></span>
+                          </div>
+                          <!-- End:: fifth event -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <!-- Begin::modal e-Signature view -->
+    <div
+      class="modal fade"
+      id="dialog_dblock"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalImportCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fas fa-signature"></i> &nbsp; e-Signature
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group row">
+              <div class="col">
+                Please enter your e-mail address and password to provide your
+                e-signature.
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-4">
+                <label class="col-form-label"> e-mail: </label>
+              </div>
+              <div class="col-8">
+                <input
+                  autocomplete="false"
+                  class="form-control"
+                  type="text"
+                  id="input_email"
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-4">
+                <label class="col-form-label"> Password: </label>
+              </div>
+              <div class="col-8">
+                <input
+                  class="form-control"
+                  type="password"
+                  id="input_password"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-brand"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-brand"
+              id="btn_proceed_e_signature"
+              th:data-uid="${session.uid}"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End::modal e-Signature -->
+
+    <!-- Begin::modal DB lock cancel -->
+    <div
+      class="modal fade"
+      id="dialog_dblock_cancel"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalImportCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fad fa-times-square fa-lg"></i> &nbsp; DB Lock Cancel
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group row">
+              <div class="col">
+                Please describe why you need to cancel the DB Lock process.
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-12">
+                <label class="col-form-label"> Comment: </label>
+              </div>
+              <div class="col-12">
+                <input class="form-control" type="text" id="input_comment" />
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-brand"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-brand"
+              id="btn_cancel_db_lock"
+              th:data-uid="${session.uid}"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End::modal DB lock cancel -->
+
+    <script>
+      var warning_class =
+        "kt-badge kt-badge--brand kt-badge--rounded kt-badge--inline";
+      var success_class =
+        "kt-badge kt-badge--danger kt-badge--rounded kt-badge--inline";
+
+      var visits = "[[${objDBLock.visits}]]";
+      var forms = "[[${objDBLock.forms}]]";
+
+      jQuery(document).ready(function () {
+        $.each($("textarea.form-control"), function () {
+          $(this).maxlength({
+            alwaysShow: false,
+            threshold: 200,
+            warningClass: warning_class,
+            limitReachedClass: success_class,
+            separator: " of ",
+            preText: "",
+            postText: " letters",
+            validate: true,
+            placement: "top",
+          });
+        });
+
+        $("button[id=btn_submit]").prop("disabled", true);
+        $("input[id=check_confirmation]").prop("disabled", true);
+        $("#btn_check_forms").prop("disabled", true);
+
+        // check selected visits
+        if (visits.length > 0) {
+          var tokens = visits.split(",");
+          for (var i = 0; i < tokens.length; i++) {
+            $("#input_visit_" + tokens[i]).prop("checked", true);
+          }
+        }
+
+        // check selected forms
+        if (forms.length > 0) {
+          var tokens = forms.split(",");
+          for (var i = 0; i < tokens.length; i++) {
+            $("#input_form_" + tokens[i]).prop("checked", true);
+          }
+        }
+
+        var rid = "[[${listUser.get(session.uid)?.rid}]]";
+        if (rid != "role2") {
+          $("input[id=check_confirmation]").prop("disabled", false);
+        }
+
+        var hasPIsigned = "[[${objDBLock.registeredBy4PI}]]";
+        if (hasPIsigned.length > 0) {
+          $("input[id=check_confirmation]").prop("disabled", false);
+        }
+
+        // initialize
+        var permission = "[[${session.pm_o3}]]";
+        if (permission == "true") init_upload();
+      });
+
+      $("input[id=check_confirmation]").on("click", function () {
+        // enable and disable button submit via confirmation check box
+        if ($(this).is(":checked")) {
+          $("button[id=btn_submit]").prop("disabled", false);
+        } else {
+          $("button[id=btn_submit]").prop("disabled", true);
+        }
+      });
+
+      $("input[name=visits]").on("click", function () {
+        var visit = $(this).attr("data-key");
+
+        if ($(this).is(":checked")) {
+          $.each($(".form" + visit), function () {
+            $(this).prop("checked", true);
+          });
+        } else {
+          $.each($(".form" + visit), function () {
+            $(this).prop("checked", false);
+          });
+        }
+
+        $("#btn_check_forms").prop("disabled", false);
+
+        // block checkbox button confirmation
+        $("input[id=check_confirmation]").prop("checked", false);
+        $("input[id=check_confirmation]").prop("disabled", true);
+
+        // block submit button
+        $("#btn_submit").prop("disabled", true);
+      });
+
+      $("input[name=forms]").on("click", function () {
+        var visit = $(this).attr("data-key");
+
+        $("#input_visit_" + visit).prop("checked", true);
+
+        $("#btn_check_forms").prop("disabled", false);
+
+        // block checkbox button confirmation
+        $("input[id=check_confirmation]").prop("checked", false);
+        $("input[id=check_confirmation]").prop("disabled", true);
+
+        // block submit button
+        $("#btn_submit").prop("disabled", true);
+      });
+
+      var isChecked = false;
+      function check_forms() {
+        if (!isChecked) {
+          $("input[id=check_confirmation]").prop("checked", false);
+          $("input[id=check_confirmation]").prop("disabled", true);
+        } else {
+          $("input[id=check_confirmation]").prop("disabled", false);
+        }
+
+        var forms = $("input[name=forms]:checked");
+        if (forms.length == 0) {
+          swal.fire({
+            title: "You need to check at least one.",
+            icon: "error",
+            backdrop: false,
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+
+        var btn = $("#btn_check_forms");
+        KTApp.progress(btn);
+
+        var arr = [];
+        $.each(forms, function () {
+          arr.push($(this).val());
+        });
+
+        var studyShortName = "[[${studyShortName}]]";
+        var siteid = "[[${siteid}]]";
+
+        $.ajax({
+          type: "POST",
+          headers: {
+            //Required to avoid 415 error
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          url: "lock/check_vars_before_lock/" + studyShortName + "/" + siteid,
+          data: JSON.stringify(arr),
+          success: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+
+            var str = JSON.parse(xhr.responseText);
+            if (str.result == "success") {
+              swal
+                .fire({
+                  title: str.msg_text,
+                  icon: "success",
+                  backdrop: true,
+                  allowOutsideClick: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  if (result.value) {
+                    // block button 'check forms'
+                    $("#btn_check_forms").prop("disabled", true);
+                    // release checkbox button confirmation
+                    $("input[id=check_confirmation]").prop("disabled", false);
+                  }
+                });
+            } else if (str.result == "error") {
+              swal.fire({
+                title: str.msg_title,
+                text: str.msg_text,
+                icon: "error",
+                backdrop: true,
+                allowOutsideClick: false,
+                confirmButtonText: "OK",
+              });
+            }
+          },
+          error: function (data, textStatus, xhr) {
+            swal.fire({
+              title: "Variable checking has been failed. Please try it again.",
+              icon: "error",
+              backdrop: true,
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+            });
+          },
+        });
+      }
+
+      function add() {
+        var studyShortName = "[[${studyShortName}]]";
+        var siteid = "[[${siteid}]]";
+        var nextNumber = "[[${nextNum}]]";
+
+        window.location =
+          "/lock/" + studyShortName + "/" + siteid + "/" + nextNumber;
+      }
+
+      function cancel() {
+        var studyShortName = "[[${studyShortName}]]";
+        var siteid = "[[${siteid}]]";
+
+        window.location = "/lock/" + studyShortName + "/" + siteid + "/";
+      }
+
+      var btn;
+      $(".dropdown-item.cancel").on("click", function () {
+        btn = $(this);
+
+        $("#dialog_dblock_cancel").modal("show");
+      });
+
+      $("#btn_cancel_db_lock").on("click", function () {
+        $("#dialog_dblock_cancel").modal("hide");
+
+        var studyid = btn.data("studyid");
+        var siteid = btn.data("siteid");
+        var sid = btn.data("sid");
+        var comment = $("#input_comment").val();
+
+        if (comment.length > 0) {
+          var bdata = {};
+          bdata["studyid"] = studyid;
+          bdata["siteid"] = siteid;
+          bdata["sid"] = sid;
+          bdata["comment"] = comment;
+
+          sendCancelRequest4DBLock(bdata);
+        } else {
+          swal.fire({
+            title: "You must provide your comment.",
+            icon: "error",
+            backdrop: true,
+            allowOutsideClick: false,
+            confirmButtonText: "OK",
+          });
+        }
+      });
+
+      function sendCancelRequest4DBLock(bdata) {
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(bdata),
+          success: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+            if (str.result == "success") {
+              swal
+                .fire({
+                  title: str.msg_text,
+                  icon: "success",
+                  backdrop: true,
+                  allowOutsideClick: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  if (result.value) location.reload();
+                });
+            } else if (str.result == "error") {
+              swal.fire({
+                title: str.msg_text,
+                icon: "error",
+                backdrop: true,
+                allowOutsideClick: false,
+                confirmButtonText: "OK",
+              });
+            }
+          },
+          error: function (data, textStatus, xhr) {
+            swal.fire({
+              title: "Cancel request was failed.",
+              icon: "error",
+              backdrop: true,
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+            });
+          },
+        });
+      }
+
+      $("#btn_submit").on("click", function submit() {
+        $("#input_email").val("");
+        $("#input_password").val("");
+        $("#dialog_dblock").modal("show");
+      });
+
+      $("#btn_proceed_e_signature").on("click", function submit() {
+        var btn = $(this);
+        var uid = btn.data("uid");
+        var email = $("#input_email").val().trim();
+        var password = $("#input_password").val().trim();
+
+        var urldata = "/lock/" + uid + "/" + email + "/" + password;
+
+        var bdata = {};
+        bdata["uid"] = uid;
+        bdata["email"] = email;
+        bdata["password"] = password;
+
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          url: "/esign",
+          data: JSON.stringify(bdata),
+          success: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            var str = JSON.parse(xhr.responseText);
+
+            if (str.result == "success") {
+              swal
+                .fire({
+                  title: str.msg_text,
+                  icon: "success",
+                  backdrop: true,
+                  allowOutsideClick: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  if (result.value) {
+                    // pause
+                    KTApp.block($("#portlet_dblock"), {
+                      overlayColor: "#000000",
+                      type: "v2",
+                      state: "primary",
+                      message: "Processing...",
+                    });
+
+                    var btn = $("#btn_submit");
+                    var rid = btn.data("rid");
+
+                    var form = $("#form_dblock_" + rid);
+                    form.submit();
+                  }
+                });
+            } else if (str.result == "error") {
+              swal.fire({
+                title: str.msg_text,
+                icon: "error",
+                backdrop: true,
+                allowOutsideClick: false,
+                confirmButtonText: "OK",
+              });
+            }
+
+            $("#dialog_dblock").modal("hide");
+          },
+          error: function (data, textStatus, xhr) {
+            swal.fire({
+              title: "e-signature failed. Please try it again.",
+              icon: "error",
+              backdrop: true,
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+            });
+          },
+        });
+      });
+
+      function download_lab_files() {
+        var form = $("#form_download_lab_files");
+        form.submit();
+      }
+    </script>
+  </div>
+</html>

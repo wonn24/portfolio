@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Messages</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Messages</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Messages</h3>
+          </div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div>
+            <div class="form-group row">
+              <div class="col">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-label-linkedin"
+                  id="btn_check_all_msg"
+                >
+                  <i class="fad fa-check"></i> &nbsp; Check All
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-label-linkedin"
+                  id="btn_clear_all_msg"
+                >
+                  <i class="fad fa-times"></i> &nbsp; Clear All
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-label-linkedin"
+                  id="btn_mark_read_read"
+                >
+                  <i class="fad fa-flag"></i> &nbsp; Mark as read
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-label-linkedin"
+                  id="btn_mark_read_unread"
+                >
+                  <i class="fad fa-flag"></i> &nbsp; Mark as unread
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <table class="table table-bordered table-hover" id="table_msg">
+            <thead style="text-align: center">
+              <tr>
+                <th>CHK</th>
+                <th>#</th>
+                <th>StudyID</th>
+                <th>SiteID</th>
+                <th>Message</th>
+                <th style="width: 90px">State</th>
+                <th style="width: 90px">Date</th>
+              </tr>
+            </thead>
+
+            <tbody
+              th:if="${#lists.size(listMessages) > 0}"
+              style="text-align: center"
+            >
+              <tr th:each="item, iter : ${listMessages}">
+                <td style="vertical-align: middle" class="select-checkbox"></td>
+                <td style="vertical-align: middle">
+                  <span th:text="${iter.count}" th:data-id="${item.id}"></span>
+                </td>
+                <td style="vertical-align: middle">
+                  <span th:text="${item.studyid}"></span>
+                </td>
+                <td style="vertical-align: middle">
+                  <span th:text="${item.siteid}"></span>
+                </td>
+                <td style="vertical-align: middle">
+                  <span th:text="${item.comment}"></span>
+                </td>
+                <td
+                  th:if="${item.state== 'read'}"
+                  style="vertical-align: middle"
+                >
+                  <span class="kt-badge kt-badge--brand kt-badge--dot"></span>
+                  &nbsp;
+                  <span
+                    class="kt-font-bold kt-font-brand"
+                    th:text="${item.state}"
+                  ></span>
+                </td>
+                <td
+                  th:unless="${item.state == 'read'}"
+                  style="vertical-align: middle"
+                >
+                  <span class="kt-badge kt-badge--danger kt-badge--dot"></span>
+                  &nbsp;
+                  <span
+                    class="kt-font-bold kt-font-danger"
+                    th:text="${item.state}"
+                  ></span>
+                </td>
+                <td style="vertical-align: middle">
+                  <span
+                    th:text="${#temporals.format(item.registeredDate, session.timeformat)}"
+                  ></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <script></script>
+  </div>
+</html>

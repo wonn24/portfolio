@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Query Management</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a
+              href="/"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              href="/studies"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study List"
+              ><i class="fad fa-tags"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study Dashboard"
+              ><i class="fad fa-chess-king"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName + '/' + siteid}"
+              class="kt-subheader__breadcrumbs-home"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Site Dashboard"
+              ><i class="fad fa-chess-queen"></i
+            ></a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <!-- begin::hidden inputs -->
+      <input
+        class="form-control"
+        type="hidden"
+        name="STUDYID"
+        th:value="${studyid}"
+      />
+      <input
+        class="form-control"
+        type="hidden"
+        name="SITEID"
+        th:value="${siteid}"
+      />
+      <!-- end::hidden inputs -->
+
+      <!--begin::Portlet-->
+      <div class="kt-portlet" id="div_filter">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Get queries by filters</h3>
+          </div>
+          <div class="kt-portlet__head-toolbar"></div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="row">
+            <div class="col-2">
+              <code>Query Type</code>
+              <select
+                class="form-control selectpicker"
+                data-size="7"
+                title="Choose"
+                id="select_type"
+              >
+                <option value="">Choose</option>
+                <option value="auto">Auto</option>
+                <option value="manual">Manual</option>
+              </select>
+            </div>
+
+            <div class="col-2">
+              <code>Query State</code>
+              <select
+                class="form-control selectpicker"
+                data-size="7"
+                title="Choose"
+                id="select_state"
+              >
+                <option value="">Choose</option>
+                <option value="opened">Opened</option>
+                <option value="in_progress">In progress</option>
+                <option value="pending">Pending</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+
+            <div class="col-2">
+              <code>Domain</code>
+              <select
+                class="form-control selectpicker"
+                data-size="7"
+                title="Choose"
+                id="select_domain"
+              >
+                <option value="">Choose</option>
+                <option
+                  th:value="${item}"
+                  th:text="${item}"
+                  th:each="item : ${setDomain}"
+                ></option>
+              </select>
+            </div>
+
+            <div class="col-4">
+              <code>Please click the button to get result</code>
+              <br />
+              <button
+                type="button"
+                class="btn btn-instagram btn-hover btn-elevate"
+                id="btn_submit"
+              >
+                <i class="fad fa-play-circle fa-lg"></i> &nbsp;
+                <strong>GET <span class="kt-opacity-7">RESULT</span></strong>
+              </button>
+
+              <button type="button" class="btn btn-facebook" id="btn_refresh">
+                <i class="fad fa-redo fa-lg"></i> &nbsp;<span
+                  ><strong th:text="#{menu.button.refresh}"
+                    >REFRESH</strong
+                  ></span
+                >
+              </button>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 20px">
+            <div class="col-12 kt-scroll" data-scroll="true">
+              <!--begin: Datatable -->
+              <table
+                class="table table-striped table-bordered table-hover"
+                id="table_query"
+              ></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      $("#btn_refresh").on("click", function () {
+        location.reload();
+      });
+
+      $("#btn_submit").on("click", function () {
+        var studyid = "[[${studyid}]]";
+        var studyShortName = "[[${studyShortName}]]";
+        var siteid = "[[${siteid}]]";
+        var scrno = $("#select_scrno").val() || "ALL";
+        var type = $("#select_type").val() || "ALL";
+        var state = $("#select_state").val() || "ALL";
+        var domain = $("#select_domain").val() || "ALL";
+
+        // validating an uploaded excel file
+        var layer = $("#div_filter");
+        KTApp.block(layer, {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Loading...",
+        });
+
+        $.ajax({
+          method: "POST",
+          dataType: "text",
+          contentType: "application/json",
+          url:
+            "/query/" +
+            studyid +
+            "/" +
+            siteid +
+            "/" +
+            scrno +
+            "/" +
+            type +
+            "/" +
+            state +
+            "/" +
+            domain,
+          success: function (result) {
+            KTApp.unblock(layer);
+
+            Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+            }).fire({
+              icon: "success",
+              title: "Loading complete!",
+            });
+
+            var parsedData = JSON.parse(result);
+            var table = $("#table_query")
+              .DataTable({
+                colReorder: true,
+                responsive: true,
+                destroy: true,
+                dom: "Bfltipl",
+                buttons: ["excel"],
+                lengthMenu: [5, 10, 25, 50],
+                pageLength: 25,
+                data: parsedData,
+                columns: [
+                  {
+                    title: "Type",
+                  },
+                  {
+                    title: "State",
+                  },
+                  {
+                    title: "SCRNO",
+                  },
+                  {
+                    title: "Variable",
+                  },
+                  {
+                    title: "Value",
+                  },
+                  {
+                    title: "Comment",
+                  },
+                  {
+                    title: "Author",
+                  },
+                  {
+                    title: "Date",
+                  },
+                  {
+                    title: "Action",
+                  },
+                ],
+                columnDefs: [
+                  {
+                    targets: -1,
+                    data: null,
+                    defaultContent: btn_act1,
+                  },
+                ],
+              })
+              .order([1, "desc"])
+              .draw();
+
+            $(".btn-sm").on("click", function () {
+              var data = table.row($(this).parents("tr")).data();
+
+              if (studyid.toLowerCase().includes("hpv"))
+                window.location =
+                  "/crf/" +
+                  studyShortName +
+                  "/" +
+                  siteid +
+                  "/" +
+                  data[2] +
+                  "/1/hpv";
+            });
+          },
+          error: function (result) {
+            KTApp.unblock(layer);
+            Swal.mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+            }).fire({
+              icon: "error",
+              title: "Loading failed!",
+            });
+          },
+        });
+      });
+
+      var btn_act1 =
+        '<button type="button" class="btn btn-google btn-sm">OPEN</button>';
+
+      $(document).ready(function () {
+        //
+      });
+    </script>
+  </div>
+</html>

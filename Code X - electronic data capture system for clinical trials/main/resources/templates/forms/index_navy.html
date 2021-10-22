@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+
+    <style>
+      table.dataTable thead th.select-checkbox {
+        /* display: none; */
+        position: relative;
+      }
+
+      table.dataTable tbody td.select-checkbox {
+        position: relative;
+      }
+
+      table.dataTable tbody td.select-checkbox:before,
+      table.dataTable tbody td.select-checkbox:after,
+      table.dataTable thead th.select-checkbox:before,
+      table.dataTable thead th.select-checkbox:after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        box-sizing: border-box;
+      }
+
+      table.dataTable tbody td.select-checkbox:before,
+      table.dataTable thead th.select-checkbox:before {
+        content: " ";
+        margin-top: -6px;
+        margin-left: -6px;
+        border: 1px solid black;
+        border-radius: 3px;
+      }
+
+      .scrollable-menu {
+        height: auto;
+        max-height: 400px;
+        overflow-x: hidden;
+      }
+
+      .short-dropdown-menu {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .text-center-row > th,
+      .text-center-row > td {
+        text-align: center;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <!-- end::Head -->
+
+  <!-- begin:: Body -->
+  <body
+    class="
+      kt-quick-panel--right
+      kt-demo-panel--right
+      kt-offcanvas-panel--right
+      kt-header--fixed
+      kt-header-mobile--fixed
+      kt-subheader--enabled kt-subheader--transparent
+      kt-aside--enabled kt-aside--fixed
+      kt-page--loading
+    "
+  >
+    <!-- begin:: Header Mobile -->
+    <div id="kt_header_mobile" class="kt-header-mobile kt-header-mobile--fixed">
+      <div class="kt-header-mobile__logo">
+        <h2>
+          <a href="/">
+            <span style="color: white"><i class="fad fa-cat fa-lg"></i></span>
+          </a>
+        </h2>
+      </div>
+      <div class="kt-header-mobile__toolbar">
+        <button
+          class="
+            kt-header-mobile__toolbar-toggler
+            kt-header-mobile__toolbar-toggler--left
+          "
+          id="kt_aside_mobile_toggler"
+        >
+          <span></span>
+        </button>
+
+        <button
+          class="kt-header-mobile__toolbar-topbar-toggler"
+          id="kt_header_mobile_topbar_toggler"
+        >
+          <i class="flaticon-more"></i>
+        </button>
+      </div>
+    </div>
+    <!-- end:: Header Mobile -->
+
+    <!-- begin:: Root -->
+    <div class="kt-grid kt-grid--hor kt-grid--root">
+      <!-- begin:: Page -->
+      <div
+        class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page"
+      >
+        <!-- begin:: Aside -->
+        <button class="kt-aside-close" id="kt_aside_close_btn">
+          <i class="la la-close"></i>
+        </button>
+        <div
+          th:include="forms/sidenav_navy :: sidenav"
+          class="
+            kt-aside kt-aside--fixed
+            kt-grid__item
+            kt-grid kt-grid--desktop kt-grid--hor-desktop
+          "
+          id="kt_aside"
+        ></div>
+        <!-- end:: Aside  -->
+
+        <!-- begin:: Wrapper -->
+        <div
+          class="
+            kt-grid__item kt-grid__item--fluid
+            kt-grid kt-grid--hor
+            kt-wrapper
+          "
+          id="kt_wrapper"
+          th:switch="${session.action}"
+        >
+          <!-- begin:: Header -->
+          <div class="kt-header kt-grid__item kt-header--fixed" id="kt_header">
+            <!-- begin:: Header Menu -->
+            <div
+              class="kt-header-menu-wrapper"
+              id="kt_header_menu_wrapper"
+            ></div>
+            <!-- end:: Header Menu -->
+
+            <!-- begin:: Header Topbar -->
+            <div
+              th:include="forms/top_bar_navy :: top_bar"
+              class="kt-header__topbar"
+            ></div>
+            <!-- end:: Header Topbar -->
+          </div>
+          <!-- end:: Header -->
+
+          <!-- Begin:: login section -->
+          <div
+            th:case="login"
+            th:if="${session.uid == null}"
+            th:include="forms/login :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: login section -->
+
+          <!-- Begin:: login section -->
+          <div
+            th:case="reset-login"
+            th:include="forms/reset-login :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: login section -->
+
+          <!-- Begin:: blank -->
+          <div
+            th:case="blank"
+            th:include="forms/main_page :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: blank -->
+
+          <!-- Begin:: Messages -->
+          <div
+            th:case="messages"
+            th:include="forms/messages :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Messages -->
+
+          <!-- Begin:: Register -->
+          <div
+            th:case="register"
+            th:include="forms/register :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Register -->
+
+          <!-- Begin:: Reset password -->
+          <div
+            th:case="reset_password"
+            th:include="forms/reset_password :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Reset password -->
+
+          <!-- Begin:: Forgot password -->
+          <div
+            th:case="forgot_password"
+            th:include="forms/forgot_password :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Forgot password -->
+
+          <!-- Begin:: Create new study -->
+          <div
+            th:case="create"
+            th:include="forms/study_build/create_study :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Create new study -->
+
+          <!-- Begin:: Build - User Roles -->
+          <div
+            th:case="build-role"
+            th:include="forms/study_build/user_role :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Build - User Roles -->
+
+          <!-- Begin:: Build - Validation -->
+          <div
+            th:case="build-validation"
+            th:include="forms/study_build/validation :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Build - Validation -->
+
+          <!-- Begin: Studies -->
+          <div
+            th:case="studies"
+            th:include="forms/studies :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: Studies -->
+
+          <!-- Begin:: study dashboard -->
+          <div
+            th:case="dashboard-study"
+            th:include="forms/dashboard_study :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: study dashboard -->
+
+          <!-- Begin:: site dashboard -->
+          <div
+            th:case="dashboard-site"
+            th:include="forms/dashboard_site :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: site dashboard -->
+
+          <!-- Begin:: New subject -->
+          <div
+            th:case="new_subject"
+            th:include="forms/crf/new_subject :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: New subject -->
+
+          <!-- Begin:: CRF DM -->
+          <div
+            th:case="crf-dm"
+            th:include="forms/crf/dm :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: CRF DM -->
+
+          <!-- Begin:: CRF DS -->
+          <div
+            th:case="crf-ds"
+            th:include="forms/crf/ds :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: CRF DS -->
+
+          <!-- Begin:: Error 400 -->
+          <div
+            th:case="error-400"
+            th:include="forms/error/400 :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+
+          <!-- Begin:: document - introduction -->
+          <div
+            th:case="doc-introduction"
+            th:include="forms/document/introduction :: content"
+            class="
+              kt-content
+              kt-grid__item kt-grid__item--fluid
+              kt-grid kt-grid--hor
+            "
+            id="kt_content"
+          ></div>
+          <!-- End:: blank -->
+
+          <code>
+            <span
+              style="float: right"
+              th:if="${responseTime}"
+              th:text="${'Responded in ' + responseTime}"
+            ></span>
+          </code>
+
+          <!-- end:: Content & sub-header -->
+
+          <!-- begin:: Footer -->
+          <div
+            th:include="forms/footer_navy :: footer"
+            class="
+              kt-footer
+              kt-grid__item
+              kt-grid kt-grid--desktop kt-grid--ver-desktop
+            "
+          ></div>
+          <!-- end:: Footer -->
+        </div>
+        <!-- end:: Wrapper -->
+      </div>
+      <!-- end:: Page -->
+
+      <!-- Begin::modal session view -->
+      <div
+        class="modal fade"
+        id="session-dialog"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="modalImportCenter"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">session-dialog</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table>
+                <tr th:each="var : ${session}">
+                  <td th:text="${var.key}"></td>
+                  <td th:text="${var.value}"></td>
+                </tr>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-brand"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End::modal session2 -->
+    </div>
+    <!-- end:: Root -->
+
+    <!-- begin:: Scrolltop -->
+    <div id="kt_scrolltop" class="kt-scrolltop">
+      <i class="la la-arrow-up"></i>
+    </div>
+    <!-- end:: Scrolltop -->
+
+    <!-- begin::Global Config(global config for global JS scripts) -->
+    <script>
+      var KTAppOptions = {
+        colors: {
+          state: {
+            brand: "#5d78ff",
+            metal: "#c4c5d6",
+            light: "#ffffff",
+            accent: "#00c5dc",
+            primary: "#5867dd",
+            success: "#34bfa3",
+            info: "#36a3f7",
+            warning: "#ffb822",
+            danger: "#fd3995",
+            focus: "#9816f4",
+          },
+          base: {
+            label: ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
+            shape: ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"],
+          },
+        },
+      };
+    </script>
+    <!-- end::Global Config -->
+  </body>
+  <!-- end::Body -->
+</html>

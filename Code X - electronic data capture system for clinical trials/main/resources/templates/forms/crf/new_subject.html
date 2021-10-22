@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">New Subject</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a
+              href="/"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              href="/studies"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study List"
+              ><i class="fad fa-tags"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study Dashboard"
+              ><i class="fad fa-hospital-alt"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName + '/' + siteid}"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Site Dashboard"
+              ><i class="fad fa-hospital"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/subject/' + studyShortName + '/' + siteid}"
+              class="kt-subheader__breadcrumbs-home"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Subject Dashboard"
+              ><i class="fad fa-user-tag"></i>
+            </a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <div class="kt-subheader__toolbar">
+          <div class="kt-subheader__wrapper">
+            <a
+              th:if="${session.pm_e2 == true}"
+              th:href="${'/study/' + studyShortName + '/' + siteid + '/new_subject'}"
+              class="btn btn-sm btn-hover btn-dark btn-elevate"
+              id="btn_add_subject"
+            >
+              <i class="fas fa-user-plus fa-lg"></i> &nbsp;
+              <span class="kt-opacity-7">NEW</span> &nbsp;
+              <strong>SUBJECT</strong>
+            </a>
+          </div>
+        </div>
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <!--begin::Portlet-->
+      <div class="kt-portlet" id="kt_page_portlet">
+        <form
+          class="kt-form"
+          method="post"
+          id="form_new_subject"
+          autocomplete="off"
+          onsubmit="save_changes_new_screening(); return false;"
+        >
+          <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+              <h3 class="kt-portlet__head-title">
+                <span th:text="#{menu.label.add_new_screening_number}"
+                  >Add new screening number</span
+                >
+              </h3>
+            </div>
+          </div>
+
+          <div class="kt-portlet__body">
+            <div class="col-xl-1">
+              <!-- begin::hidden inputs -->
+              <input
+                class="form-control"
+                type="hidden"
+                name="STUDYID"
+                th:value="${session.studyid}"
+              />
+              <input
+                class="form-control"
+                type="hidden"
+                name="SITEID"
+                th:value="${session.siteid}"
+              />
+              <!-- end::hidden inputs -->
+            </div>
+
+            <div class="col-xl-10">
+              <div class="kt-section kt-section--first">
+                <div class="kt-section__body">
+                  <div class="form-group row">
+                    <label class="col-lg-2 col-form-label"
+                      >Screening number</label
+                    >
+                    <div class="col-lg-6">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="input_screening_number"
+                        name="SCRNO"
+                        maxlength="20"
+                        placeholder=""
+                        required
+                      />
+                      <code
+                        >Must consist of upper-case, digit, or dash (up-to 20
+                        characters)</code
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-1"></div>
+          </div>
+        </form>
+        <!--end::Portlet-->
+      </div>
+      <!--end::Dashboard 3-->
+    </div>
+    <!-- end:: Main content -->
+
+    <script>
+      var map = JSON.parse("[(${mapIDs})]");
+      var msg_result = "[[#{messages.new_subject.12}]]";
+      var msg_verified2 = "[[#{messages.new_subject.01}]]";
+
+      $(document).ready(function () {
+        $("input.form-control").maxlength({
+          alwaysShow: true,
+          threshold: 10,
+          warningClass: warning_class,
+          limitReachedClass: success_class,
+          separator: " of ",
+          preText: "",
+          postText: " chars",
+          validate: true,
+          placement: "bottom",
+        });
+
+        $("#btn_proceed_criteria").prop("disabled", true);
+      });
+
+      // END::function onclick
+
+      $("#input_screening_number").on("change", function () {
+        var selected = $("#select_suffix").val();
+        var value = $("#input_screening_number").val();
+        var sub_value = value.substring(0, 4);
+
+        if (value.length > 6 && selected.length > 0) {
+          $("#btn_save").prop("disabled", false);
+          $("#btn_save_changes").prop("disabled", false);
+        } else {
+          $("#btn_save").prop("disabled", true);
+          $("#btn_save_changes").prop("disabled", true);
+        }
+
+        if (value.length != 7) {
+          swal
+            .fire({
+              title: "Error",
+              text: "[[#{messages.new_subject.19}]]",
+              icon: "error",
+              backdrop: true,
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+            })
+            .then(function (result) {
+              if (result.value) $("#input_screening_number").val("");
+            });
+        }
+
+        if (!value.startsWith("1") && !value.startsWith("2")) {
+          swal
+            .fire({
+              title: "Error",
+              text: "[[#{messages.new_subject.20}]]",
+              icon: "error",
+              backdrop: true,
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+            })
+            .then(function (result) {
+              if (result.value) $("#input_screening_number").val("");
+            });
+        }
+
+        var siteid_suffix = "[[${siteid}]]".substring(2, 3);
+        /* if ($.inArray(sub_value, arr) < 0 || !sub_value.startsWith(siteid_suffix)) { */
+        if (!sub_value.startsWith(siteid_suffix)) {
+          swal
+            .fire({
+              title: "Error",
+              text: "Incorrect ID entered.",
+              icon: "error",
+              backdrop: true,
+              allowOutsideClick: false,
+              confirmButtonText: "OK",
+            })
+            .then(function (result) {
+              if (result.value) {
+                // reset 7 digits
+                $("#input_screening_number").val("");
+
+                $("#btn_save").prop("disabled", true);
+                $("#select_suffix").find("option:eq(0)").prop("selected", true);
+                $("#select_suffix")
+                  .find("option:eq(1)")
+                  .prop("disabled", false);
+                $("#select_suffix")
+                  .find("option:eq(2)")
+                  .prop("disabled", false);
+              }
+            });
+        } else {
+          $("#btn_save").prop("disabled", true);
+          $("#select_suffix").find("option:eq(0)").prop("selected", true);
+          $("#select_suffix").find("option:eq(1)").prop("disabled", false);
+          $("#select_suffix").find("option:eq(2)").prop("disabled", false);
+        }
+      });
+
+      $("#select_suffix").on("change", function () {
+        var selected = $("#select_suffix").val();
+        var value = $("#input_screening_number").val();
+        if (value.length > 6 && selected.length > 0) {
+          $("#btn_save").prop("disabled", false);
+          $("#btn_save_changes").prop("disabled", false);
+        } else {
+          $("#btn_save").prop("disabled", true);
+          $("#btn_save_changes").prop("disabled", true);
+        }
+      });
+
+      function update() {
+        var form = document.getElementById("form_new_subject");
+        form.submit();
+
+        return true;
+      }
+
+      function refreseh() {
+        var ssn = "[[${studyShortName}]]";
+        var siteid = "[[${siteid}]]";
+        window.location("/study/" + ssn + "/" + siteid + "/new_subject");
+      }
+    </script>
+  </div>
+</html>

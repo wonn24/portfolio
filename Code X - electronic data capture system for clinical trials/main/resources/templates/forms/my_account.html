@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >MY ACCOUNT</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet" id="portlet_registration_form">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3
+              class="kt-portlet__head-title"
+              th:text="#{menu.button.my_account}"
+            >
+              My Account
+            </h3>
+          </div>
+        </div>
+
+        <form
+          class="kt-form kt-form--label-right"
+          id="form_my_account"
+          autocomplete="off"
+          method="post"
+          action="/my_account"
+          th:object="${objUser}"
+        >
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      <span th:text="#{menu.label.account}">Account:</span>
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label"
+                    >Email Address</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input_email"
+                      name="email"
+                      th:value="${objUser.email}"
+                      placeholder=""
+                      readonly
+                    />
+                    <span class="form-text text-muted"
+                      >Email will not be publicly displayed.
+                      <a
+                        href="javascript:void(0);"
+                        class="kt-link"
+                        tabindex="-1"
+                        >Learn more</a
+                      >.
+                    </span>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.first_name}"
+                    >First Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input_firstName"
+                      name="firstName"
+                      th:value="${objUser.firstName}"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.last_name}"
+                    >Last Name</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input_lastName"
+                      name="lastName"
+                      th:value="${objUser.lastName}"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.organization}"
+                    >Organization</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input_organization"
+                      name="organization"
+                      th:value="${objUser.organization}"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="form-group row"
+                  style="display: none"
+                  id="div_has_phone"
+                >
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.phone_number}"
+                    >Phone number (optional)</label
+                  >
+                  <div class="col-xl-6 col-lg-9">
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control"
+                        th:value="${objUser.phone}"
+                        disabled
+                      />
+
+                      <button
+                        type="button"
+                        class="
+                          btn btn-sm btn-hover btn-google btn-elevate
+                          input-group-append
+                        "
+                        id="btn_remove_phone"
+                      >
+                        <i class="fas fa-pencil fa-lg"></i> &nbsp;
+                        <span th:text="#{menu.label.update}">Update</span>
+                      </button>
+                    </div>
+
+                    <code
+                      id="code_phone_example"
+                      th:text="#{menu.label.choose_country_first}"
+                      >Please choose your country first</code
+                    >
+                  </div>
+                  <div class="col-xl-3"></div>
+                </div>
+
+                <div
+                  class="form-group row"
+                  style="display: none"
+                  id="div_no_phone"
+                >
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.phone_number}"
+                    >Phone number (optional)</label
+                  >
+                  <div class="col-xl-6 col-lg-9">
+                    <div class="input-group">
+                      <div class="btn-group dropdown input-group-prepend">
+                        <button
+                          type="button"
+                          class="
+                            btn btn-sm btn-hover btn-facebook btn-elevate
+                            dropdown-toggle
+                          "
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          id="btn_globe"
+                          aria-expanded="false"
+                        >
+                          <i class="fas fa-globe fa-lg"></i>
+                        </button>
+
+                        <div class="dropdown-menu">
+                          <ul class="kt-nav">
+                            <li class="kt-nav__item">
+                              <a class="kt-nav__link phone" data-code="82">
+                                <span class="kt-nav__link-icon"
+                                  ><img
+                                    style="width: 25px"
+                                    src="assets/media/flags/018-south-korea.svg"
+                                    alt=""
+                                /></span>
+                                <span class="kt-nav__link-text">
+                                  &nbsp; Korea, Rep of</span
+                                >
+                              </a>
+                            </li>
+
+                            <li class="kt-nav__item">
+                              <a class="kt-nav__link phone" data-code="66">
+                                <span class="kt-nav__link-icon"
+                                  ><img
+                                    style="width: 25px"
+                                    src="assets/media/flags/021-Thailand.svg"
+                                    alt=""
+                                /></span>
+                                <span class="kt-nav__link-text">
+                                  &nbsp; Thailand</span
+                                >
+                              </a>
+                            </li>
+
+                            <li class="kt-nav__item">
+                              <a class="kt-nav__link phone" data-code="91">
+                                <span class="kt-nav__link-icon"
+                                  ><img
+                                    style="width: 25px"
+                                    src="assets/media/flags/010-india.svg"
+                                    alt=""
+                                /></span>
+                                <span class="kt-nav__link-text">
+                                  &nbsp; India</span
+                                >
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <input
+                        type="text"
+                        class="col-2 form-control"
+                        id="input_country_code"
+                        name="country_code"
+                        value=""
+                        placeholder="+00"
+                        readonly
+                      />
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="input_phone"
+                        name="phone_number"
+                        maxlength="10"
+                        th:value="${objUser.phone}"
+                        placeholder="00 0000 0000"
+                      />
+
+                      <button
+                        type="button"
+                        class="
+                          btn btn-sm btn-hover btn-facebook btn-elevate
+                          input-group-append
+                        "
+                        id="btn_send_passcode"
+                      >
+                        <i class="fas fa-envelope fa-lg"></i> &nbsp; Send code
+                      </button>
+                    </div>
+
+                    <code
+                      id="code_phone_example"
+                      th:text="#{menu.label.choose_country_first}"
+                      >Please choose your country first</code
+                    >
+                  </div>
+                  <div class="col-xl-3"></div>
+                </div>
+
+                <div
+                  class="form-group row"
+                  id="div_passcode_verification"
+                  style="display: none"
+                >
+                  <div class="col-xl-3 col-lg-3 col"></div>
+                  <div class="col-xl-3 col-lg-5 col-form-label">
+                    Please verify the code within
+                    <span id="time_intervals"></span>s
+                  </div>
+                  <div class="col-xl-3 col-lg-4 input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="input_passcode"
+                      maxlength="6"
+                      placeholder="000000"
+                    />
+
+                    <div class="input-group-append">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-hover btn-google btn-elevate"
+                        id="btn_verify_passcode"
+                      >
+                        <i class="fas fa-check fa-lg"></i> &nbsp; Verify code
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-lg-3">
+                    <input type="hidden" id="input_randomCode" />
+                  </div>
+
+                  <div class="col-xl-3 col-lg-3"></div>
+                  <div class="col-xl-6 col-lg-9">
+                    <div
+                      class="
+                        kt-separator
+                        kt-separator--border-dashed
+                        kt-separator--portlet-fit
+                        kt-separator--space-lg
+                      "
+                    ></div>
+                    <a href="/register" class="kt-link"
+                      >If you could not receive the message, please click here
+                      to start over again.</a
+                    >
+                  </div>
+                  <div class="col-xl-3 col-lg-3"></div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="
+                kt-separator
+                kt-separator--border-dashed
+                kt-separator--portlet-fit
+                kt-separator--space-lg
+              "
+            ></div>
+
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">
+                      <span th:text="#{menu.label.personalized}"
+                        >Personalized:</span
+                      >
+                    </h3>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.language}"
+                    >Language</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <select class="form-control" name="language" required>
+                      <option
+                        value=""
+                        th:text="#{menu.label.select_language}"
+                        selected
+                      >
+                        Select Language...
+                      </option>
+                      <option
+                        value="de"
+                        th:selected="${objUser.language} == 'de' ? 'selected'"
+                        disabled
+                      >
+                        Deutsch - German
+                      </option>
+                      <option
+                        value="en"
+                        th:selected="${objUser.language} == 'en' ? 'selected'"
+                      >
+                        English
+                      </option>
+                      <option
+                        value="es"
+                        th:selected="${objUser.language} == 'es' ? 'selected'"
+                        disabled
+                      >
+                        Español - Spanish
+                      </option>
+                      <option
+                        value="fr"
+                        th:selected="${objUser.language} == 'fr' ? 'selected'"
+                        disabled
+                      >
+                        Français - French
+                      </option>
+                      <option
+                        value="vi"
+                        th:selected="${objUser.language} == 'vi' ? 'selected'"
+                        disabled
+                      >
+                        Tiếng Việt - Vietnamese
+                      </option>
+                      <option
+                        value="bn"
+                        th:selected="${objUser.language} == 'bn' ? 'selected'"
+                        disabled
+                      >
+                        বাংলা - Bangla
+                      </option>
+                      <option
+                        value="th"
+                        th:selected="${objUser.language} == 'th' ? 'selected'"
+                        disabled
+                      >
+                        ภาษาไทย - Thai
+                      </option>
+                      <option
+                        value="ko"
+                        th:selected="${objUser.language} == 'ko' ? 'selected'"
+                        disabled
+                      >
+                        한국어 - Korean
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.timezone}"
+                    >Time Zone</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <select class="form-control" name="timezone" required>
+                      <option
+                        value=""
+                        th:text="#{menu.label.select_timezone}"
+                        selected
+                      >
+                        Select Timezone...
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Accra' ? 'selected'"
+                        value="Africa/Accra"
+                      >
+                        Africa/Accra (UTC+00:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Ouagadougou' ? 'selected'"
+                        value="Africa/Ouagadougou"
+                      >
+                        Africa/Ouagadougou (UTC+00:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Lagos' ? 'selected'"
+                        value="Africa/Lagos"
+                      >
+                        Africa/Lagos (UTC+01:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Johannesburg' ? 'selected'"
+                        value="Africa/Johannesburg"
+                      >
+                        Africa/Johannesburg (UTC+02:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Maputo' ? 'selected'"
+                        value="Africa/Maputo"
+                      >
+                        Africa/Maputo (UTC+02:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Addis_Ababa' ? 'selected'"
+                        value="Africa/Addis_Ababa"
+                      >
+                        Africa/Addis_Ababa (UTC+03:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Africa/Nairobi' ? 'selected'"
+                        value="Africa/Nairobi"
+                      >
+                        Africa/Nairobi (UTC+03:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Asia/Kathmandu' ? 'selected'"
+                        value="Asia/Kathmandu"
+                      >
+                        Asia/Kathmandu (UTC+05:45)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Asia/Bangkok' ? 'selected'"
+                        value="Asia/Bangkok"
+                      >
+                        Asia/Bangkok (UTC+07:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Asia/Manila' ? 'selected'"
+                        value="Asia/Manila"
+                      >
+                        Asia/Manila (UTC+08:00)
+                      </option>
+                      <option
+                        th:selected="${objUser.timezone} == 'Asia/Seoul' ? 'selected'"
+                        value="Asia/Seoul"
+                      >
+                        Asia/Seoul (UTC+09:00)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label
+                    class="col-xl-3 col-lg-3 col-form-label"
+                    th:text="#{menu.label.timeformat}"
+                    >Time Format</label
+                  >
+                  <div class="col-lg-9 col-xl-6">
+                    <select class="form-control" name="timeformat" required>
+                      <option
+                        value=""
+                        th:text="#{menu.label.select_timeformat}"
+                        selected
+                      >
+                        Select Time Format...
+                      </option>
+                      <option
+                        th:selected="${objUser.timeformat} == 'yyyy-MM-dd HH:mm:ss z' ? 'selected'"
+                        value="yyyy-MM-dd HH:mm:ss z"
+                      >
+                        yyyy-MM-dd HH:mm:ss z &emsp; (2020-02-04 20:09:11 KST)
+                      </option>
+                      <option
+                        th:selected="${objUser.timeformat} == 'yyyy-MM-dd hh:mm:ss a z' ? 'selected'"
+                        value="yyyy-MM-dd hh:mm:ss a z"
+                      >
+                        yyyy-MM-dd hh:mm:ss a z &emsp; (2020-02-04 08:09:11 PM
+                        KST)
+                      </option>
+
+                      <option
+                        th:selected="${objUser.timeformat} == 'dd MMM yyyy HH:mm:ss z' ? 'selected'"
+                        value="dd MMM yyyy HH:mm:ss z"
+                      >
+                        dd MMM yyyy HH:mm:ss z &emsp; (04 Feb 2020 20:09:11 KST)
+                      </option>
+                      <option
+                        th:selected="${objUser.timeformat} == 'dd MMM yyyy hh:mm:ss a z' ? 'selected'"
+                        value="dd MMM yyyy hh:mm:ss a z"
+                      >
+                        dd MMM yyyy hh:mm:ss a z &emsp; (04 Feb 2020 08:09:11 PM
+                        KST)
+                      </option>
+
+                      <option
+                        th:selected="${objUser.timeformat} == 'MM/dd/yyyy - HH:mm:ss z' ? 'selected'"
+                        value="MM/dd/yyyy - HH:mm:ss z"
+                      >
+                        MM/dd/yyyy - HH:mm:ss z &emsp; (02/04/2020 - 20:09:11
+                        KST)
+                      </option>
+                      <option
+                        th:selected="${objUser.timeformat} == 'MM/dd/yyyy - hh:mm:ss a z' ? 'selected'"
+                        value="MM/dd/yyyy - hh:mm:ss a z"
+                      >
+                        MM/dd/yyyy - hh:mm:ss a z &emsp; (02/04/2020 - 08:09:11
+                        PM KST)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    value="Reset"
+                    id="btn_cancel"
+                    onclick="cancel_edit_myaccount();"
+                  >
+                    <span th:text="#{menu.button.cancel}">Cancel</span>
+                  </button>
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    style="float: right"
+                    onclick="submit_registration();"
+                  >
+                    <span th:text="#{menu.button.submit}">Submit</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <script>
+      var isValid = false;
+      var isChanged = false;
+      var tmpPhone = "";
+
+      jQuery(document).ready(function () {
+        var phone = "[[${objUser.phone}]]";
+
+        if (phone.length > 0) {
+          $("#div_has_phone").show();
+          $("#div_no_phone").hide();
+        } else {
+          $("#div_has_phone").hide();
+          $("#div_no_phone").show();
+        }
+
+        tmpPhone = phone;
+      });
+
+      $(".phone").on("click", function () {
+        var code = $(this).data("code");
+        $("#input_country_code").val("+" + code);
+
+        if (code == "82") {
+          $("#input_phone").val("");
+          $("#input_phone").prop("placeholder", "1234567890 (10 digits)");
+          $("#code_phone_example").text(
+            "Republic of Korea phone number: +82 12 3456 7890"
+          );
+        } else if (code == "66") {
+          $("#input_phone").val("");
+          $("#input_phone").prop("placeholder", "123456789 (9 digits)");
+          $("#code_phone_example").text("Thailand phone number: +66123456789");
+        } else if (code == "91") {
+          $("#input_phone").val("");
+          $("#input_phone").prop("placeholder", "1234567890 (10 digits)");
+          $("#code_phone_example").text("India phone number: +911234567890");
+        }
+      });
+
+      var timeoutId;
+      $("#btn_send_passcode").on("click", function () {
+        var code = $("#input_country_code").val().trim();
+        code = code.substring(1, code.length);
+
+        var number = $("#input_phone").val().trim();
+
+        if (code.length == 0 || number.length < 9) {
+          swal.fire({
+            title: "Wrong input found!",
+            text: "Please check the country code and phone number.",
+            icon: "error",
+            backdrop: true,
+            confirmButtonText: "OK",
+          });
+
+          return;
+        } else {
+          // show passcode area
+          $("#div_passcode_verification").show();
+          $("#time_intervals").html("3:01");
+          var btn = document.getElementById("btn_send_passcode");
+          KTApp.progress(btn);
+
+          timeoutId = setTimeout(startTimer(), 1000);
+        }
+
+        // pause
+        KTApp.block("#portlet_registration_form", {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Sending...",
+        });
+
+        $.ajax({
+          type: "Post",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          url: "/verify_phone_number/" + code + number,
+          success: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+
+            swal
+              .fire({
+                title: "Passcode is sent to your mobile phone!",
+                text: "Please check the message on your mobile phone and verify it.",
+                icon: "success",
+                backdrop: false,
+                confirmButtonText: "OK",
+              })
+              .then(function (result) {
+                if (result.value) {
+                  $("#input_randomCode").val(str.randomCode);
+                  KTApp.unblock("#portlet_registration_form");
+                  $("#btn_globe").prop("disabled", true);
+                  $("#input_phone").prop("readonly", true);
+                }
+              });
+          },
+          error: function (data, textStatus, xhr) {
+            event.preventDefault();
+
+            swal.fire({
+              title: "Verification is not available!",
+              text: data.responseText,
+              icon: "error",
+              backdrop: false,
+              confirmButtonText: "OK",
+            });
+
+            KTApp.unblock("#portlet_registration_form");
+
+            // unprogress btn_send_passcode
+            var btn = document.getElementById("btn_send_passcode");
+            KTApp.unprogress(btn);
+
+            $("#time_intervals").html(""); // reset
+            $("#div_passcode_verification").hide();
+          },
+        });
+      });
+
+      function cancel_edit_myaccount() {
+        reload();
+      }
+
+      $("#btn_verify_passcode").on("click", function () {
+        var value = $("#input_passcode").val().trim();
+
+        if (value.length == 0) {
+          swal.fire({
+            title: "You need to enter passcode!",
+            icon: "error",
+            backdrop: false,
+            confirmButtonText: "OK",
+          });
+
+          isValid = false;
+
+          return;
+        }
+
+        var code = $("#input_randomCode").val();
+        if (code == value) {
+          swal
+            .fire({
+              title: "Verified!",
+              text: "Your phone number is verified.",
+              icon: "success",
+              backdrop: false,
+              confirmButtonText: "OK",
+            })
+            .then(function (result) {
+              if (result.value) {
+                // unprogress btn_send_passcode
+                var btn = document.getElementById("btn_send_passcode");
+                KTApp.unprogress(btn);
+
+                // btn_globe,input_country_code,btn_send_passcode
+                $("#btn_globe").prop("disabled", true);
+                $("#input_phone").prop("readonly", true);
+                $("#btn_send_passcode").prop("disabled", true);
+                $("#div_passcode_verification").hide();
+
+                isValid = true;
+              }
+            });
+
+          clearTimeout(timeoutId);
+        } else {
+          isValid = false;
+
+          swal.fire({
+            title: "Wrong passcode!",
+            text: "Sorry, you have entered a wrong passcode.",
+            icon: "error",
+            backdrop: false,
+            confirmButtonText: "OK",
+          });
+        }
+      });
+
+      $("#input_phone").on("change keyup", function () {
+        var sanitized = $(this)
+          .val()
+          .replace(/[^0-9]/g, "");
+        $(this).val(sanitized);
+
+        isChanged = true;
+
+        if ($(this).val() == tmpPhone) isChanged = false;
+      });
+
+      function startTimer() {
+        var presentTime = $("#time_intervals").text();
+        var timeArray = presentTime.split(/[:]+/);
+        if (timeArray.length != 2) return;
+
+        var m = timeArray[0];
+        var s_ = timeArray[1] - 1;
+        var s = checkSecond(timeArray[1] - 1);
+        if (s == 59) m--;
+
+        $("#time_intervals").html(m + ":" + s);
+
+        if (m < 0) {
+          alert("Passcode is expired. Please try it again.");
+
+          // hide div
+          $("#div_passcode_verification").hide();
+
+          // unprogress btn_send_passcode
+          var btn = document.getElementById("btn_send_passcode");
+          KTApp.unprogress(btn);
+
+          $("#btn_globe").prop("disabled", false);
+          $("#input_phone").prop("readonly", false);
+
+          // clear timeout
+          clearTimeout(timeoutId);
+        } else timeoutId = setTimeout(startTimer, 1000);
+      }
+
+      function reload() {
+        location.reload();
+      }
+
+      function checkSecond(sec) {
+        var result;
+        if (sec < 0) result = "59";
+        else if (sec < 10) result = "0" + sec;
+        else result = sec;
+
+        return result;
+      }
+
+      function submit_registration() {
+        var email = $("#input_email").val();
+        var firstName = $("#input_firstName").val().trim();
+        var lastName = $("#input_lastName").val().trim();
+        var organization = $("#input_organization").val().trim();
+        var phone = $("#input_phone").val().trim();
+        var country_code = $("#input_country_code").val().trim();
+        var phone_number = $("#input_phone").val().trim();
+
+        if (firstName.length == 0) {
+          swal.fire({
+            title: "You missed some of essential fields.",
+            text: "Please check first name.",
+            icon: "error",
+            backdrop: true,
+            confirmButtonText: "OK",
+            allowOutsideClick: false,
+          });
+
+          return;
+        } else if (lastName.length == 0) {
+          swal.fire({
+            title: "You missed some of essential fields.",
+            text: "Please check the last name.",
+            icon: "error",
+            backdrop: true,
+            confirmButtonText: "OK",
+            allowOutsideClick: false,
+          });
+
+          return;
+        } else if (organization.length == 0) {
+          swal.fire({
+            title: "You missed some of essential fields.",
+            text: "Please check the organization name.",
+            icon: "error",
+            backdrop: true,
+            confirmButtonText: "OK",
+            allowOutsideClick: false,
+          });
+
+          return;
+        } else if (
+          (country_code.length > 0 &&
+            phone_number.length == 0 &&
+            isChanged == true) ||
+          (country_code.length == 0 &&
+            phone_number.length > 0 &&
+            isChanged == true)
+        ) {
+          swal.fire({
+            title: "You missed some of essential fields.",
+            text: "Please check the country code or phone number.",
+            icon: "error",
+            backdrop: true,
+            confirmButtonText: "OK",
+            allowOutsideClick: false,
+          });
+
+          return;
+        }
+
+        if (
+          country_code.length > 0 &&
+          phone_number.length > 0 &&
+          isValid == false
+        ) {
+          swal.fire({
+            title: "Phone number verification",
+            text: "Please verify your phone number first.",
+            icon: "error",
+            backdrop: true,
+            confirmButtonText: "OK",
+            allowOutsideClick: false,
+          });
+
+          return;
+        }
+
+        swal
+          .fire({
+            title: "Do you want submit the registration form?",
+            icon: "question",
+            iconHtml: " ",
+            backdrop: true,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            allowOutsideClick: false,
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              KTApp.block("#portlet_registration_form", {
+                overlayColor: "#000000",
+                type: "v2",
+                state: "primary",
+                message: "Processing...",
+              });
+
+              submit_this_form();
+            }
+          });
+      }
+
+      function submit_this_form() {
+        var form = $("#form_my_account");
+        form.submit();
+      }
+
+      $("#btn_remove_phone").on("click", function () {
+        $("#input_phone").val("");
+        $("#div_has_phone").hide();
+        $("#div_no_phone").show();
+      });
+    </script>
+  </div>
+</html>

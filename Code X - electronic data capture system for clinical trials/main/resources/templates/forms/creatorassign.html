@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Creator Role Assign</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet" id="div_creator_assign">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Creator Role Assign</h3>
+          </div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="kt-section kt-section--first">
+            <div class="kt-section__body">
+              <div class="alert alert-secondary" role="alert">
+                <div class="alert-icon">
+                  <i class="flaticon-warning kt-font-brand"></i>
+                </div>
+                <div class="alert-text">Creator Role Assign...</div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-4">
+                  <label>Study</label>
+                  <select class="form-control" id="select_study" required>
+                    <option>select...</option>
+                    <option
+                      th:each="item : ${listStudy}"
+                      th:data-studyid="${item.studyid}"
+                      th:data-siteid="${item.siteid}"
+                      th:text="${item.studyid + ': ' + item.siteid}"
+                    ></option>
+                  </select>
+                </div>
+
+                <div class="col-4">
+                  <label>e-mail address</label>
+                  <select class="form-control" id="select_uid" required>
+                    <option>select...</option>
+                    <option
+                      th:each="item : ${listUserObj}"
+                      th:data-uid="${item.uid}"
+                      th:text="${item.email}"
+                    ></option>
+                  </select>
+                </div>
+
+                <div class="col-4">
+                  <label>&nbsp;</label> <br />
+                  <button class="btn btn-outline-brand btn-md">
+                    Set as study creator
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <script>
+      $("button").on("click", set_creator);
+
+      function set_creator() {
+        var selected_study = $("#select_study").find("option:selected");
+        var selected_uid = $("#select_uid").find("option:selected");
+
+        var studyid = selected_study.attr("data-studyid");
+        var siteid = selected_study.attr("data-siteid");
+        var uid = selected_uid.attr("data-uid");
+
+        var json = {};
+        json["studyid"] = studyid;
+        json["siteid"] = siteid;
+        json["uid"] = uid;
+
+        if (studyid.length > 0 && uid.length > 0) {
+          swal
+            .fire({
+              title: "Are you sure?",
+              icon: "warning",
+              backdrop: false,
+              showCancelButton: true,
+              cancelButtonText: "No",
+              confirmButtonText: "Yes",
+              reverseButtons: true,
+            })
+            .then(function (result) {
+              if (result.value) {
+                // update
+                sendJson(json);
+              } else {
+                // revert
+              }
+            });
+        }
+      }
+
+      function sendJson(json) {
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(json),
+          success: function (data, textStatus, xhr) {
+            swal.fire({
+              title: msg_save_success,
+              icon: "success",
+              backdrop: false,
+              confirmButtonText: "OK",
+            });
+          },
+          error: function (data, textStatus, xhr) {
+            msg_error();
+          },
+        });
+      }
+    </script>
+  </div>
+</html>

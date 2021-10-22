@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X-site</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Site Dashboard</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a
+              href="/"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              href="/studies"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study List"
+              ><i class="fad fa-tags"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study Dashboard"
+              ><i class="fad fa-chess-king"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName + '/' + siteid}"
+              class="kt-subheader__breadcrumbs-home"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Site Dashboard"
+              ><i class="fad fa-chess-queen"></i
+            ></a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <div class="kt-subheader__toolbar">
+          <div class="kt-subheader__wrapper">
+            <div class="dropdown dropdown-inline">
+              <a
+                th:if="${session.pm_d1 == true or session.pm_d2 == true or session.pm_d3 == true or session.pm_d4 == true or session.pm_d5 == true}"
+                th:href="${'/lock/' + studyShortName + '/' + siteid}"
+                class="btn btn-sm btn-hover btn-success btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fad fa-lock-alt fa-lg"></i>
+                <span class="kt-opacity-7"> &emsp; LOCK</span> &nbsp;
+                <strong>DB</strong></a
+              >
+              <a
+                th:if="${session.pm_t1 == true and studyid != null}"
+                th:href="${'/build/crf_version/' + studyShortName + '/' + siteid}"
+                class="btn btn-sm btn-hover btn-accent btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fad fa-repeat fa-lg"></i> &emsp;
+                <span class="kt-opacity-7"> SWITCH</span> &nbsp;
+                <strong>CRF</strong></a
+              >
+              <a
+                href="#"
+                class="
+                  btn btn-sm btn-hover btn-brand btn-elevate
+                  dropdown-toggle
+                "
+                data-toggle="dropdown"
+                data-offset="0px,0px"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fad fa-map-marker-alt fa-inverse fa-lg"></i> &emsp;
+                <span th:if="${#locale.language == 'en'}"
+                  ><span class="kt-opacity-7">CHOOSE</span>
+                  <strong>SITE</strong></span
+                >
+                <span
+                  th:unless="${#locale.language == 'en'}"
+                  th:text="#{menu.button.choose_site}"
+                ></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                <ul
+                  class="kt-nav kt-nav--active-bg"
+                  role="tablist"
+                  th:each="item: ${listStudyAll}"
+                >
+                  <li class="kt-nav__item">
+                    <a
+                      th:href="${'/study/' + studyShortName + '/' + item.siteid}"
+                      class="kt-nav__link"
+                      role="tab"
+                    >
+                      <i class="kt-nav__link-icon fas fa-map-marker-alt"></i>
+                      <span
+                        class="kt-nav__link-text"
+                        th:text="${item.siteid + ' - ' + item.sitename}"
+                      ></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <a
+                th:if="${session.pm_u1 == true or session.pm_u2 == true}"
+                th:href="${'/userlist/' + studyShortName + '/' + siteid}"
+                class="btn btn-sm btn-hover btn-focus btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fad fa-users-cog fa-lg"></i> &emsp;
+                <span
+                  ><span class="kt-opacity-7">CHANGE</span>
+                  <strong>ROLE</strong></span
+                >
+              </a>
+              <a
+                th:if="${session.pm_e2 == true}"
+                th:href="${'/study/' + studyShortName + '/' + siteid + '/new_subject'}"
+                class="btn btn-sm btn-hover btn-dark btn-elevate"
+                id="btn_add_subject"
+              >
+                <i class="fas fa-user-plus fa-lg"></i> &emsp;
+                <span th:if="${#locale.language == 'en'}"
+                  ><span class="kt-opacity-7">NEW</span>
+                  <strong>SUBJECT</strong></span
+                >
+                <span
+                  th:unless="${#locale.language == 'en'}"
+                  th:text="#{menu.button.new_subject}"
+                ></span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+      id="div_site_dashboard"
+    >
+      <div class="row">
+        <div class="col-12">
+          <!--Begin::Portlet-->
+          <div class="kt-portlet" id="div_site_information">
+            <div class="kt-portlet__head">
+              <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                  <i class="fal fa-exclamation-square fa-lg"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                  Site information: &nbsp; <span th:text="${siteid}"></span>
+                </h3>
+              </div>
+            </div>
+
+            <div class="kt-portlet__body">
+              <div class="row kt-portlet__body kt-portlet__body--fit">
+                <div
+                  class="col-lg-12 kt-widget kt-widget--general-2"
+                  th:each="item : ${listStudy}"
+                >
+                  <div class="kt-widget kt-widget--general-3">
+                    <div class="kt-widget__top">
+                      <div class="kt-widget__wrapper">
+                        <div class="kt-widget__label">
+                          <a
+                            href="javascript:void(0);"
+                            class="kt-widget__title"
+                          >
+                            <span
+                              th:text="${item.piname != null ? item.piname : 'NA'}"
+                            ></span>
+                          </a>
+                          <span class="kt-widget__desc">
+                            Principal Investigator <br />
+                            <br />
+                            Site ID:
+                            <a
+                              th:href="${'/study/' + studyShortName + '/' + item.siteid}"
+                              class="kt-link kt-link--danger"
+                              ><strong th:text="${item.siteid}"></strong
+                            ></a>
+                            &emsp; Site Name:
+                            <strong th:text="${item.sitename}"></strong> &emsp;
+                            Max visit number:
+                            <strong th:text="${item.maxvisit}"></strong> &emsp;
+                            Max subject number:
+                            <strong
+                              th:if="${item.maxSubject}"
+                              th:text="${item.maxSubject}"
+                            ></strong>
+                            <strong
+                              th:unless="${item.maxSubject}"
+                              th:text="'N/A'"
+                            ></strong>
+                          </span>
+                        </div>
+
+                        <div class="kt-widget__toolbar">
+                          <div class="kt-widget__stats">
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value kt-font-danger"
+                                th:text="${item.countParticipants}"
+                              ></span>
+                              <span class="kt-widget__caption">Subjects</span>
+                            </div>
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value"
+                                th:text="${mapStudy.get(item.siteid)?.total != null ? mapStudy.get(item.siteid)?.total : 0}"
+                              ></span>
+                              <span class="kt-widget__caption">Queries</span>
+                            </div>
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value"
+                                th:text="${mapStudy.get(item.siteid)?.total != null ? mapStudy.get(item.siteid)?.totalSDV : 0}"
+                              ></span>
+                              <span class="kt-widget__caption">SDV</span>
+                            </div>
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value"
+                                th:text="${mapStudy.get(item.siteid)?.total != null ? mapStudy.get(item.siteid)?.totalReview : 0}"
+                              ></span>
+                              <span class="kt-widget__caption">REVIEW</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="kt-widget__bottom">
+                      <div
+                        class="kt-widget__progress"
+                        style="min-width: 320px; padding-bottom: 30px"
+                      >
+                        <div class="kt-widget__stat">
+                          <span class="kt-widget__caption">Query Progress</span>
+                          <span
+                            class="kt-widget__value"
+                            th:text="${mapStudy.get(item.siteid)?.total}"
+                          ></span>
+                        </div>
+
+                        <div class="progress" style="height: 10px">
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.opened}"
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.opened * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.opened}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.opened}"
+                            ></span>
+                          </div>
+
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.in_progress}"
+                            class="progress-bar bg-warning"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.in_progress * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.in_progress}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.in_progress}"
+                            ></span>
+                          </div>
+
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.pending}"
+                            class="progress-bar bg-danger"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.pending * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.pending}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.pending}"
+                            ></span>
+                          </div>
+
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.closed}"
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.closed * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.closed}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.closed}"
+                            ></span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <br />
+                          <span
+                            class="kt-badge kt-badge--primary kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-primary"
+                            >Opened</span
+                          >
+                          &nbsp;
+                          <span
+                            class="kt-badge kt-badge--warning kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-warning"
+                            >In progress</span
+                          >
+                          &nbsp;
+                          <span
+                            class="kt-badge kt-badge--danger kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-danger"
+                            >Pending</span
+                          >
+                          &nbsp;
+                          <span
+                            class="kt-badge kt-badge--success kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-success"
+                            >Closed</span
+                          >
+                        </div>
+                      </div>
+
+                      <div class="kt-widget__actions" style="float: right">
+                        <a
+                          th:unless="${item.countParticipants > 0}"
+                          onclick="create_subject_first()"
+                          class="btn btn-sm btn-bold btn-label-instagram"
+                          >SUBJECT DETAIL</a
+                        >
+                        <a
+                          th:if="${item.countParticipants > 0}"
+                          th:href="${'/subject/' + studyShortName + '/' + item.siteid}"
+                          class="btn btn-sm btn-bold btn-label-instagram"
+                          th:text="#{menu.button.subject_details}"
+                          >SUBJECT DETAIL</a
+                        >
+                      </div>
+                    </div>
+
+                    <div
+                      class="
+                        col-lg-12
+                        kt-separator
+                        kt-separator--border-dashed
+                        kt-separator--space-lg
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--End::Portlet-->
+        </div>
+      </div>
+
+      <!--end::Dashboard 3-->
+    </div>
+    <!-- end:: Main content -->
+
+    <!-- Begin::modal import view -->
+    <div
+      class="modal fade"
+      id="dialog_import"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalImportCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fad fa-file-upload"></i> &nbsp; Import
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form
+              th:action="${'import_blankpdf/' + studyShortName}"
+              method="post"
+              id="form_import"
+            >
+              <div class="form-group row">
+                <div class="col">
+                  Please choose Excel Workbooks (.xlsx) to be imported. Please
+                  make sure that Cell type must be 'General'. Excel 97-2003
+                  workbook and CSV may not be supported.
+                </div>
+                <input
+                  type="hidden"
+                  name="withFlag"
+                  id="input_flag"
+                  value="0"
+                />
+              </div>
+
+              <div class="form-group row" id="div_ecrf">
+                <span class="col-2 col-form-label" style="padding-top: 3px"
+                  >e-CRF</span
+                >
+                <div class="col-10">
+                  <i id="icon_import_crf" class="far fa-meh-blank fa-lg"></i>
+                  &nbsp;
+                  <input
+                    type="file"
+                    name="import_crf"
+                    id="input_import_crf"
+                    accept=".xlsx, .xls"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group row" id="div_audit">
+                <span class="col-2 col-form-label" style="padding-top: 3px"
+                  >Audit</span
+                >
+                <div class="col-10">
+                  <i id="icon_import_audit" class="far fa-meh-blank fa-lg"></i>
+                  &nbsp;
+                  <input
+                    type="file"
+                    name="import_audit"
+                    id="input_import_audit"
+                    accept=".xlsx, .xls"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group row" id="div_flag">
+                <span class="col-2 col-form-label" style="padding-top: 3px"
+                  >Flag</span
+                >
+                <div class="col-10">
+                  <i id="icon_import_flag" class="far fa-meh-blank fa-lg"></i>
+                  &nbsp;
+                  <input
+                    type="file"
+                    name="import_flag"
+                    id="input_import_flag"
+                    accept=".xlsx, .xls"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-brand"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-brand"
+              id="btn_proceed_import"
+              onclick="import_excel()"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End::modal e-Signature -->
+
+    <!-- Begin::modal import report view -->
+    <div
+      class="modal fade"
+      id="dialog_import_error"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalImportCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fad fa-exclamation-square fa-lg"></i> &nbsp; Report
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group row">
+              <div class="col">
+                This dialog represents simple statistics and logs of the result.
+                Please check headers and cell types in your workbook if you can
+                see something similar with the following message
+                <code>Column 'visit' cannot be null</code>
+                . In this case, you should check whether the variable is shown
+                in the header.
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-12">
+                <label class="col-form-label">Details in JSON</label>
+              </div>
+              <div class="col-12" style="max-height: 500px; overflow-y: scroll">
+                <pre id="input_error_details"></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-brand" data-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End::modal e-Signature -->
+
+    <!-- Begin::modal upload result view -->
+    <div
+      class="modal fade"
+      id="dialog_upload_id_list"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalUploadCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fad fa-file-upload"></i> &nbsp; Upload National ID list
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <form method="post" id="form_upload_barcodes">
+              <div class="form-group row">
+                <div class="col">
+                  Please choose an Excel file to be uploaded. NOTE that all old
+                  data will be replaced by the uploaded data.
+                </div>
+              </div>
+
+              <div class="form-group row" id="div_upload">
+                <span class="col-2 col-form-label" style="padding-top: 3px"
+                  >Excel</span
+                >
+                <div class="col-10">
+                  <i id="icon_upload" class="far fa-meh-blank fa-lg"></i> &nbsp;
+                  <input
+                    type="file"
+                    name="upload_national_id"
+                    id="input_upload_national_id"
+                    accept=".xlsx"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-brand"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-brand"
+              id="btn_proceed_upload"
+              onclick="upload_barcodes()"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End::modal upload result view -->
+
+    <!-- Begin::modal error check start view -->
+    <div
+      class="modal fade"
+      id="dialog_error_check_list"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalUploadCenter"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">
+              <i class="fad fa-check"></i> &nbsp; Error Check
+            </h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-group row">
+              <div class="col">
+                Please choose an Excel file to be uploaded. NOTE that all old
+                data will be replaced by the uploaded data.
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-2">
+                <span class="col-form-label"><strong>Study ID</strong></span>
+              </div>
+
+              <div class="col-10">
+                <span class="col-form-label" th:text="${studyid}"></span>
+              </div>
+
+              <div class="col-2">
+                <span class="col-form-label"><strong>Site ID</strong></span>
+              </div>
+
+              <div class="col-10">
+                <span class="col-form-label" th:text="${siteid}"></span>
+              </div>
+
+              <div class="col-4">
+                <span class="col-form-label"><strong>Total forms</strong></span>
+              </div>
+
+              <div class="col-8">
+                <span class="col-form-label" id="value_total_forms"></span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-10">
+                <span class="col-form-label">DM</span>
+              </div>
+              <div class="col-2">
+                <span>320</span> / <span class="kt-opacity-5">780</span>
+              </div>
+              <div class="col-12">
+                <div class="progress" style="height: 2px">
+                  <div
+                    class="progress-bar bg-primary"
+                    id="progress_dm"
+                    role="progressbar"
+                    style="width: 55%"
+                    aria-valuenow="55"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="div_progress"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-brand"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn btn-brand"
+              id="btn_proceed_error_check"
+              onclick="proceed_error_check()"
+            >
+              Proceed
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End::modal error check start view -->
+
+    <script>
+      var arr = [];
+      function proceed_error_check() {
+        $("#progress_dm").css({
+          width: 100 + "%",
+        });
+      }
+
+      function error_check() {
+        var studyShortName = "[[${studyShortName}]]";
+        var studyid = "[[${studyid}]]";
+        var siteid = "[[${siteid}]]";
+
+        // validating an uploaded excel file
+        var layer = $("#div_site_dashboard");
+        KTApp.block(layer, {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Processing...",
+        });
+
+        $.ajax({
+          url:
+            "/crf/manual_error_check/" +
+            studyShortName +
+            "/" +
+            studyid +
+            "/" +
+            siteid,
+          method: "POST",
+          dataType: "text",
+          contentType: "application/json",
+          success: function (data, textStatus, xhr) {
+            KTApp.unblock(layer);
+
+            var str = JSON.parse(xhr.responseText);
+            var div_progress = "";
+            var parsedForms = JSON.parse(str.forms);
+            var partialHtml = "";
+            $.each(parsedForms, function (index, item) {
+              partialHtml +=
+                '<div class="form-group row"><div class="col-2"><span class="col-form-label">' +
+                item +
+                '</span></div> <div class="col-10"><span class="col-form-label">' +
+                item +
+                "</span></div></div>";
+            });
+
+            document.getElementById("div_progress").innerHTML = partialHtml;
+
+            // set values
+            $("#value_total_forms").text(str.form_size);
+
+            $("#dialog_error_check_list").modal("show");
+          },
+          error: function (xhr, desc, err) {
+            console.log(err);
+          },
+        });
+      }
+    </script>
+
+    <script>
+      var msg_back_list =
+        "It seems like your account is expired in this site. Please press OK to redirect to main page.";
+      $(document).ready(function () {
+        var state = "[[${session.stoplist}]]";
+        var siteid = "[[${siteid}]]";
+        if (state != null && state.includes(siteid)) {
+          swal
+            .fire({
+              title: msg_back_list,
+              icon: "error",
+              backdrop: false,
+              confirmButtonText: "OK",
+              reverseButtons: true,
+            })
+            .then(function (result) {
+              if (result.value) {
+                window.location = "/blank";
+              }
+            });
+        }
+
+        /* if there is no permission to access */
+        var shortname = "[[${studyShortName}]]";
+        var hasPermission = "[[${hasPermission}]]";
+        if (hasPermission.length > 0) {
+          swal
+            .fire({
+              title: "You have no access to this page.",
+              text: "Please contact Study Creator to check your permissions.",
+              icon: "error",
+              backdrop: false,
+              confirmButtonText: "OK",
+            })
+            .then(function (result) {
+              if (result.value) {
+                window.location = "/study/" + shortname;
+              }
+            });
+        }
+      });
+
+      function export_blankPDF() {
+        swal
+          .fire({
+            title: "Do you want to export blank CRFs?",
+            icon: "info",
+            iconHtml: " ",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              var form = $("#form_export_blank_pdf");
+              form.submit();
+            }
+          });
+      }
+
+      function export_annotatedPDF() {
+        swal
+          .fire({
+            title: "Do you want to export annotated CRFs?",
+            icon: "info",
+            iconHtml: " ",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              var form = $("#form_export_annotated_pdf");
+              form.submit();
+            }
+          });
+      }
+
+      function export_audit() {
+        swal
+          .fire({
+            title: "Do you want to export audit log?",
+            icon: "info",
+            iconHtml: " ",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              var form = $("#form_export_audit");
+              form.submit();
+            }
+          });
+      }
+
+      function export_ecrf() {
+        swal
+          .fire({
+            title: "Do you want to export all e-CRF records for this site?",
+            icon: "info",
+            iconHtml: " ",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              var form = $("#form_export_ecrf");
+              form.submit();
+            }
+          });
+      }
+
+      function export_flag() {
+        swal
+          .fire({
+            title: "Do you want to export all e-CRF flags?",
+            icon: "info",
+            iconHtml: " ",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              var form = $("#form_export_flag");
+              form.submit();
+            }
+          });
+      }
+
+      function import_ecrf() {
+        // open import modal with clearing the file chosen
+        $("#input_import_crf").val("");
+        $("#input_import_audit").val("");
+        $("#input_import_flag").val("");
+
+        $("#icon_import_crf").removeClass("fa-laugh-wink");
+        $("#icon_import_crf").addClass("fa-meh-blank");
+
+        $("#div_ecrf").show();
+        $("#div_audit").hide();
+        $("#div_flag").hide();
+
+        $("#input_flag").val(0);
+
+        $("#dialog_import").modal("show");
+      }
+
+      function import_ecrf_flag() {
+        // open import modal with clearing the file chosen
+        $("#input_import_crf").val("");
+        $("#input_import_audit").val("");
+        $("#input_import_flag").val("");
+
+        $("#icon_import_crf").removeClass("fa-laugh-wink");
+        $("#icon_import_crf").addClass("fa-meh-blank");
+
+        $("#div_ecrf").show();
+        $("#div_audit").hide();
+        $("#div_flag").hide();
+
+        $("#input_flag").val(1);
+
+        $("#dialog_import").modal("show");
+      }
+
+      function import_audit() {
+        // open import modal with clearing the file chosen
+        $("#input_import_crf").val("");
+        $("#input_import_audit").val("");
+        $("#input_import_flag").val("");
+
+        $("#icon_import_audit").removeClass("fa-laugh-wink");
+        $("#icon_import_audit").addClass("fa-meh-blank");
+
+        $("#div_ecrf").hide();
+        $("#div_audit").show();
+        $("#div_flag").hide();
+
+        $("#input_flag").val(0);
+
+        $("#dialog_import").modal("show");
+      }
+
+      function import_flag() {
+        // open import modal with clearing the file chosen
+        $("#input_import_crf").val("");
+        $("#input_import_audit").val("");
+        $("#input_import_flag").val("");
+
+        $("#icon_import_flag").removeClass("fa-laugh-wink");
+        $("#icon_import_flag").addClass("fa-meh-blank");
+
+        $("#div_ecrf").hide();
+        $("#div_audit").hide();
+        $("#div_flag").show();
+
+        $("#input_flag").val(0);
+
+        $("#dialog_import").modal("show");
+      }
+
+      $("#input_import_crf").on("change", function () {
+        // control file attached icon
+        if ($("#input_import_crf").val().length == 0) {
+          $("#icon_import_crf").removeClass("fa-laugh-wink");
+          $("#icon_import_crf").addClass("fa-meh-blank");
+        } else {
+          $("#icon_import_crf").removeClass("fa-meh-blank");
+          $("#icon_import_crf").addClass("fa-laugh-wink");
+        }
+      });
+
+      $("#input_import_audit").on("change", function () {
+        // control file attached icon
+        if ($("#input_import_audit").val().length == 0) {
+          $("#icon_import_audit").removeClass("fa-laugh-wink");
+          $("#icon_import_audit").addClass("fa-meh-blank");
+        } else {
+          $("#icon_import_audit").removeClass("fa-meh-blank");
+          $("#icon_import_audit").addClass("fa-laugh-wink");
+        }
+      });
+
+      $("#input_import_flag").on("change", function () {
+        // control file attached icon
+        if ($("#input_import_flag").val().length == 0) {
+          $("#icon_import_flag").removeClass("fa-laugh-wink");
+          $("#icon_import_flag").addClass("fa-meh-blank");
+        } else {
+          $("#icon_import_flag").removeClass("fa-meh-blank");
+          $("#icon_import_flag").addClass("fa-laugh-wink");
+        }
+      });
+
+      function import_excel() {
+        var form = document.getElementById("form_import");
+        var fileData = new FormData(form);
+        var shortname = "[[${studyShortName}]]";
+
+        $("#dialog_import").modal("hide");
+
+        if ($("#input_import_crf").val().length > 0)
+          validateExcelData(shortname, fileData, "crf");
+        else if ($("#input_import_audit").val().length > 0)
+          validateExcelData(shortname, fileData, "audit");
+        else if ($("#input_import_flag").val().length > 0)
+          validateExcelData(shortname, fileData, "flag");
+        else
+          swal.fire({
+            title: "You must choose a file!",
+            icon: "error",
+            backdrop: false,
+            confirmButtonText: "OK",
+          });
+      }
+
+      function validateExcelData(shortname, fileData, target) {
+        // validating an imported excel file
+        var layer = $("#div_site_information");
+        KTApp.block(layer, {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Validating...",
+        });
+
+        $.ajax({
+          url: "/validate_excel_" + target + "/" + shortname,
+          type: "POST",
+          enctype: "multipart/form-data",
+          data: fileData,
+          cache: false,
+          processData: false,
+          contentType: false,
+          success: function (data, textStatus, xhr) {
+            KTApp.unblock(layer);
+
+            var str = JSON.parse(xhr.responseText);
+            if (str.result == "success") {
+              var obj = JSON.parse(JSON.stringify(str.data));
+              var hasErr = obj.meta.hasError; // has any error?
+              if (hasErr == true) {
+                swal
+                  .fire({
+                    title: "Validation Error",
+                    icon: "Error",
+                    text: "You chose a wrong file. Please verify another input file.",
+                    backdrop: false,
+                    showCancelButton: true,
+                    cancelButtonText: "Open report",
+                    confirmButtonText: "Close",
+                    reverseButtons: true,
+                  })
+                  .then(function (result) {
+                    if (result.dismiss === Swal.DismissReason.cancel)
+                      showDialog(JSON.stringify(str.data, undefined, 4));
+                  });
+              } else {
+                swal
+                  .fire({
+                    title: "Validation successful",
+                    icon: "success",
+                    text: "You can proceed the importation.",
+                    backdrop: false,
+                    showCancelButton: true,
+                    cancelButtonText: "Cancel",
+                    confirmButtonText: "Proceed",
+                    reverseButtons: true,
+                  })
+                  .then(function (result) {
+                    if (result.value) importExcel(shortname, fileData, target);
+                  });
+              }
+            }
+          },
+          error: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+            if (str.result != "success")
+              swal.fire({
+                title: "Import failed",
+                icon: "error",
+                backdrop: false,
+                confirmButtonText: "OK",
+              });
+          },
+        });
+      }
+
+      function importExcel(shortname, fileData, target) {
+        // validating an imported excel file
+        var layer = $("#div_site_information");
+        KTApp.block(layer, {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Importing...",
+        });
+
+        var myUrl;
+        if (fileData.get("withFlag") == 1)
+          myUrl = "/import_excel_" + target + "_1/" + shortname;
+        else myUrl = "/import_excel_" + target + "/" + shortname;
+
+        $.ajax({
+          url: myUrl,
+          type: "POST",
+          enctype: "multipart/form-data",
+          data: fileData,
+          cache: false,
+          processData: false,
+          contentType: false,
+          success: function (data, textStatus, xhr) {
+            KTApp.unblock(layer);
+
+            var str = JSON.parse(xhr.responseText);
+            if (str.result == "success") {
+              var obj = JSON.parse(JSON.stringify(str.data));
+
+              swal
+                .fire({
+                  title: "Import successful",
+                  icon: "success",
+                  backdrop: false,
+                  showCancelButton: true,
+                  cancelButtonText: "Open report",
+                  confirmButtonText: "Close",
+                  reverseButtons: true,
+                })
+                .then(function (result) {
+                  if (result.value) location.reload();
+                  else if (result.dismiss === Swal.DismissReason.cancel)
+                    showDialog(JSON.stringify(str.data, undefined, 4));
+                });
+            }
+          },
+          error: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+            if (str.result != "success")
+              swal.fire({
+                title: "Import failed",
+                icon: "error",
+                backdrop: false,
+                confirmButtonText: "OK",
+              });
+          },
+        });
+      }
+
+      function showDialog(element) {
+        jp(element, "input_error_details");
+        $("#dialog_import_error").modal("show");
+      }
+
+      var regex =
+        /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g;
+      function syntaxHighlight(json) {
+        json = json
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        return json.replace(regex, function (match) {
+          var cls = "number";
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = "key";
+            } else {
+              cls = "string";
+            }
+          } else if (/true|false/.test(match)) {
+            cls = "boolean";
+          } else if (/null/.test(match)) {
+            cls = "null";
+          }
+          return '<span class="' + cls + '">' + match + "</span>";
+        });
+      }
+
+      function create_subject_first() {
+        swal.fire({
+          title: "You need to create a subject first.",
+          icon: "error",
+          backdrop: false,
+          confirmButtonText: "OK",
+          reverseButtons: true,
+        });
+      }
+    </script>
+
+    <script>
+      function import_hpv_nationalID() {
+        $("#input_upload_national_id").val("");
+        $("#icon_upload").removeClass("fa-laugh-wink");
+        $("#icon_upload").addClass("fa-meh-blank");
+        $("#dialog_upload_id_list").modal("show");
+      }
+
+      $("#input_upload_national_id").on("change", function () {
+        // control file attached icon
+        if ($("#input_upload_national_id").val().length == 0) {
+          $("#icon_upload").removeClass("fa-laugh-wink");
+          $("#icon_upload").addClass("fa-meh-blank");
+        } else {
+          $("#input_upload_national_id").removeClass("fa-meh-blank");
+          $("#icon_upload").addClass("fa-laugh-wink");
+        }
+      });
+
+      function upload_barcodes() {
+        var form = document.getElementById("form_upload_barcodes");
+        var fileData = new FormData(form);
+
+        $("#dialog_upload_id_list").modal("hide");
+
+        if ($("#input_upload_national_id").val().length > 0)
+          uploadEXCELData(fileData);
+        else
+          swal.fire({
+            title: "You must choose a file!",
+            icon: "error",
+            backdrop: false,
+            confirmButtonText: "OK",
+          });
+      }
+
+      function uploadEXCELData(fileData) {
+        var shortname = "[[${studyShortName}]]";
+        var msg_national_id_failed =
+          "Please check out the file and try it again. If you still have a problem, please contact IVI Data Manager.";
+
+        // validating an uploaded excel file
+        var layer = $("#div_site_dashboard");
+        KTApp.block(layer, {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Uploading...",
+        });
+
+        $.ajax({
+          url: "/upload_id_list/" + shortname,
+          type: "POST",
+          enctype: "multipart/form-data",
+          data: fileData,
+          cache: false,
+          processData: false,
+          contentType: false,
+          success: function (data, textStatus, xhr) {
+            KTApp.unblock(layer);
+            var str = JSON.parse(xhr.responseText);
+            if (str.result == "success") {
+              /* var obj = JSON.parse(JSON.stringify(str.data)); */
+              swal.fire({
+                title: "Upload successful",
+                text: "Results for samples will be added.",
+                icon: "success",
+                backdrop: false,
+                confirmButtonText: "OK",
+                reverseButtons: true,
+              });
+            } else if (str.result == "error") {
+              swal.fire({
+                title: "Upload failed.",
+                text: msg_national_id_failed,
+                icon: "error",
+                backdrop: false,
+                confirmButtonText: "OK",
+                reverseButtons: true,
+              });
+            }
+          },
+          error: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+            if (str.result != "success")
+              swal.fire({
+                title: "Upload failed",
+                icon: "error",
+                backdrop: false,
+                confirmButtonText: "OK",
+              });
+          },
+        });
+      }
+    </script>
+
+    <script>
+      function audit_history() {
+        var studyShortName = "[[${studyShortName}]]";
+        var studyid = "[[${studyid}]]";
+        var siteid = "[[${siteid}]]";
+
+        window.location = "/audit/" + studyShortName + "/" + siteid;
+      }
+    </script>
+  </div>
+</html>

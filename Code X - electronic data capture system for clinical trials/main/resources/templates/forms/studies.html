@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Study List</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a
+              href="/"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              href="/studies"
+              class="kt-subheader__breadcrumbs-home"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study List"
+              ><i class="fad fa-tags"></i
+            ></a>
+          </div>
+        </div>
+
+        <div class="kt-subheader__main">
+          <a
+            href="javascript:void(0);"
+            class="kt-subheader__breadcrumbs-link"
+            data-toggle="kt-tooltip"
+            data-skin="brand"
+            title="Grid view"
+            id="btn_grid_view"
+            ><i class="fas fa-th fa-lg"></i
+          ></a>
+          &emsp;
+          <a
+            href="javascript:void(0);"
+            class="kt-subheader__breadcrumbs-link"
+            data-toggle="kt-tooltip"
+            data-skin="brand"
+            title="List view"
+            id="btn_list_view"
+            ><i class="fas fa-th-list fa-lg"></i
+          ></a>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+      id="div_list_view"
+      style="display: none"
+    >
+      <div class="kt-portlet" th:each="item : ${listStudy}">
+        <div class="kt-portlet__body" data-mobile-width="350">
+          <div class="kt-blog-list">
+            <div
+              class="row"
+              style="
+                padding-top: 0px;
+                margin-top: 0px;
+                padding-bottom: 0px;
+                margin-bottom: 0px;
+              "
+            >
+              <div class="col-xl-5">
+                <div class="kt-blog-list__head">
+                  <div class="kt-avatar kt-avatar--outline kt-avatar--circle-">
+                    <form
+                      method="post"
+                      th:id="${'form_' + item.shortname}"
+                      enctype="multipart/form-data"
+                      th:data-value="${item.shortname}"
+                    >
+                      <img
+                        th:if="${item.logofile}"
+                        class="kt-avatar__holder"
+                        th:src="*{'data:image/jpeg;base64,'+ item.convertedlogo}"
+                        alt="#"
+                        style="max-width: 350px; width: auto; height: auto"
+                      />
+
+                      <div
+                        th:unless="
+											${item.logofile}"
+                        class="kt-avatar__holder"
+                        style="
+                          min-width: 350px;
+                          max-width: 350px;
+                          min-height: 300px;
+                          height: auto;
+                          background-image: url('assets/media/blog/900x600/25.jpg');
+                        "
+                      ></div>
+
+                      <label
+                        th:if="${session.email == 'hyeongwon.seo@ivi.int'}"
+                        class="kt-avatar__upload"
+                        data-toggle="kt-tooltip"
+                        title=""
+                        data-original-title="Change this image"
+                      >
+                        <i class="fa fa-pen"></i>
+                        <input
+                          type="file"
+                          name="file_logo"
+                          accept=".png, .jpg, .jpeg"
+                          th:data-shortname="${item.shortname}"
+                        />
+                      </label>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-xl-7">
+                <div class="kt-blog-list__body">
+                  <div class="kt-blog-list__title">
+                    <br />
+                    <h3>
+                      <a
+                        th:href="${'/study/' + item.shortname}"
+                        class="kt-link"
+                        th:text="${'[' + item.studyid + '] ' + item.fullname}"
+                        >study name</a
+                      >
+                    </h3>
+                  </div>
+
+                  <div class="kt-blog-list__meta">
+                    <div class="kt-blog-list__date">
+                      <strong th:text="#{menu.label.registered}"
+                        >Registered: </strong
+                      ><strong
+                        th:text="${#temporals.format(item.registeredDate, session.timeformat)}"
+                      ></strong>
+                    </div>
+                  </div>
+
+                  <p></p>
+
+                  <div class="kt-blog-list__content">
+                    <span th:text="${item.description}"></span>
+                  </div>
+
+                  <div>
+                    <h5>
+                      <a
+                        th:href="${'/study/' + item.shortname}"
+                        class="kt-link"
+                        style="float: right; padding-right: 10px"
+                      >
+                        <span>see more...</span>
+                      </a>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+      id="div_grid_view"
+      style="display: none"
+    >
+      <div class="row">
+        <div class="col-4" th:each="item : ${listStudy}">
+          <div class="kt-portlet kt-portlet--contain">
+            <div class="kt-blog-grid" style="min-height: 500px">
+              <div class="kt-blog-grid__head">
+                <form
+                  method="post"
+                  th:id="${'form_' + item.shortname}"
+                  enctype="multipart/form-data"
+                  th:data-value="${item.shortname}"
+                >
+                  <div th:if="${item.logofile}" class="kt-avatar__holder">
+                    <img
+                      th:src="*{'data:image/jpeg;base64,'+ item.convertedlogo}"
+                      style="object-fit: cover; height: 300px; width: 100%"
+                    />
+                  </div>
+
+                  <div
+                    style="
+                      min-width: 350px;
+                      min-height: 300px;
+                      height: auto;
+                      width: auto;
+                      background-image: url('assets/media/blog/900x600/25.jpg');
+                    "
+                    th:unless="${item.logofile}"
+                    class="kt-avatar__holder"
+                  ></div>
+
+                  <label
+                    th:if="${session.email == 'hyeongwon.seo@ivi.int'}"
+                    class="kt-avatar__upload"
+                    data-toggle="kt-tooltip"
+                    title=""
+                    data-original-title="Change this image"
+                  >
+                    <input
+                      type="file"
+                      name="file_logo"
+                      accept=".png, .jpg, .jpeg"
+                      th:data-shortname="${item.shortname}"
+                    />
+                  </label>
+                </form>
+              </div>
+              <div class="kt-portlet__body">
+                <div class="kt-blog-grid__body">
+                  <div class="kt-blog-list__title">
+                    <h3>
+                      <a
+                        th:href="${'/study/' + item.shortname}"
+                        class="kt-link"
+                        th:text="${'[' + item.studyid + '] ' + item.fullname}"
+                        >study name</a
+                      >
+                    </h3>
+                  </div>
+
+                  <div class="kt-blog-list__meta">
+                    <div class="kt-blog-list__date">
+                      <strong th:text="#{menu.label.registered}"
+                        >Registered: </strong
+                      ><strong
+                        th:text="${#temporals.format(item.registeredDate, session.timeformat)}"
+                      ></strong>
+                    </div>
+                  </div>
+
+                  <p></p>
+
+                  <div class="kt-blog-list__content">
+                    <span th:text="${item.description}"></span>
+                  </div>
+
+                  <div>
+                    <h5>
+                      <a
+                        th:href="${'/study/' + item.shortname}"
+                        class="kt-link"
+                        style="float: right; padding-right: 10px"
+                      >
+                        <span>see more...</span>
+                      </a>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+      th:unless="${#lists.size(listStudy) > 0}"
+    >
+      <div class="kt-portlet">
+        <div class="kt-portlet__body" data-mobile-width="350">
+          <div class="kt-blog-list">
+            <div
+              class="row"
+              style="
+                padding-top: 0px;
+                margin-top: 0px;
+                padding-bottom: 0px;
+                margin-bottom: 0px;
+              "
+            >
+              <div class="col-xl-12">
+                <div class="kt-blog-list__body">
+                  <div class="kt-blog-list__title">
+                    <br />
+                    <h3>
+                      Sorry, there are no studies available. Please contact IVI
+                      Study Creator to assign your role.
+                    </h3>
+                  </div>
+
+                  <div class="kt-blog-list__meta">
+                    <div class="kt-blog-list__date">
+                      <span
+                        th:text="${'Current date and time: ' + #dates.format(#dates.createNow(), session.timeformat)}"
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end:: Main content -->
+
+    <script>
+      jQuery(document).ready(function () {
+        $("#div_grid_view").show();
+
+        var jpg = ["5.jpg", "8.jpg", "24.jpg", "25.jpg"];
+
+        $.each($("img.kt-blog-list__image"), function () {
+          var num = Math.floor(Math.random() * 4); // 0 - 3
+          $(this).attr("src", "assets/media/blog/900x600/" + jpg[num]);
+        });
+
+        $.each($("input[name='file_logo']"), function () {
+          $(this).on("change", function () {
+            if ($(this).val().length == 0) return;
+
+            var shortname = $(this).attr("data-shortname");
+            var form = document.getElementById("form_" + shortname);
+            var fileData = new FormData(form);
+            postFilesData(shortname, fileData);
+          });
+        });
+      });
+
+      $("#btn_list_view").on("click", function () {
+        $("#div_list_view").show();
+        $("#div_grid_view").hide();
+      });
+
+      $("#btn_grid_view").on("click", function () {
+        $("#div_list_view").hide();
+        $("#div_grid_view").show();
+      });
+    </script>
+
+    <script>
+      function postFilesData(shortname, fileData) {
+        $.ajax({
+          url: "/study/change_logo/" + shortname,
+          type: "POST",
+          enctype: "multipart/form-data",
+          data: fileData,
+          cache: false,
+          processData: false,
+          contentType: false,
+          success: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+            if (str.result == "success")
+              swal
+                .fire({
+                  title: "Update successful",
+                  icon: "success",
+                  backdrop: false,
+                  confirmButtonText: "OK",
+                })
+                .then(function (result) {
+                  if (result.value) location.reload();
+                });
+          },
+          error: function (data, textStatus, xhr) {
+            var str = JSON.parse(xhr.responseText);
+            if (str.result != "success")
+              swal.fire({
+                title: "Update failed",
+                icon: "error",
+                backdrop: false,
+                confirmButtonText: "OK",
+              });
+          },
+        });
+      }
+    </script>
+  </div>
+</html>

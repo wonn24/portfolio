@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <div class="kt-subheader__breadcrumbs">
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >Build</a
+            >
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a href="javascript:void(0);" class="kt-subheader__breadcrumbs-link"
+              >User Role</a
+            >
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet" id="div_user_role">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Build - User Role</h3>
+          </div>
+
+          <div class="kt-portlet__head-toolbar">
+            <button
+              type="button"
+              class="btn btn-sm btn-hover btn-danger btn-elevate"
+              id="btn_save_role"
+            >
+              <i class="fad fa-save fa-lg"></i>
+              <span class="kt-hidden-mobile">
+                &nbsp; <strong>SAVE</strong> &nbsp;
+                <span class="kt-opacity-7">CHANGES</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="kt-section kt-section--first">
+            <div class="kt-section__body">
+              <div class="form-group row">
+                <div class="col-lg-4 col-sm-4">
+                  <div class="list-group">
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(1);"
+                      class="
+                        list-group-item list-group-item-action
+                        flex-column
+                        align-items-start
+                      "
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label
+                        class="kt-checkbox kt-checkbox--brand"
+                        style="font-size: 1em"
+                      >
+                        <input
+                          class="chk_user_role"
+                          id="check_role1"
+                          type="checkbox"
+                          name="user_role1"
+                          th:text="#{users.user_role.ua}"
+                          th:value="#{users.user_role.ua}"
+                        />
+                        <span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(2);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role2"
+                          type="checkbox"
+                          name="user_role2"
+                          th:text="#{users.user_role.scr}"
+                          th:value="#{users.user_role.scr}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(3);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role3"
+                          type="checkbox"
+                          name="user_role3"
+                          th:text="#{users.user_role.smm}"
+                          th:value="#{users.user_role.smm}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(4);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role4"
+                          type="checkbox"
+                          name="user_role4"
+                          th:text="#{users.user_role.co}"
+                          th:value="#{users.user_role.co}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(5);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role5"
+                          type="checkbox"
+                          name="user_role5"
+                          th:text="#{users.user_role.bst}"
+                          th:value="#{users.user_role.bst}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(6);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role6"
+                          type="checkbox"
+                          name="user_role6"
+                          th:text="#{users.user_role.qm}"
+                          th:value="#{users.user_role.qm}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(7);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role7"
+                          type="checkbox"
+                          name="user_role7"
+                          th:text="#{users.user_role.crl}"
+                          th:value="#{users.user_role.crl}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-sm-4">
+                  <div class="list-group">
+                    <a
+                      class="
+                        list-group-item list-group-item-action
+                        flex-column
+                        align-items-start
+                        active
+                      "
+                      style="color: white"
+                      >SITE</a
+                    >
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(8);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role8"
+                          type="checkbox"
+                          name="user_role8"
+                          th:text="#{users.user_role.pi}"
+                          th:value="#{users.user_role.pi}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(9);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role9"
+                          type="checkbox"
+                          name="user_role9"
+                          th:text="#{users.user_role.si}"
+                          th:value="#{users.user_role.si}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(10);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role10"
+                          type="checkbox"
+                          name="user_role10"
+                          th:text="#{users.user_role.scd}"
+                          th:value="#{users.user_role.scd}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(11);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role11"
+                          type="checkbox"
+                          name="user_role11"
+                          th:text="#{users.user_role.sdm}"
+                          th:value="#{users.user_role.sdm}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(12);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role12"
+                          type="checkbox"
+                          name="user_role12"
+                          th:text="#{users.user_role.sde}"
+                          th:value="#{users.user_role.sde}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                  </div>
+
+                  <br />
+
+                  <div class="list-group">
+                    <a
+                      class="
+                        list-group-item list-group-item-action
+                        flex-column
+                        align-items-start
+                        active
+                      "
+                      style="color: white"
+                      >CRO</a
+                    >
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(13);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role13"
+                          type="checkbox"
+                          name="user_role13"
+                          th:text="#{users.user_role.cra}"
+                          th:value="#{users.user_role.cra}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(14);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role14"
+                          type="checkbox"
+                          name="user_role14"
+                          th:text="#{users.user_role.ss}"
+                          th:value="#{users.user_role.ss}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-sm-4">
+                  <div class="list-group">
+                    <a
+                      class="
+                        list-group-item list-group-item-action
+                        flex-column
+                        align-items-start
+                        active
+                      "
+                      style="color: white"
+                      >Others</a
+                    >
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(15);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role15"
+                          type="checkbox"
+                          name="user_role15"
+                          th:text="#{users.user_role.adt}"
+                          th:value="#{users.user_role.adt}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(16);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role16"
+                          type="checkbox"
+                          name="user_role16"
+                          th:text="#{users.user_role.gst}"
+                          th:value="#{users.user_role.gst}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Read-only access to demo study only"
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                    <a
+                      href="javascript:void(0);"
+                      onclick="javascript:getUserRole(17);"
+                      class="list-group-item list-group-item-action flex-column"
+                      style="margin-bottom: 0x; padding-bottom: 0px"
+                    >
+                      <label class="kt-checkbox kt-checkbox--brand">
+                        <input
+                          class="chk_user_role"
+                          id="check_role17"
+                          type="checkbox"
+                          name="user_role17"
+                          th:text="#{users.user_role.cdr}"
+                          th:value="#{users.user_role.cdr}"
+                        /><span></span>
+                      </label>
+                      <span
+                        style="float: right"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="..."
+                        ><i class="fad fa-question-circle"></i
+                      ></span>
+                      <span style="float: right; padding-right: 10px"
+                        ><i class="fad fa-eye"></i
+                      ></span>
+                    </a>
+                  </div>
+
+                  <br />
+                  <span>Extra roles</span>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <label
+                          class="
+                            kt-checkbox kt-checkbox--single kt-checkbox--brand
+                          "
+                        >
+                          <input
+                            class="chk_user_role"
+                            id="check_role18"
+                            type="checkbox"
+                            value="extra_role1"
+                            name="user_role18"
+                          />
+                          <span></span>
+                        </label>
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      aria-label="Text input with checkbox"
+                      id="input_extra_role1"
+                    />
+
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        onclick="javascript:getUserRole(18);"
+                      >
+                        <span style="float: right; padding-left: 5px"
+                          ><i class="fad fa-eye"></i
+                        ></span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <br />
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <label
+                          class="
+                            kt-checkbox kt-checkbox--single kt-checkbox--brand
+                          "
+                        >
+                          <input
+                            class="chk_user_role"
+                            id="check_role19"
+                            type="checkbox"
+                            value="extra_role2"
+                            name="user_role19"
+                          />
+                          <span></span>
+                        </label>
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      aria-label="Text input with checkbox"
+                      id="input_extra_role2"
+                    />
+
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        onclick="javascript:getUserRole(19);"
+                      >
+                        <span style="float: right; padding-left: 5px"
+                          ><i class="fad fa-eye"></i
+                        ></span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <br />
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <label
+                          class="
+                            kt-checkbox kt-checkbox--single kt-checkbox--brand
+                          "
+                        >
+                          <input
+                            class="chk_user_role"
+                            id="check_role20"
+                            type="checkbox"
+                            value="extra_role3"
+                            name="user_role20"
+                          />
+                          <span></span>
+                        </label>
+                      </span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      aria-label="Text input with checkbox"
+                      id="input_extra_role3"
+                    />
+
+                    <div class="input-group-append">
+                      <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        onclick="javascript:getUserRole(20);"
+                      >
+                        <span style="float: right; padding-left: 5px"
+                          ><i class="fad fa-eye"></i
+                        ></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div
+                  class="
+                    kt-separator
+                    kt-separator--border-dashed
+                    kt-separator--space-lg
+                  "
+                ></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-lg-12">
+                  <p>
+                    <label>Permissions</label>
+                    <span
+                      class="badge badge-danger"
+                      data-rid=""
+                      id="lbl_permission"
+                      >Not selected...</span
+                    >
+
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-label-linkedin"
+                      onclick="clear_permissions()"
+                      style="float: right"
+                    >
+                      Clear All
+                    </button>
+                  </p>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="form-group">
+                    <div class="kt-checkbox-list">
+                      <label class="kt-checkbox">
+                        <input
+                          class="chk_user_permission"
+                          type="checkbox"
+                          id="pm_t1"
+                        />
+                        Study Build <span></span>
+                      </label>
+                      ...
+                    </div>
+
+                    <div>
+                      <br />
+                    </div>
+
+                    <div class="kt-checkbox-list">
+                      <label class="kt-checkbox">
+                        <input
+                          class="chk_user_permission"
+                          type="checkbox"
+                          id="pm_u1"
+                        />
+                        User Role Assign (General) <span></span>
+                      </label>
+                      <label class="kt-checkbox">
+                        <input
+                          class="chk_user_permission"
+                          type="checkbox"
+                          id="pm_u2"
+                        />
+                        User Role Assign (Study Creator)
+                        <span></span>
+                      </label>
+                    </div>
+                    <span class="form-text text-muted"
+                      >Permissions related user role and password</span
+                    >
+                  </div>
+                </div>
+
+                ...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      // getting all user roles
+      var mySession = JSON.parse("[(${user_roles})]");
+
+      jQuery(document).ready(function () {
+        init_user_role_change_listener();
+        init_user_permission_change_listener();
+        init_extra_user_role_change_listener();
+
+        // uncheck extra roles
+        $("#check_role18").prop("checked", false);
+        $("#check_role19").prop("checked", false);
+        $("#check_role20").prop("checked", false);
+
+        // set check box checked
+        Object.keys(mySession).forEach(function (item) {
+          if (item.startsWith("check_role"))
+            $("#" + item).prop("checked", true);
+
+          if (item.startsWith("input_extra_role"))
+            $("#" + item).val(mySession[item]);
+        });
+
+        // set checked roles in Session
+        setCheckedRoles();
+      });
+
+      $("#btn_save_role").on("click", function () {
+        event.preventDefault();
+
+        swal
+          .fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            backdrop: false,
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonText: "Yes",
+            reverseButtons: true,
+          })
+          .then(function (result) {
+            if (result.value) {
+              completeBuild();
+            }
+          });
+      });
+
+      function completeBuild() {
+        var btn = document.getElementById("btn_save_role");
+
+        KTApp.progress(btn);
+        // pause
+        KTApp.block("#div_user_role", {
+          overlayColor: "#000000",
+          type: "v2",
+          state: "primary",
+          message: "Processing...",
+        });
+
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify(mySession),
+          success: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            KTApp.unblock("#div_user_role");
+
+            if (textStatus == "success") {
+              swal.fire({
+                title: msg_save_success,
+                icon: "success",
+                backdrop: false,
+                confirmButtonText: "OK",
+              });
+            }
+          },
+          error: function (data, textStatus, xhr) {
+            KTApp.unprogress(btn);
+            KTApp.unblock("#div_user_role");
+            msg_error();
+          },
+        });
+      }
+    </script>
+  </div>
+</html>

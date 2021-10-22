@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="top_bar">
+    <!--begin: Notifications -->
+    <div
+      class="kt-header__topbar-item dropdown"
+      th:if="${session.uid != null and total_msg != null}"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Messages"
+    >
+      <div
+        class="kt-header__topbar-wrapper"
+        data-toggle="dropdown"
+        data-offset="30px,0px"
+      >
+        <span class="kt-header__topbar-icon">
+          <i class="fad fa-bell fa-lg"></i>
+          <span
+            th:if="${total_msg > 0}"
+            class="
+              kt-badge
+              kt-badge--dot
+              kt-badge--notify
+              kt-badge--sm
+              kt-badge--brand
+            "
+          ></span>
+        </span>
+      </div>
+      <div
+        class="
+          dropdown-menu
+          dropdown-menu-fit
+          dropdown-menu-right
+          dropdown-menu-anim
+          dropdown-menu-top-unround
+          dropdown-menu-lg
+        "
+      >
+        <form>
+          <div
+            class="kt-head"
+            style="background-image: url(assets/media/misc/head_bg_sm.jpg)"
+          >
+            <h3 class="kt-head__title">Messages</h3>
+            <div class="kt-head__sub">
+              <span class="kt-head__desc"
+                ><span
+                  th:if="${messages}"
+                  th:text="${total_msg + ' new message(s)'}"
+                ></span>
+                <span th:unless="${messages}" th:text="'0 new message'"></span
+              ></span>
+            </div>
+          </div>
+
+          <div
+            class="kt-notification kt-margin-t-30 kt-margin-b-20 kt-scroll"
+            data-scroll="true"
+            data-height="270"
+            data-mobile-height="220"
+          >
+            <a
+              href="/messages"
+              class="kt-notification__item"
+              th:if="${messages}"
+              th:each="item : ${messages}"
+            >
+              <span class="kt-notification__item-icon">
+                <i class="fad fa-comments-alt fa-lg"></i>
+              </span>
+              <span class="kt-notification__item-details">
+                <span
+                  class="kt-notification__item-title"
+                  style="font-size: 12px"
+                  th:text="${item.comment}"
+                ></span>
+                <span
+                  class="kt-notification__item-time"
+                  style="font-size: 11px"
+                  th:text="${#temporals.format(item.registeredDate, session.timeformat)}"
+                ></span>
+              </span>
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--end: Notifications -->
+
+    <!--begin: Create study -->
+    <div
+      class="kt-header__topbar-item"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Create"
+      th:if="${session.email == '******'}"
+    >
+      <div class="kt-header__topbar-wrapper">
+        <a class="kt-header__topbar-icon" href="/create"
+          ><i class="fad fa-plus-circle fa-lg"></i
+        ></a>
+      </div>
+    </div>
+    <!--end: Create study -->
+
+    <!--begin:: Languages -->
+    <div
+      class="kt-header__topbar-item kt-header__topbar-item--langs"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Language"
+    >
+      <div
+        class="kt-header__topbar-wrapper"
+        data-toggle="dropdown"
+        data-offset="10px,0px"
+      >
+        <span class="kt-header__topbar-icon"> <img id="img_language" /> </span>
+      </div>
+      <div
+        class="
+          dropdown-menu
+          dropdown-menu-fit
+          dropdown-menu-right
+          dropdown-menu-anim
+          dropdown-menu-top-unround
+        "
+      >
+        <ul class="kt-nav kt-margin-t-10 kt-margin-b-10">
+          <li class="kt-nav__item">
+            <a
+              href="javascript:void(0);"
+              onclick="change_language('en')"
+              class="kt-nav__link"
+            >
+              <span class="kt-nav__link-icon"
+                ><img src="assets/media/flags/020-flag.svg"
+              /></span>
+              <span class="kt-nav__link-text">English</span>
+            </a>
+          </li>
+
+          <li class="kt-nav__item">
+            <a
+              href="javascript:void(0);"
+              onclick="change_language()"
+              class="kt-nav__link"
+            >
+              <span class="kt-nav__link-icon"
+                ><img src="assets/media/flags/018-south-korea.svg"
+              /></span>
+              <span class="kt-nav__link-text">Korean</span>
+            </a>
+          </li>
+
+          <li class="kt-nav__item">
+            <a
+              href="javascript:void(0);"
+              onclick="change_language('th')"
+              class="kt-nav__link"
+            >
+              <span class="kt-nav__link-icon"
+                ><img src="assets/media/flags/021-Thailand.svg"
+              /></span>
+              <span class="kt-nav__link-text">Thai</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!--end:: Languages -->
+
+    <!--begin: Sign in -->
+    <div
+      class="kt-header__topbar-item"
+      th:if="${session.uid == null}"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Sign in"
+    >
+      <div
+        class="kt-header__topbar-wrapper"
+        id="kt_offcanvas_toolbar_quick_actions_toggler_btn"
+      >
+        <a href="/login" class="kt-header__topbar-icon"
+          ><i class="fad fa-sign-in fa-lg"></i
+        ></a>
+      </div>
+    </div>
+    <!--end: Sign in -->
+
+    <!--begin: User Bar -->
+    <div
+      class="kt-header__topbar-item kt-header__topbar-item--user"
+      th:if="${session.uid != null}"
+    >
+      <div
+        class="kt-header__topbar-wrapper"
+        data-toggle="dropdown"
+        data-offset="0px,0px"
+      >
+        <!--use "kt-rounded" class for rounded avatar style-->
+        <div class="kt-header__topbar-user kt-rounded-">
+          <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
+          <span
+            class="kt-header__topbar-username kt-hidden-mobile"
+            th:text="${session.firstName}"
+          ></span>
+          <img
+            alt="Pic"
+            src="assets/media/users/default.jpg"
+            class="kt-rounded- kt-hidden"
+          />
+
+          <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
+          <span
+            id="myBadge"
+            class="kt-badge kt-badge--username kt-badge--lg kt-badge--bold"
+            ><span
+              th:text="${#strings.substring(session.firstName, 0, 1) + #strings.substring(session.lastName, 0, 1)}"
+            ></span
+          ></span>
+        </div>
+      </div>
+      <div
+        class="
+          dropdown-menu
+          dropdown-menu-fit
+          dropdown-menu-right
+          dropdown-menu-anim
+          dropdown-menu-top-unround
+          dropdown-menu-sm
+        "
+      >
+        <div
+          class="kt-user-card kt-margin-b-40 kt-margin-b-30-tablet-and-mobile"
+          style="background-image: url(assets/media/misc/head_bg_sm.jpg)"
+        >
+          <div class="kt-user-card__wrapper">
+            <!-- According the ISO IEC 7813 the cardholder name length must be 2 to 26 characters including first name, last name and spaces. -->
+            <div
+              class="kt-user-card__details"
+              th:if="${#strings.length(session.fullName) > 20}"
+            >
+              <div class="kt-user-card__name" style="font-size: 16px">
+                <span
+                  th:text="${#strings.substring(session.fullName, 0, 20) + '...'}"
+                ></span>
+              </div>
+              <div class="kt-user-card__position">
+                <span th:if="${session.uid != null}">
+                  <span th:if="${listUser != null}"
+                    ><span th:text="${listUser.get(session.uid)?.rname + ','}"
+                      >{userRole}</span
+                    >&nbsp;</span
+                  >
+                  <span th:text="${session.organization}">{organization}</span>
+                  <br />
+                  <span style="font-size: 9.5px"
+                    ><span th:text="#{menu.label.last_visit}">Last visit:</span>
+                    &nbsp;<span
+                      th:text="${#temporals.format(session.latestLogin, session.timeformat)}"
+                    ></span> </span
+                  ><br />
+                </span>
+              </div>
+            </div>
+
+            <!-- According the ISO IEC 7813 the cardholder name length must be 2 to 26 characters including first name, last name and spaces. -->
+            <div
+              class="kt-user-card__details"
+              th:if="${#strings.length(session.fullName) <= 20}"
+            >
+              <div class="kt-user-card__name" style="font-size: 16px">
+                <span th:text="${session.fullName}"></span>
+              </div>
+              <div class="kt-user-card__position">
+                <span th:if="${session.uid != null}">
+                  <span th:if="${listUser != null}">
+                    <span th:text="${listUser.get(session.uid)?.rname + ','}"
+                      >{userRole}</span
+                    >&nbsp;
+                  </span>
+                  <span th:text="${session.organization}">{organization}</span>
+                  <br />
+                  <span style="font-size: 9.5px"
+                    ><span th:text="#{menu.label.last_visit}">Last visit:</span>
+                    &nbsp;<span
+                      th:text="${#temporals.format(session.latestLogin, session.timeformat)}"
+                    ></span></span
+                  ><br />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="kt-nav kt-margin-b-10">
+          <!-- <li class="kt-nav__custom"></li> -->
+
+          <li class="kt-nav__item">
+            <a href="/my_account" class="kt-nav__link">
+              <span class="kt-nav__link-icon" style="font-size: 1em"
+                ><i class="fas fa-user-circle fa-lg"></i
+              ></span>
+              <span
+                class="kt-nav__link-text"
+                th:text="#{menu.button.my_account}"
+                >My Account</span
+              >
+            </a>
+          </li>
+
+          <li class="kt-nav__item">
+            <a href="/messages" class="kt-nav__link">
+              <span class="kt-nav__link-icon"
+                ><i class="fas fa-envelope"></i
+              ></span>
+              <span class="kt-nav__link-text" th:text="#{menu.button.messages}"
+                >Messages</span
+              >
+            </a>
+          </li>
+
+          <li class="kt-nav__item">
+            <a onclick="reset_my_password()" type="button" class="kt-nav__link">
+              <span class="kt-nav__link-icon"><i class="fas fa-key"></i></span>
+              <span
+                class="kt-nav__link-text"
+                th:text="#{menu.button.password_reset}"
+                >Password reset</span
+              >
+            </a>
+          </li>
+
+          <li
+            th:if="${studyShortName != null and siteid != null and (session.email == '****' or session.pm_u2 == true)}"
+            class="kt-nav__item"
+          >
+            <a
+              th:href="${'/creator_role_assign/' + studyShortName + '/' + siteid}"
+              class="kt-nav__link"
+            >
+              <span class="kt-nav__link-icon" style="font-size: 1em"
+                ><i class="fas fa-users-cog"></i
+              ></span>
+              <span class="kt-nav__link-text">Creator role assign</span></a
+            >
+          </li>
+
+          <li class="kt-nav__separator kt-nav__separator--fit"></li>
+
+          <li class="kt-nav__custom kt-space-between">
+            <a
+              href="/logout"
+              class="btn btn-label-brand btn-upper btn-sm btn-bold"
+              th:text="#{menu.label.signout}"
+              >Sign Out</a
+            >
+          </li>
+        </ul>
+
+        <form
+          action="/reset_my_password"
+          method="post"
+          id="form_reset_password"
+        >
+          <input id="input_uid" name="myUid" type="hidden" />
+        </form>
+      </div>
+    </div>
+    <!--end: User Bar -->
+
+    <script>
+      function openSessionDialog() {
+        $("#session-dialog").modal("show");
+      }
+
+      function reset_my_password() {
+        $("#input_uid").val("[[${session.uid}]]");
+        $("#form_reset_password").submit();
+      }
+
+      function change_language(code) {
+        var loc = window.location.href.split("?")[0];
+        if (code == "en") {
+          location.href = loc + "?lang=en";
+        } else if (code == "th") {
+          location.href = loc + "?lang=th";
+        }
+      }
+
+      $(document).ready(function () {
+        var code = "[[${#locale.language}]]";
+        if (code == "th") {
+          $("#img_language").attr("src", "assets/media/flags/021-flag.svg");
+        } else {
+          // default en
+          $("#img_language").attr("src", "assets/media/flags/020-flag.svg");
+        }
+      });
+    </script>
+  </div>
+</html>

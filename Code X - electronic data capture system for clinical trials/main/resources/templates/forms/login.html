@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <!-- begin::Body -->
+  <div th:fragment="content">
+    <!-- begin:: Page -->
+    <div
+      class="
+        kt-grid__item kt-grid__item--fluid
+        kt-grid kt-grid--hor
+        kt-login-v2
+      "
+      id="kt_login_v2"
+    >
+      <!--begin::Item-->
+      <div class="kt-grid__item kt-grid kt-grid--ver kt-grid__item--fluid">
+        <!--begin::Body-->
+        <div class="kt-login-v2__body">
+          <!--begin::Wrapper-->
+          <div class="kt-login-v2__wrapper">
+            <div class="kt-login-v2__container">
+              <div class="kt-login-v2__title">
+                <h3>
+                  <span th:text="#{menu.label.signin}">Sign In</span>
+                </h3>
+              </div>
+
+              <!--begin::Form-->
+              <form
+                class="kt-login-v2__form kt-form"
+                action=""
+                method="post"
+                autocomplete="off"
+                id="kt_login_form"
+              >
+                <div class="form-group">
+                  <input
+                    class="form-control"
+                    type="text"
+                    placeholder="E-mail"
+                    name="email"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <input
+                    class="form-control"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    autocomplete="off"
+                    required
+                  />
+                </div>
+
+                <!--begin::Action-->
+                <div class="row">
+                  <div class="col-6">
+                    <a
+                      href="/forgot_password"
+                      class="kt-link kt-link--brand"
+                      th:text="#{menu.label.forgot_password_}"
+                    >
+                      Forgot Password ?
+                    </a>
+                  </div>
+
+                  <div class="col-6">
+                    <button
+                      type="submit"
+                      class="btn btn-brand btn-elevate btn-sm"
+                      style="min-width: 110px; float: right"
+                    >
+                      <span th:text="#{menu.label.signin}">Sign In</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!--begin::Separator-->
+                <div
+                  class="
+                    kt-separator
+                    kt-separator--space-lg
+                    kt-separator--border-solid
+                  "
+                ></div>
+                <!--end::Separator-->
+
+                <div class="kt-login-v2__signup">
+                  <span th:text="#{menu.label.dont_have_account}"
+                    >Don't have an account?</span
+                  >
+                  <a
+                    href="/register"
+                    class="kt-link kt-font-brand"
+                    th:text="#{menu.label.signup}"
+                    >Sign Up</a
+                  >
+                </div>
+
+                <!--end::Action-->
+              </form>
+              <!--end::Form-->
+            </div>
+          </div>
+
+          <!--end::Wrapper-->
+
+          <!--begin::Image-->
+          <div class="kt-login-v2__image">
+            <img id="img_main" />
+          </div>
+          <!--begin::Image-->
+        </div>
+        <!--begin::Body-->
+      </div>
+      <!--end::Item-->
+    </div>
+
+    <script>
+      jQuery(document).ready(function () {
+        var jpg = ["2.jpg", "3.jpg", "6.jpg"];
+        var num = Math.floor(Math.random() * 3); // 0 - 2
+        var urlString = "assets/media/blog/1200x600/" + jpg[num];
+        $("#img_main").attr("src", urlString);
+      });
+    </script>
+  </div>
+  <!-- end:: Page -->
+</html>

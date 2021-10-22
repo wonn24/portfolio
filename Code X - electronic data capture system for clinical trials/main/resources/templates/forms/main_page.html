@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Home</h3>
+          <span class="kt-subheader__separator kt-hidden"></span>
+          <div class="kt-subheader__breadcrumbs">
+            <a href="/" class="kt-subheader__breadcrumbs-home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <div class="kt-portlet">
+        <div class="kt-portlet__body">
+          <div class="kt-invoice-1">
+            <div
+              class="kt-invoice__head"
+              style="background-image: url(assets/media/misc/invoice1-bg.png)"
+            >
+              <div class="kt-invoice__container">
+                <div class="kt-invoice__brand">
+                  <h1 class="kt-invoice__title">Welcome to CODE X!</h1>
+                  <div class="kt-invoice__logo">
+                    <div class="kt-invoice__desc">
+                      Easily and efficiently build and manage your studies on a
+                      compliant electronic data capture (EDC) system <br />
+                      <br />
+                      <h6>
+                        <a style="padding-left: 0px; color: white" href="/doc"
+                          >Learn more...</a
+                        >
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="kt-invoice__items">
+                  <div class="kt-invoice__item">
+                    <span class="kt-invoice__subtitle">SPONSOR:</span> &emsp;
+                    <img
+                      src="assets/images/IVI_Logo_2018_dark.png"
+                      style="width: 300px"
+                    />
+                  </div>
+                  <div class="kt-invoice__item">
+                    <div class="kt-invoice__info">
+                      <span class="kt-invoice__subtitle">RELEASE DATE:</span>
+                      <span class="kt-invoice__text">2020-10-26</span>
+                    </div>
+                    <div class="kt-invoice__info">
+                      <span class="kt-invoice__subtitle">VERSION:</span>
+                      <span class="kt-invoice__text">2.00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- end:: Content -->
+    <!-- end:: Main content -->
+
+    <script>
+      jQuery(document).ready(function () {
+        //
+      });
+    </script>
+  </div>
+</html>

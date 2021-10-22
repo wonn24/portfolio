@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- begin::Head -->
+  <head>
+    <base href="../" />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CODE X-site</title>
+  </head>
+  <!-- end::Head -->
+
+  <div th:fragment="content">
+    <!-- begin:: Subheader -->
+    <div class="kt-subheader kt-grid__item" id="kt_subheader">
+      <div class="kt-container kt-container--fluid">
+        <!-- begin::breadcrumbs -->
+        <div class="kt-subheader__main">
+          <h3 class="kt-subheader__title">Study Dashboard</h3>
+          <div class="kt-subheader__breadcrumbs">
+            <a
+              href="/"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Home"
+              ><i class="fad fa-home-lg"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              href="/studies"
+              class="kt-subheader__breadcrumbs-link"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study List"
+              ><i class="fad fa-tags"></i
+            ></a>
+            <span class="kt-subheader__breadcrumbs-separator"></span>
+            <a
+              th:href="${'/study/' + studyShortName}"
+              class="kt-subheader__breadcrumbs-home"
+              data-toggle="kt-tooltip"
+              data-skin="brand"
+              title="Study Dashboard"
+              ><i class="fad fa-chess-king"></i
+            ></a>
+          </div>
+        </div>
+        <!-- end::breadcrumbs -->
+
+        <!-- begin::toolbar -->
+        <div class="kt-subheader__toolbar">
+          <div class="kt-subheader__wrapper">
+            <div class="dropdown dropdown-inline">
+              <a
+                href="#"
+                class="
+                  btn btn-sm btn-hover btn-brand btn-elevate
+                  dropdown-toggle
+                "
+                data-toggle="dropdown"
+                data-offset="0px,0px"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fad fa-map-marker-alt fa-inverse fa-lg"></i> &emsp;
+                <span th:if="${#locale.language == 'en'}"
+                  ><span class="kt-opacity-7">CHOOSE</span>
+                  <strong>SITE</strong></span
+                >
+                <span
+                  th:unless="${#locale.language == 'en'}"
+                  th:text="#{menu.button.choose_site}"
+                ></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                <ul
+                  class="kt-nav kt-nav--active-bg"
+                  role="tablist"
+                  th:each="item: ${listStudy}"
+                >
+                  <li class="kt-nav__item">
+                    <a
+                      th:href="${'/study/' + studyShortName + '/' + item.siteid}"
+                      class="kt-nav__link"
+                      role="tab"
+                    >
+                      <i class="kt-nav__link-icon fas fa-map-marker-alt"></i>
+                      <span
+                        class="kt-nav__link-text"
+                        th:text="${item.siteid + ' - ' + item.sitename}"
+                      ></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end::toolbar -->
+      </div>
+    </div>
+    <!-- end:: Subheader -->
+
+    <!-- begin:: Main content -->
+    <div
+      class="
+        kt-container kt-container--fluid
+        kt-grid__item kt-grid__item--fluid
+      "
+    >
+      <!--begin::Dashboard 3-->
+      <div class="row">
+        <div class="col-12">
+          <!--Begin::Portlet-->
+          <div class="kt-portlet">
+            <div class="kt-portlet__head">
+              <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                  <i class="fal fa-exclamation-square fa-lg"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                  Study information: &nbsp; <span th:text="${studyid}"></span>
+                </h3>
+              </div>              
+            </div>
+
+            <div class="kt-portlet__body">
+              <div class="row kt-portlet__body kt-portlet__body--fit">
+                <div
+                  class="col-lg-12 kt-widget kt-widget--general-2"
+                  th:each="item : ${listStudy}"
+                >
+                  <div class="kt-widget kt-widget--general-3">
+                    <div class="kt-widget__top">
+                      <div class="kt-widget__wrapper">
+                        <div class="kt-widget__label">
+                          <a
+                            href="javascript:void(0);"
+                            class="kt-widget__title"
+                          >
+                            <span
+                              th:text="${item.piname != null ? item.piname : 'NA'}"
+                            ></span>
+                          </a>
+                          <span class="kt-widget__desc">
+                            Principal Investigator <br />
+                            <br />
+                            Site ID:
+                            <a
+                              th:href="${'/study/' + studyShortName + '/' + item.siteid}"
+                              class="kt-link kt-link--danger"
+                              ><strong th:text="${item.siteid}"></strong
+                            ></a>
+                            &emsp; Site Name:
+                            <strong th:text="${item.sitename}"></strong> &emsp;
+                            Max visit number:
+                            <strong th:text="${item.maxvisit}"></strong> &emsp;
+                            Max subject number:
+                            <strong
+                              th:if="${item.maxSubject}"
+                              th:text="${item.maxSubject}"
+                            ></strong>
+                            <strong
+                              th:unless="${item.maxSubject}"
+                              th:text="'N/A'"
+                            ></strong>
+                          </span>
+                        </div>
+
+                        <div class="kt-widget__toolbar">
+                          <div class="kt-widget__stats">
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value kt-font-danger"
+                                th:text="${item.countParticipants}"
+                              ></span>
+                              <span class="kt-widget__caption">Subjects</span>
+                            </div>
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value"
+                                th:text="${mapStudy.get(item.siteid)?.total != null ? mapStudy.get(item.siteid)?.total : 0}"
+                              ></span>
+                              <span class="kt-widget__caption">Queries</span>
+                            </div>
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value"
+                                th:text="${mapStudy.get(item.siteid)?.total != null ? mapStudy.get(item.siteid)?.totalSDV : 0}"
+                              ></span>
+                              <span class="kt-widget__caption">SDV</span>
+                            </div>
+                            <div
+                              class="kt-widget__stat"
+                              style="min-width: 80px"
+                            >
+                              <span
+                                class="kt-widget__value"
+                                th:text="${mapStudy.get(item.siteid)?.total != null ? mapStudy.get(item.siteid)?.totalReview : 0}"
+                              ></span>
+                              <span class="kt-widget__caption">REVIEW</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="kt-widget__bottom">
+                      <div
+                        class="kt-widget__progress"
+                        style="min-width: 320px; padding-bottom: 30px"
+                      >
+                        <div class="kt-widget__stat">
+                          <span class="kt-widget__caption">Query Progress</span>
+                          <span
+                            class="kt-widget__value"
+                            th:text="${mapStudy.get(item.siteid)?.total}"
+                          ></span>
+                        </div>
+
+                        <div class="progress" style="height: 10px">
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.opened}"
+                            class="progress-bar bg-primary"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.opened * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.opened}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.opened}"
+                            ></span>
+                          </div>
+
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.in_progress}"
+                            class="progress-bar bg-warning"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.in_progress * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.in_progress}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.in_progress}"
+                            ></span>
+                          </div>
+
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.pending}"
+                            class="progress-bar bg-danger"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.pending * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.pending}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.pending}"
+                            ></span>
+                          </div>
+
+                          <div
+                            th:if="${mapStudy.get(item.siteid)?.closed}"
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            th:style="${'width: ' + (mapStudy.get(item.siteid)?.closed * 100.0 / mapStudy.get(item.siteid)?.total) + '%'}"
+                            th:aria-valuenow="${mapStudy.get(item.siteid)?.closed}"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          >
+                            <span
+                              th:text="${mapStudy.get(item.siteid)?.closed}"
+                            ></span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <br />
+                          <span
+                            class="kt-badge kt-badge--primary kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-primary"
+                            >Opened</span
+                          >
+                          &nbsp;
+                          <span
+                            class="kt-badge kt-badge--warning kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-warning"
+                            >In progress</span
+                          >
+                          &nbsp;
+                          <span
+                            class="kt-badge kt-badge--danger kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-danger"
+                            >Pending</span
+                          >
+                          &nbsp;
+                          <span
+                            class="kt-badge kt-badge--success kt-badge--dot"
+                          ></span>
+                          &nbsp;
+                          <span class="kt-font-bold kt-font-success"
+                            >Closed</span
+                          >
+                        </div>
+                      </div>
+
+                      <div class="kt-widget__actions" style="float: right">
+                        <a
+                          th:if="${#strings.contains(session.stoplist, item.siteid)}"
+                          onclick="not_be_used()"
+                          class="btn btn-sm btn-bold btn-label-instagram"
+                          >SITE DETAIL is NOT available</a
+                        >
+                        <a
+                          th:unless="${#strings.contains(session.stoplist, item.siteid)}"
+                          th:href="${'/study/' + studyShortName + '/' + item.siteid}"
+                          class="btn btn-sm btn-bold btn-label-google"
+                          ><span th:text="#{menu.button.site_details}"></span
+                        ></a>
+                      </div>
+                    </div>
+
+                    <div
+                      class="
+                        col-lg-12
+                        kt-separator
+                        kt-separator--border-dashed
+                        kt-separator--space-lg
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--End::Portlet-->
+        </div>
+      </div>
+
+      <!--end::Dashboard 3-->
+    </div>
+    <!-- end:: Main content -->
+
+    <!-- begin::chart-js -->
+    <script
+      type="text/javascript"
+      src="assets/js/customized/Chart.min.js"
+    ></script>
+    <!-- begin::chart-js -->
+
+    <script>
+      var category_color = [
+        "rgba(255, 255, 5, 0.5)",
+        "rgba(249, 140, 4, 0.5)",
+        "rgba(243, 30, 3, 0.5)",
+        "rgba(237, 3, 81, 0.5)",
+        "rgba(231, 2, 180, 0.5)",
+        "rgba(176, 2, 225, 0.5)",
+        "rgba(74, 1, 220, 0.5)",
+        "rgba(1, 24, 214, 0.5)",
+        "rgba(1, 116, 208, 0.5)",
+        "rgba(0, 202, 202, 0.5)",
+        "rgba(0, 196, 109, 0.5)",
+        "rgba(0, 191, 21, 0.5)",
+      ];
+
+      var myChart = new Chart(
+        document.getElementById("canvas_monthly_enrolled"),
+        {
+          type: "bar",
+          data: {
+            labels: JSON.parse("[(${header})]"),
+            datasets: [
+              {
+                data: JSON.parse("[[${values}]]"),
+                backgroundColor: category_color,
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              yAxes: [
+                {
+                  stacked: true,
+                  ticks: {
+                    beginAtZero: true,
+                    min: 0,
+                  },
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Number of subjects",
+                  },
+                },
+              ],
+            },
+            legend: {
+              display: false,
+            },
+          },
+        }
+      );
+
+      function not_be_used() {
+        swal.fire({
+          title: "Your account is expired for this site. ...",
+          icon: "error",
+          backdrop: false,
+          confirmButtonText: "OK",
+          reverseButtons: true,
+        });
+      }
+    </script>
+  </div>
+</html>
