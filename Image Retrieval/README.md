@@ -29,5 +29,5 @@ GPU 환경:
 name: Tesla P100-PCIE-16GB, computeCapability: 6.0, coreClock: 1.3285GHz, coreCount: 56, deviceMemorySize: 15.90GiB, deviceMemoryBandwidth: 681.88GiB/s
 
 성능:
-Object Detection MAP@IoU:.50:.95 - 93%, MAP@IoU:.50:.95 - 91%
-Image Search: Acc 94%
+- Object Detection MAP@IoU:.50:.95 - 93%, MAP@IoU:.50:.95 - 91%
+- mage Search: Acc 94%
