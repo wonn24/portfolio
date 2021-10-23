@@ -1,4 +1,4 @@
-This document contains several requirements of the software (a.k.a., Project CODE-X) and sample codes are also uploaded in the repository. 
+This document contains several requirements of the software (an electronic data capture system running for Typhoid & HPV clinical trials (phase II) in Philippine and Thailand; also for vaccine adverse event reporting/management system funded by WHO Western Pacific) and sample codes are also uploaded in the repository. 
 
 
 
