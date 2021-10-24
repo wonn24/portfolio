@@ -13,8 +13,8 @@
 - 학사 (2000.03~2006.02): 부산외국어대학교 (컴퓨터공학부)
 
 # 경력
-- 2021.04~현재: 이투스교육 (차장)
-- 2015.09~2021.04: 국제백신연구소 (Associate Research Scientist; Lead Software Engineer)
+- 2021.04~현재: 이투스교육 테이터플랫폼팀 인공지능 파트 (차장)
+- 2015.09~2021.04: 국제백신연구소 Biostat & Data Management team (Associate Research Scientist; Lead Software Engineer)
 
 # 강의
 - 한국해양대학교 2014년 1학기: Data Structure (C++)
