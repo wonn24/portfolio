@@ -1,17 +1,4 @@
-import base64
-import os
-import time
-from matplotlib import pyplot as plt
-import glob
-import numpy as np
-import tensorflow as tf
-import cv2
-import faiss
-import torch
-import torch.nn as nn
-
-from albumentations.pytorch import ToTensorV2
-import albumentations as A
+### hidden ###
 
 PATH_TO_SAVED_MODEL = "../saved_model"
 PATH_TO_LABELS = "../label_map.pbtxt"
@@ -176,9 +163,9 @@ def load_files():
     
     ## Using an basic index with GPU
     st = time.time()
-    index_flat = faiss.IndexFlatL2(d)  # build a flat (CPU) index
-    res = faiss.StandardGpuResources()  # use a single GPU
-    GPU_INDEX_FLAT = faiss.index_cpu_to_gpu(res, 0, index_flat)
+    index_flat = f.IndexFlatL2(d)  # build a flat (CPU) index
+    res = f.StandardGpuResources()  # use a single GPU
+    GPU_INDEX_FLAT = f.index_cpu_to_gpu(res, 0, index_flat)
     GPU_INDEX_FLAT.add(xb)  # add vectors to the index
     print(
         f"--- Building INDEX with GPU.. done in {(time.time() - st):.4f} seconds ---",
